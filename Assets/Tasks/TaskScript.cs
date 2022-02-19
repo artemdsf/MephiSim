@@ -78,7 +78,7 @@ public class TaskScript : MonoBehaviour
             }
             else
             {
-                Debug.Log("Uncorrect");
+                Debug.Log("Incorrect");
             }
         }
     }
