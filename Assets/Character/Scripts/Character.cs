@@ -5,220 +5,218 @@ using UnityEngine.Tilemaps;
 
 public abstract class Character : MonoBehaviour
 {
-	//Ќам точно нужен конструктор? [SerializeField] нормально работает
-    public Character(float maxHP, float defaultSpeed, float defaultDefense, float width)
-	{
-		_width = width;
-		_maxHP = maxHP;
-		_defaultSpeed = defaultSpeed;
-		_defaultDef = defaultDefense;
+    [SerializeField] private float _defaultDef = 10;
+    [SerializeField] private float _defaultSpeed = 5;
+    [SerializeField] private float _maxHP = 100;
 
-		ResetHP();
-		ResetDef();
-		ResetSpeed();
-	}
+    public float HP 
+    { 
+        get; 
+        private set; 
+    }
 
-	public Character() { }
-
-	public virtual void Start() {
-		if (_maxHP < 0)
-		{
-			Debug.LogError("maxHP parametr cannot have a negative value", this);
-			_maxHP = 0;
-		}
-
-		if (_defaultSpeed < 0)
-		{
-			Debug.LogError("defaultSpeed parametr cannot have a negative value", this);
-			_defaultSpeed = 0;
-		}
-
-		if (_defaultDef < 0)
-		{
-			Debug.LogError("defaultSpeed parametr cannot have a negative value", this);
-			_defaultDef = 0;
-		}
-
-		if (_defaultDef > 100)
-		{
-			Debug.LogError("defaultSpeed parametr cannot exceed 100", this);
-			_defaultDef = 100;
-		}
-
-		_speed = _defaultSpeed;
-		HP = _maxHP;
-		_defense = _defaultDef;
-
-		GameObject[] collidableTilemaps = GameObject.FindGameObjectsWithTag("CollidableTilemap");
-
-		foreach (GameObject gameObject in collidableTilemaps)
+    public float Defense
+    {
+        get
         {
-			Tilemap tilemap = gameObject.GetComponent<Tilemap>();
+            return Defense;
+        }
+        set
+        {
+            if (value < 0)
+            {
+                Defense = 0;
+            }
+            else if (value > 100)
+            {
+                Defense = 100;
+            }
+            else
+            {
+                Defense = value;
+            }
+        }
+    }
 
-			if (tilemap)
-				_collidableTilemaps.Add(tilemap);
+    public float Speed
+    {
+        get
+        {
+            return Speed;
+        }
+        set
+        {
+            if (value < 0)
+            {
+                Speed = 0;
+            }
+            else
+            {
+                Speed = value;
+            }
+        }
+    }
+
+    //Ќам точно нужен конструктор? [SerializeField] нормально работает
+    public Character(float maxHP, float defaultSpeed, float defaultDefense, float width)
+    {
+        _width = width;
+        _defaultDef = defaultDefense;
+        _defaultSpeed = defaultSpeed;
+        _maxHP = maxHP;
+
+        ResetHP();
+        ResetDef();
+        ResetSpeed();
+    }
+
+    public Character() { }
+
+    public virtual void Start()
+    {
+        if (_maxHP < 0)
+        {
+            Debug.LogError("maxHP parametr cannot have a negative value", this);
+            _maxHP = 0;
         }
 
-		if (_collidableTilemaps.Count == 0)
-			Debug.LogWarning("there is no collidable tilemaps in the scene", this);
+        if (_defaultSpeed < 0)
+        {
+            Debug.LogError("defaultSpeed parametr cannot have a negative value", this);
+            _defaultSpeed = 0;
+        }
 
-	}
+        if (_defaultDef < 0)
+        {
+            Debug.LogError("defaultSpeed parametr cannot have a negative value", this);
+            _defaultDef = 0;
+        }
 
-	[SerializeField]
-	private float _defaultDef = 10;
-	[SerializeField]
-	private float _defaultSpeed = 5;
-	[SerializeField]
-	private float _maxHP = 100;
+        if (_defaultDef > 100)
+        {
+            Debug.LogError("defaultSpeed parametr cannot exceed 100", this);
+            _defaultDef = 100;
+        }
 
-	public float HP { get; private set; }
-	private float _defense;
-	private float _speed;
+        Speed = _defaultSpeed;
+        HP = _maxHP;
+        Defense = _defaultDef;
 
+        //Must be changed
+        GameObject[] collidableTilemaps = GameObject.FindGameObjectsWithTag("CollidableTilemap");
+
+        foreach (GameObject gameObject in collidableTilemaps)
+        {
+            Tilemap tilemap = gameObject.GetComponent<Tilemap>();
+
+            if (tilemap)
+                _collidableTilemaps.Add(tilemap);
+        }
+
+        if (_collidableTilemaps.Count == 0)
+            Debug.LogWarning("there is no collidable tilemaps in the scene", this);
+
+    }
 
     public void ResetHP()
     {
-		HP = _maxHP;
+        HP = _maxHP;
     }
 
-	public void ResetDef()
+    public void ResetDef()
     {
-		_defense = _defaultDef;
+        Defense = _defaultDef;
     }
 
-	public void ResetSpeed()
-	{
-		_speed = _defaultSpeed;
-	}
+    public void ResetSpeed()
+    {
+        Speed = _defaultSpeed;
+    }
 
-    public float Speed
-	{
-		get
-		{
-			return _speed;
-		}
-		set
-		{
-			if (value < 0)
-			{
-				_speed = 0;
-			}
-			else
-			{
-				_speed = value;
-			}
-		}
-	}
+    public void TakeDamage(float damage)
+    {
+        float decreasedHP = damage * (1 - Defense / 100);
 
-	public float Defense
-	{
-		get
-		{
-			return _defense;
-		}
-		set
-		{
-			if (value < 0)
-			{
-				_defense = 0;
-			}
-			else if (value > 100)
-			{
-				_defense = 100;
-			}
-			else
-			{
-				_defense = value;
-			}
-		}
-	}
+        if (damage < 0)
+            damage = 0;
 
-	public void TakeDamage(float damage)
-	{
-		float decreasedHP = damage * (1 - _defense / 100);
+        if (HP <= decreasedHP)
+        {
+            HP = 0;
+            Die();
+        }
+        else
+        {
+            HP -= decreasedHP;
+        }
+    }
 
-		if (damage < 0)
-			damage = 0;
+    public void Heal(float hp)
+    {
+        if (HP + hp > _maxHP)
+        {
+            HP = _maxHP;
+        }
+        else
+        {
+            HP += hp;
+        }
+    }
 
-		if (HP <= decreasedHP)
-		{
-			HP = 0;
-			Die();
-		}
-		else
-		{
-			HP -= decreasedHP;
-		}
-	}
+    [SerializeField] private Transform _characterBottom;
+    [SerializeField] private float _width = 1;
+    private List<Tilemap> _collidableTilemaps = new List<Tilemap>();
 
-	public void Heal(float hp)
-	{
-		if (HP + hp > _maxHP)
-		{
-			HP = _maxHP;
-		}
-		else
-		{
-			HP += hp;
-		}
-	}
+    private bool IsOccupied(Vector3 pos)
+    {
+        bool flag = false;
 
-	[SerializeField]
-	private Transform _characterBottom;
-	private List <Tilemap> _collidableTilemaps = new List<Tilemap>();
-	[SerializeField]
-	private float _width = 1;
+        foreach (Tilemap tilemap in _collidableTilemaps)
+        {
+            if (tilemap.GetTile(tilemap.WorldToCell(pos)))
+            {
+                flag = true;
+                break;
+            }
+        }
 
-	private bool IsOccupied(Vector3 pos) 
-	{
-		bool flag = false;
+        return flag;
+    }
 
-		foreach (Tilemap tilemap in _collidableTilemaps)
-		{
-			if (tilemap.GetTile(tilemap.WorldToCell(pos)))
-			{
-				flag = true;
-				break;
-			}
-		}
+    public void Move(Vector2 direction)
+    {
+        Vector3 finalDirection = direction.normalized * Speed * Time.deltaTime;
+        Vector3 charRightBorder = Vector3.right * _width / 2;
 
-		return flag;
-	}
+        bool isOccupiedRight = IsOccupied(_characterBottom.position + finalDirection + charRightBorder);
+        bool isOccupiedLeft = IsOccupied(_characterBottom.position + finalDirection - charRightBorder);
 
-	public void Move(Vector2 direction) 
-	{
-		Vector3 finalDirection = direction * Speed * Time.deltaTime;
-		Vector3 charRightBorder = Vector3.right * _width / 2;
+        if (isOccupiedLeft || isOccupiedRight)
+        {
+            bool isOccupiedRightX = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right + charRightBorder);
+            bool isOccupiedLeftX = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right - charRightBorder);
 
-		bool checkRight = IsOccupied(_characterBottom.position + finalDirection + charRightBorder);
-		bool checkLeft = IsOccupied(_characterBottom.position + finalDirection - charRightBorder);
+            if (isOccupiedRightX || isOccupiedLeftX)
+            {
+                finalDirection.x = 0;
+            }
 
-		if (checkLeft || checkRight)
-		{
-			bool checkRightX = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right + charRightBorder);
-			bool checkLeftX = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right - charRightBorder);
+            bool isOccupiedRightY = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up + charRightBorder);
+            bool isOccupiedLeftY = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up - charRightBorder);
 
-			if (checkRightX || checkLeftX)
-			{
-				finalDirection.x = 0;
-			}
+            if (isOccupiedRightY || isOccupiedLeftY)
+            {
+                finalDirection.y = 0;
+            }
 
-			bool checkRightY = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up + charRightBorder);
-			bool checkLeftY = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up - charRightBorder);
+            if (finalDirection.x != 0 && finalDirection.y != 0)
+            {
+                finalDirection.x = 0;
+            }
+        }
 
-			if (checkRightY || checkLeftY)
-			{
-				finalDirection.y = 0;
-			}
+        transform.position += finalDirection;
+    }
 
-			if (finalDirection.x != 0 && finalDirection.y != 0)
-			{
-				finalDirection = Vector3.zero;
-			}
-		}
-
-		transform.position += finalDirection;
-	}
-
-	public abstract void Die();
+    public abstract void Die();
 }
