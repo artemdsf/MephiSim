@@ -5,9 +5,15 @@ using UnityEngine.Tilemaps;
 
 public abstract class Character : MonoBehaviour
 {
+    [SerializeField] private Transform _characterBottom;
+
+    //Default parameters
+    [SerializeField] private float _maxHP = 100;
     [SerializeField] private float _defaultDef = 10;
     [SerializeField] private float _defaultSpeed = 5;
-    [SerializeField] private float _maxHP = 100;
+    [SerializeField] private float _width = 1;
+
+    private List<Tilemap> _collidableTilemaps = new List<Tilemap>();
 
     public float HP 
     { 
@@ -56,9 +62,19 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
+   
+    public virtual void Start()
+    {
+        CheckParameters();
 
-    //Ќам точно нужен конструктор? [SerializeField] нормально работает
-    public Character(float maxHP, float defaultSpeed, float defaultDefense, float width)
+        ResetDef();
+        ResetHP();
+        ResetSpeed();
+
+        FindCollidTiles();
+    }
+
+    public void Init(float maxHP, float defaultSpeed, float defaultDefense, float width)
     {
         _width = width;
         _defaultDef = defaultDefense;
@@ -69,55 +85,7 @@ public abstract class Character : MonoBehaviour
         ResetDef();
         ResetSpeed();
     }
-
-    public Character() { }
-
-    public virtual void Start()
-    {
-        if (_maxHP < 0)
-        {
-            Debug.LogError("maxHP parametr cannot have a negative value", this);
-            _maxHP = 0;
-        }
-
-        if (_defaultSpeed < 0)
-        {
-            Debug.LogError("defaultSpeed parametr cannot have a negative value", this);
-            _defaultSpeed = 0;
-        }
-
-        if (_defaultDef < 0)
-        {
-            Debug.LogError("defaultSpeed parametr cannot have a negative value", this);
-            _defaultDef = 0;
-        }
-
-        if (_defaultDef > 100)
-        {
-            Debug.LogError("defaultSpeed parametr cannot exceed 100", this);
-            _defaultDef = 100;
-        }
-
-        Speed = _defaultSpeed;
-        HP = _maxHP;
-        Defense = _defaultDef;
-
-        //Must be changed
-        GameObject[] collidableTilemaps = GameObject.FindGameObjectsWithTag("CollidableTilemap");
-
-        foreach (GameObject gameObject in collidableTilemaps)
-        {
-            Tilemap tilemap = gameObject.GetComponent<Tilemap>();
-
-            if (tilemap)
-                _collidableTilemaps.Add(tilemap);
-        }
-
-        if (_collidableTilemaps.Count == 0)
-            Debug.LogWarning("there is no collidable tilemaps in the scene", this);
-
-    }
-
+    
     public void ResetHP()
     {
         HP = _maxHP;
@@ -162,10 +130,6 @@ public abstract class Character : MonoBehaviour
             HP += hp;
         }
     }
-
-    [SerializeField] private Transform _characterBottom;
-    [SerializeField] private float _width = 1;
-    private List<Tilemap> _collidableTilemaps = new List<Tilemap>();
 
     private bool IsOccupied(Vector3 pos)
     {
@@ -216,6 +180,49 @@ public abstract class Character : MonoBehaviour
         }
 
         transform.position += finalDirection;
+    }
+
+    private void CheckParameters()
+	{
+        if (_maxHP < 0)
+        {
+            Debug.LogError("maxHP parametr cannot have a negative value", this);
+            _maxHP = 0;
+        }
+
+        if (_defaultSpeed < 0)
+        {
+            Debug.LogError("defaultSpeed parametr cannot have a negative value", this);
+            _defaultSpeed = 0;
+        }
+
+        if (_defaultDef < 0)
+        {
+            Debug.LogError("defaultSpeed parametr cannot have a negative value", this);
+            _defaultDef = 0;
+        }
+
+        if (_defaultDef > 100)
+        {
+            Debug.LogError("defaultSpeed parametr cannot exceed 100", this);
+            _defaultDef = 100;
+        }
+	}
+
+    private void FindCollidTiles()
+	{
+        GameObject[] collidableTilemaps = GameObject.FindGameObjectsWithTag("CollidableTilemap");
+
+        foreach (GameObject gameObject in collidableTilemaps)
+        {
+            Tilemap tilemap = gameObject.GetComponent<Tilemap>();
+
+            if (tilemap)
+                _collidableTilemaps.Add(tilemap);
+        }
+
+        if (_collidableTilemaps.Count == 0)
+            Debug.LogWarning("there is no collidable tilemaps in the scene", this);
     }
 
     public abstract void Die();
