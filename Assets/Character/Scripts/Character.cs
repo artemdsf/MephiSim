@@ -180,18 +180,18 @@ public abstract class Character : MonoBehaviour
 
         if (isOccupiedLeft || isOccupiedRight)
         {
-            bool isOccupiedRightX = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right + charRightBorder);
-            bool isOccupiedLeftX = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right - charRightBorder);
+            bool canMoveRight = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right + charRightBorder);
+            bool canMoveLeft = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right - charRightBorder);
 
-            if (isOccupiedRightX || isOccupiedLeftX)
+            if (canMoveRight || canMoveLeft)
             {
                 finalDirection.x = 0;
             }
 
-            bool isOccupiedRightY = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up + charRightBorder);
-            bool isOccupiedLeftY = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up - charRightBorder);
+            bool canMoveUp = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up + charRightBorder);
+            bool canMoveDown = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up - charRightBorder);
 
-            if (isOccupiedRightY || isOccupiedLeftY)
+            if (canMoveUp || canMoveDown)
             {
                 finalDirection.y = 0;
             }
