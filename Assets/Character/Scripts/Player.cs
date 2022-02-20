@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Player : Character
 {
-    public override void Start()
-    {
-        base.Start();
-    }
-    private void Update()
+    public void Update()
     {
         Move(new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
     }

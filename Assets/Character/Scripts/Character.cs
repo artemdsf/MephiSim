@@ -16,53 +16,76 @@ public abstract class Character : MonoBehaviour
     private List<Tilemap> _collidableTilemaps = new List<Tilemap>();
 
     public float HP 
-    { 
-        get; 
-        private set; 
+    {
+        get
+        {
+            return _hp;
+        }
+        private set
+        {
+            if (value < 0)
+            {
+                _hp = 0;
+            }
+            else if (value > _maxHP)
+            {
+                _hp = _maxHP;
+            }
+            else
+            {
+                _hp = value;
+            }
+        }
     }
+
+    private float _hp;
 
     public float Defense
     {
         get
         {
-            return Defense;
+            return _defense;
         }
         set
         {
             if (value < 0)
             {
-                Defense = 0;
+                _defense = 0;
             }
             else if (value > 100)
             {
-                Defense = 100;
+                _defense = 100;
             }
             else
             {
-                Defense = value;
+				_defense = value;
             }
         }
     }
+
+    private float _defense;
 
     public float Speed
     {
         get
         {
-            return Speed;
+            return _speed;
         }
         set
         {
             if (value < 0)
             {
-                Speed = 0;
+                _speed = 0;
             }
             else
             {
-                Speed = value;
+                _speed = value;
             }
         }
     }
    
+    private float _speed;
+
     public virtual void Start()
     {
         CheckParameters();
@@ -103,31 +126,31 @@ public abstract class Character : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        float decreasedHP = damage * (1 - Defense / 100);
+        float decreasedHP = damage * (1 - _defense / 100);
 
         if (damage < 0)
             damage = 0;
 
-        if (HP <= decreasedHP)
+        if (_hp <= decreasedHP)
         {
-            HP = 0;
+            _hp = 0;
             Die();
         }
         else
         {
-            HP -= decreasedHP;
+            _hp -= decreasedHP;
         }
     }
 
     public void Heal(float hp)
     {
-        if (HP + hp > _maxHP)
+        if (_hp + hp > _maxHP)
         {
-            HP = _maxHP;
+            _hp = _maxHP;
         }
         else
         {
-            HP += hp;
+            _hp += hp;
         }
     }
 
@@ -149,7 +172,7 @@ public abstract class Character : MonoBehaviour
 
     public void Move(Vector2 direction)
     {
-        Vector3 finalDirection = direction.normalized * Speed * Time.deltaTime;
+        Vector3 finalDirection = direction.normalized * _speed * Time.deltaTime;
         Vector3 charRightBorder = Vector3.right * _width / 2;
 
         bool isOccupiedRight = IsOccupied(_characterBottom.position + finalDirection + charRightBorder);
