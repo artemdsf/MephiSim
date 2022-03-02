@@ -11,9 +11,10 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private float _maxHP = 100;
     [SerializeField] private float _defaultDef = 10;
     [SerializeField] private float _defaultSpeed = 5;
-    [SerializeField] private float _width = 1;
+    [SerializeField] private Vector2 _size = new Vector2(1, 0.01f);
+    [SerializeField] private LayerMask _collidable;
+    
 
-    private List<Tilemap> _collidableTilemaps = new List<Tilemap>();
 
     public float HP 
     {
@@ -86,20 +87,19 @@ public abstract class Character : MonoBehaviour
    
     private float _speed;
 
-    public virtual void Start()
+    protected virtual void Start()
     {
+        CharactersManager.instance.AddCharacter(this);
         CheckParameters();
 
         ResetDef();
         ResetHP();
         ResetSpeed();
-
-        FindCollidTiles();
     }
 
-    public void Init(float maxHP, float defaultSpeed, float defaultDefense, float width)
+    public void Init(float maxHP, float defaultSpeed, float defaultDefense, Vector2 size)
     {
-        _width = width;
+        _size = size;
         _defaultDef = defaultDefense;
         _defaultSpeed = defaultSpeed;
         _maxHP = maxHP;
@@ -154,44 +154,25 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    private bool IsOccupied(Vector3 pos)
-    {
-        bool flag = false;
-
-        foreach (Tilemap tilemap in _collidableTilemaps)
-        {
-            if (tilemap.GetTile(tilemap.WorldToCell(pos)))
-            {
-                flag = true;
-                break;
-            }
-        }
-
-        return flag;
-    }
 
     public void Move(Vector2 direction)
     {
         Vector3 finalDirection = direction.normalized * _speed * Time.deltaTime;
-        Vector3 charRightBorder = Vector3.right * _width / 2;
 
-        bool isOccupiedRight = IsOccupied(_characterBottom.position + finalDirection + charRightBorder);
-        bool isOccupiedLeft = IsOccupied(_characterBottom.position + finalDirection - charRightBorder);
+        Collider2D collider = Physics2D.OverlapBox(_characterBottom.position + finalDirection, _size, 0, _collidable);
 
-        if (isOccupiedLeft || isOccupiedRight)
+        if (collider && !collider.isTrigger)
         {
-            bool canMoveRight = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right + charRightBorder);
-            bool canMoveLeft = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right - charRightBorder);
+            Collider2D colliderX = Physics2D.OverlapBox(_characterBottom.position + finalDirection.x * Vector3.right, _size, 0, _collidable);
 
-            if (canMoveRight || canMoveLeft)
+            if (colliderX && !colliderX.isTrigger)
             {
                 finalDirection.x = 0;
             }
 
-            bool canMoveUp = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up + charRightBorder);
-            bool canMoveDown = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up - charRightBorder);
+            Collider2D colliderY = Physics2D.OverlapBox(_characterBottom.position + finalDirection.y * Vector3.up, _size, 0, _collidable);
 
-            if (canMoveUp || canMoveDown)
+            if (colliderY && !colliderY.isTrigger)
             {
                 finalDirection.y = 0;
             }
@@ -232,21 +213,6 @@ public abstract class Character : MonoBehaviour
         }
 	}
 
-    private void FindCollidTiles()
-	{
-        GameObject[] collidableTilemaps = GameObject.FindGameObjectsWithTag("CollidableTilemap");
-
-        foreach (GameObject gameObject in collidableTilemaps)
-        {
-            Tilemap tilemap = gameObject.GetComponent<Tilemap>();
-
-            if (tilemap)
-                _collidableTilemaps.Add(tilemap);
-        }
-
-        if (_collidableTilemaps.Count == 0)
-            Debug.LogWarning("there is no collidable tilemaps in the scene", this);
-    }
 
     public abstract void Die();
 }
