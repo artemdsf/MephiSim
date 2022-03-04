@@ -8,7 +8,7 @@ public class EnemyProjectile : Projectile
     {
         if (collision.tag == "Player")
         {
-            collision.GetComponent<Character>().TakeDamage(base.Damage);
+            collision.GetComponent<Player>().TakeDamage(base.Damage);
             Destroy(gameObject);
         }
 

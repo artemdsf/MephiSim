@@ -4,21 +4,20 @@ using UnityEngine;
 
 public class Enemy : Character
 {
-    // Start is called before the first frame update
+    [SerializeField] protected EnemyWeapon Weapon { get; set; }
     protected override void Start()
     {
         base.Start();
+        Weapon = GetComponent<EnemyWeapon>();
     }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         
     }
 
     public override void Die()
     {
-        CharactersManager.instance.DeleteCharacter(this);
         Destroy(gameObject);
     }
 

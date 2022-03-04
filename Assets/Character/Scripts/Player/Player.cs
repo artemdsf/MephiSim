@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : Character
 {
-    private Weapon _weapon;
+    private PlayerWeapon _weapon;
 
     protected override void Start()
     {
-        _weapon = GetComponent<Weapon>();
+        _weapon = GetComponent<PlayerWeapon>();
         if (_weapon == null) 
         {
             Debug.LogWarning("There is no weapon script assigned to player", this);
@@ -32,7 +33,7 @@ public class Player : Character
 
     public override void Die() 
     {
-        Debug.LogWarning("Die() function do nothing yet!", this);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 }

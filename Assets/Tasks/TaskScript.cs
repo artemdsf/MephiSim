@@ -18,6 +18,8 @@ public class TaskScript : MonoBehaviour
     [SerializeField] private Text _question;
     [SerializeField] private Text _input;
 
+    [SerializeField] private Spawner _spawner;
+
     private string _currentAnswer = "";
     private Task_t _newTask;
 
@@ -75,6 +77,8 @@ public class TaskScript : MonoBehaviour
             if (_currentAnswer == _newTask.answer.ToString())
             {
                 Debug.Log("Correct");
+                gameObject.SetActive(false);
+                _spawner.Spawn();
             }
             else
             {

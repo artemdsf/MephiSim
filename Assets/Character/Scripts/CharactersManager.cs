@@ -9,7 +9,12 @@ public class CharactersManager : MonoBehaviour
     private List<Enemy> _enemies = new List<Enemy>();
     private Player _player;
 
-    private void Start()
+    public int EnemiesCount() 
+    {
+        return _enemies.Count;
+    }
+
+    private void Awake()
     {
 
         if (instance == null)
@@ -20,8 +25,6 @@ public class CharactersManager : MonoBehaviour
         { 
             Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(gameObject);
 
         InitManager();
     }
@@ -66,6 +69,18 @@ public class CharactersManager : MonoBehaviour
         return _player;
     }
 
+    private void AddToList<T>(List<T> list, T element) where T : Character
+    {
+        if (!list.Contains(element))
+        {
+            list.Add(element);
+        }
+        else
+        {
+            Debug.LogError("Adding duplicates of characters is not allowed", element);
+        }
+    }
+
     public void AddCharacter(Character character)
     {
         if (character is Player)
@@ -74,7 +89,7 @@ public class CharactersManager : MonoBehaviour
         }
         else if (character is Enemy)
         {
-            _enemies.Add(character as Enemy);
+            AddToList(_enemies, character as Enemy);
         }
     }
 
@@ -82,7 +97,7 @@ public class CharactersManager : MonoBehaviour
     {
         if (character is Player)
         {
-            Debug.LogError("You cannot delete player", this);
+            _player = null;
         }
         else if (character is Enemy)
         {

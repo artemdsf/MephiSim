@@ -10,11 +10,25 @@ public abstract class Character : MonoBehaviour
     //Default parameters
     [SerializeField] private float _maxHP = 100;
     [SerializeField] private float _defaultDef = 10;
-    [SerializeField] private float _defaultSpeed = 5;
-    [SerializeField] private Vector2 _size = new Vector2(1, 0.01f);
-    [SerializeField] private LayerMask _collidable;
+    [SerializeField] private float _defaultSpeed = 10;
+    [SerializeField] private Vector2 _size = new Vector2(1, 2);
+    private LayerMask _collidable;
     
+    public Vector2 Size 
+    {
+        get 
+        {
+            return _size; 
+        }
+    }
 
+    public LayerMask CollidableLayerMask
+    {
+        get
+        {
+            return _collidable;
+        }
+    }
 
     public float HP 
     {
@@ -89,12 +103,22 @@ public abstract class Character : MonoBehaviour
 
     protected virtual void Start()
     {
-        CharactersManager.instance.AddCharacter(this);
+        _collidable = LayerMask.GetMask("Collidable Tilemap");
         CheckParameters();
 
         ResetDef();
         ResetHP();
         ResetSpeed();
+    }
+
+    protected virtual void Awake()
+    {
+        CharactersManager.instance.AddCharacter(this);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        CharactersManager.instance.DeleteCharacter(this);
     }
 
     public void Init(float maxHP, float defaultSpeed, float defaultDefense, Vector2 size)
@@ -155,24 +179,25 @@ public abstract class Character : MonoBehaviour
     }
 
 
+    public bool IsSpaceFree(Vector2 pos)
+    {
+        Collider2D collider = Physics2D.OverlapBox(pos, _size, 0, _collidable);
+        return !collider || collider.isTrigger;
+    }
+
     public void Move(Vector2 direction)
     {
         Vector3 finalDirection = direction.normalized * _speed * Time.deltaTime;
 
-        Collider2D collider = Physics2D.OverlapBox(_characterBottom.position + finalDirection, _size, 0, _collidable);
-
-        if (collider && !collider.isTrigger)
+        if (!IsSpaceFree(_characterBottom.position + finalDirection))
         {
-            Collider2D colliderX = Physics2D.OverlapBox(_characterBottom.position + finalDirection.x * Vector3.right, _size, 0, _collidable);
 
-            if (colliderX && !colliderX.isTrigger)
+            if (!IsSpaceFree(_characterBottom.position + finalDirection.x * Vector3.right))
             {
                 finalDirection.x = 0;
             }
 
-            Collider2D colliderY = Physics2D.OverlapBox(_characterBottom.position + finalDirection.y * Vector3.up, _size, 0, _collidable);
-
-            if (colliderY && !colliderY.isTrigger)
+            if (!IsSpaceFree(_characterBottom.position + finalDirection.y * Vector3.up))
             {
                 finalDirection.y = 0;
             }
@@ -185,6 +210,7 @@ public abstract class Character : MonoBehaviour
 
         transform.position += finalDirection;
     }
+
 
     private void CheckParameters()
 	{
@@ -212,7 +238,6 @@ public abstract class Character : MonoBehaviour
             _defaultDef = 100;
         }
 	}
-
 
     public abstract void Die();
 }
