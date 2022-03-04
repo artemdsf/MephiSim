@@ -18,18 +18,16 @@ public class TaskScript : MonoBehaviour
     [SerializeField] private Text _question;
     [SerializeField] private Text _input;
 
-    [SerializeField] private Spawner _spawner;
-
     private string _currentAnswer = "";
     private Task_t _newTask;
 
     private string _numbers = "0123456789";
 
+    private bool _answered = false;
+
     private void Start()
     {
-        _newTask = GetTask();
-
-        _question.text = _newTask.question;
+        NewTask();   
     }
 
     private void Update()
@@ -39,6 +37,16 @@ public class TaskScript : MonoBehaviour
         _input.text = _currentAnswer;
 
         CheckAnswer();
+    }
+
+    private void OnEnable()
+    { 
+        Time.timeScale = 0;
+    }
+
+    private void OnDisable()
+    {
+        Time.timeScale = 1;
     }
 
     private Task_t GetTask()
@@ -70,20 +78,36 @@ public class TaskScript : MonoBehaviour
         return answer;
     }
 
+    public bool IsAnswerGivenAndCorrect()
+    {
+        if (_answered)
+        {
+            NewTask();
+        }
+        return _answered;
+    }
+
+    public void NewTask()
+    {
+        _newTask = GetTask();
+
+        _question.text = _newTask.question;
+    }
+
     private void CheckAnswer()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) && !_answered)
         {
             if (_currentAnswer == _newTask.answer.ToString())
             {
                 Debug.Log("Correct");
-                gameObject.SetActive(false);
-                _spawner.Spawn();
+                _answered = true;
             }
             else
             {
                 Debug.Log("Incorrect");
             }
         }
+
     }
 }

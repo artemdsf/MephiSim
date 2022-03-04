@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _doorCollider: {fileID: 1945881761}
   _task: {fileID: 1920151922}
+  _spawner: {fileID: 195074644}
 --- !u!61 &95379724
 BoxCollider2D:
   m_ObjectHideFlags: 0

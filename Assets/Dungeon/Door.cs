@@ -7,11 +7,12 @@ public class Door : MonoBehaviour
 {
     [SerializeField] private BoxCollider2D _doorCollider;
     [SerializeField] private TaskScript _task;
+    [SerializeField] private Spawner _spawner;
 
     private bool alreadyUsed = false;
 
     private void Start()
-    {   
+    {
 
     }
 
@@ -36,12 +37,26 @@ public class Door : MonoBehaviour
         _doorCollider.gameObject.layer = 0;
     }
 
+    IEnumerator CheckAnswer()
+    {
+        bool isCorrect = false;
+        while (!isCorrect)
+        {
+            isCorrect = _task.IsAnswerGivenAndCorrect();
+            yield return null;
+        }
+
+        _spawner.Spawn();
+        _task.gameObject.SetActive(false);
+        Close();
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Player" && !alreadyUsed)
         {
             _task.gameObject.SetActive(true);
-            Close();
+            StartCoroutine(CheckAnswer());
         }
     }
 
