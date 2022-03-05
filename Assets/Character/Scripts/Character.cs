@@ -10,10 +10,25 @@ public abstract class Character : MonoBehaviour
     //Default parameters
     [SerializeField] private float _maxHP = 100;
     [SerializeField] private float _defaultDef = 10;
-    [SerializeField] private float _defaultSpeed = 5;
-    [SerializeField] private float _width = 1;
+    [SerializeField] private float _defaultSpeed = 10;
+    [SerializeField] private Vector2 _size = new Vector2(1, 2);
+    private LayerMask _collidable;
+    
+    public Vector2 Size 
+    {
+        get 
+        {
+            return _size; 
+        }
+    }
 
-    private List<Tilemap> _collidableTilemaps = new List<Tilemap>();
+    public LayerMask CollidableLayerMask
+    {
+        get
+        {
+            return _collidable;
+        }
+    }
 
     public float HP 
     {
@@ -86,20 +101,29 @@ public abstract class Character : MonoBehaviour
    
     private float _speed;
 
-    public virtual void Start()
+    protected virtual void Start()
     {
+        _collidable = LayerMask.GetMask("Collidable Tilemap");
         CheckParameters();
 
         ResetDef();
         ResetHP();
         ResetSpeed();
-
-        FindCollidTiles();
     }
 
-    public void Init(float maxHP, float defaultSpeed, float defaultDefense, float width)
+    protected virtual void Awake()
     {
-        _width = width;
+        CharactersManager.instance.AddCharacter(this);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        CharactersManager.instance.DeleteCharacter(this);
+    }
+
+    public void Init(float maxHP, float defaultSpeed, float defaultDefense, Vector2 size)
+    {
+        _size = size;
         _defaultDef = defaultDefense;
         _defaultSpeed = defaultSpeed;
         _maxHP = maxHP;
@@ -154,44 +178,26 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    private bool IsOccupied(Vector3 pos)
+
+    public bool IsSpaceFree(Vector2 pos)
     {
-        bool flag = false;
-
-        foreach (Tilemap tilemap in _collidableTilemaps)
-        {
-            if (tilemap.GetTile(tilemap.WorldToCell(pos)))
-            {
-                flag = true;
-                break;
-            }
-        }
-
-        return flag;
+        Collider2D collider = Physics2D.OverlapBox(pos, _size, 0, _collidable);
+        return !collider || collider.isTrigger;
     }
 
     public void Move(Vector2 direction)
     {
         Vector3 finalDirection = direction.normalized * _speed * Time.deltaTime;
-        Vector3 charRightBorder = Vector3.right * _width / 2;
 
-        bool isOccupiedRight = IsOccupied(_characterBottom.position + finalDirection + charRightBorder);
-        bool isOccupiedLeft = IsOccupied(_characterBottom.position + finalDirection - charRightBorder);
-
-        if (isOccupiedLeft || isOccupiedRight)
+        if (!IsSpaceFree(_characterBottom.position + finalDirection))
         {
-            bool canMoveRight = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right + charRightBorder);
-            bool canMoveLeft = IsOccupied(_characterBottom.position + finalDirection.x * Vector3.right - charRightBorder);
 
-            if (canMoveRight || canMoveLeft)
+            if (!IsSpaceFree(_characterBottom.position + finalDirection.x * Vector3.right))
             {
                 finalDirection.x = 0;
             }
 
-            bool canMoveUp = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up + charRightBorder);
-            bool canMoveDown = IsOccupied(_characterBottom.position + finalDirection.y * Vector3.up - charRightBorder);
-
-            if (canMoveUp || canMoveDown)
+            if (!IsSpaceFree(_characterBottom.position + finalDirection.y * Vector3.up))
             {
                 finalDirection.y = 0;
             }
@@ -204,6 +210,7 @@ public abstract class Character : MonoBehaviour
 
         transform.position += finalDirection;
     }
+
 
     private void CheckParameters()
 	{
@@ -231,22 +238,6 @@ public abstract class Character : MonoBehaviour
             _defaultDef = 100;
         }
 	}
-
-    private void FindCollidTiles()
-	{
-        GameObject[] collidableTilemaps = GameObject.FindGameObjectsWithTag("CollidableTilemap");
-
-        foreach (GameObject gameObject in collidableTilemaps)
-        {
-            Tilemap tilemap = gameObject.GetComponent<Tilemap>();
-
-            if (tilemap)
-                _collidableTilemaps.Add(tilemap);
-        }
-
-        if (_collidableTilemaps.Count == 0)
-            Debug.LogWarning("there is no collidable tilemaps in the scene", this);
-    }
 
     public abstract void Die();
 }

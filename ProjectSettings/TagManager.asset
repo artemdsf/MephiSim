@@ -4,15 +4,17 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - CollidableTilemap
+  - Enemy
+  - Character
+  - Collidable Tilemap
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Collidable Tilemap
   - Water
   - UI
-  - 
+  - Character
   - 
   - 
   - 
@@ -41,4 +43,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Bullets Top
+    uniqueID: 1994627895
+    locked: 0
+  - name: Player
+    uniqueID: 3852210577
+    locked: 0
+  - name: Bullets Bottom
+    uniqueID: 1255562663
     locked: 0
