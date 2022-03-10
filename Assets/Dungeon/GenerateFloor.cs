@@ -1,13 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 enum RoomType
 {
+	StartRoom,
+	BossRoom,
 	Room,
-	hallwayHoriz,
-	hallwayVertic
+	HallwayHoriz,
+	HallwayVertic,
+	HallwayRight,
+	HallwayLeft
 }
 
 public class WallTile
@@ -24,12 +27,16 @@ public class WallTile
 
 public class GenerateFloor : MonoBehaviour
 {
-	//1 - Generate floor
-	//2 - Generate skirting board
-	//3 - Generate wall in floor tilemap
-	//4 - Generate collidable wall
-	//Chunk start tile left down
+	// 1 - Generate floor
+	// 2 - Generate skirting board
+	// 3 - Generate wall in floor tilemap
+	// 4 - Generate collidable wall
+	// First chunk tile: left-down tile
+	private RoomType[,] _map = new RoomType[5, 15];
 	private readonly Vector3Int _chunkSize = new Vector3Int(18, 10, 0);
+	private readonly int _hallwaySize = 2;
+
+	[SerializeField] private int _roomCount = 10;
 
 	[SerializeField] private List<Sprite> _sprites = new List<Sprite>();
 
@@ -116,6 +123,9 @@ public class GenerateFloor : MonoBehaviour
 
 	private void Start()
 	{
+		_leftTopChunk = new Vector2Int(0, 14);
+		_rightDownChunk = new Vector2Int(14, 0);
+
 		CreateTiles();
 
 		GenerateMap();
@@ -787,23 +797,40 @@ public class GenerateFloor : MonoBehaviour
 
 	private void GenerateMap()
 	{
-		GenerateChunk(Vector3Int.zero, RoomType.Room);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up, RoomType.hallwayVertic);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * 2, RoomType.Room);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * 3, RoomType.hallwayVertic);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * 4, RoomType.Room);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * 2 + Vector3Int.right, RoomType.hallwayHoriz);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * 2 + Vector3Int.right * 2, RoomType.Room);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * 2 + Vector3Int.right * 3, RoomType.Room);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * 3 + Vector3Int.right * 2, RoomType.Room);
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * 3 + Vector3Int.right * 3, RoomType.Room);
+		//GenerateChunk(Vector3Int.zero, RoomType.Room);
+		//GenerateChunk(Vector3Int.zero + Vector3Int.up, RoomType.HallwayVertic);
+		//GenerateChunk(Vector3Int.zero, RoomType.Room);
+		//GenerateChunk(Vector3Int.zero, RoomType.Room);
+		//GenerateChunk(Vector3Int.zero, RoomType.Room);
+		//GenerateChunk(Vector3Int.zero, RoomType.Room);
+
+		AddNewRoom(2, 0, RoomType.StartRoom);
+	}
+
+	private List<RoomType> GetRoomType(int x, int y)
+	{
+		List<RoomType> roomTypes = new List<RoomType>();
+
+		if (x > 0 && (_map[x - 1, y] == RoomType.Room || _map[x - 1, y] == RoomType.BossRoom))
+		{
+
+		}
+
+		return roomTypes;
+	}
+
+	// x, y: 0 - 14
+	private void AddNewRoom(int x, int y, RoomType roomType)
+	{
+		GenerateChunk(Vector3Int.zero + Vector3Int.up * x + Vector3Int.right * y, roomType);
+		_map[x, y] = roomType;
 	}
 
 	private void GenerateChunk(Vector3Int chunkPosition, RoomType roomType)
 	{
 		Vector3Int startPosition = chunkPosition * _chunkSize;
 
-		if (roomType == RoomType.Room)
+		if (roomType == RoomType.Room || roomType == RoomType.StartRoom)
 		{
 			for (int x = 0; x < _chunkSize.x; x++)
 			{
@@ -834,11 +861,11 @@ public class GenerateFloor : MonoBehaviour
 				}
 			}
 		}
-		else if (roomType == RoomType.hallwayHoriz)
+		else if (roomType == RoomType.HallwayHoriz)
 		{
 			for (int x = 0; x < _chunkSize.x; x++)
 			{
-				for (int y = _chunkSize.y / 2 - 1; y < _chunkSize.y / 2 + 1; y++)
+				for (int y = _chunkSize.y / 2 - _hallwaySize; y < _chunkSize.y / 2 + _hallwaySize; y++)
 				{
 					if (x % 2 == 0)
 					{
@@ -865,9 +892,9 @@ public class GenerateFloor : MonoBehaviour
 				}
 			}
 		}
-		else if (roomType == RoomType.hallwayVertic)
+		else if (roomType == RoomType.HallwayVertic)
 		{
-			for (int x = _chunkSize.x / 2 - 1; x < _chunkSize.x / 2 + 1; x++)
+			for (int x = _chunkSize.x / 2 - _hallwaySize; x < _chunkSize.x / 2 + _hallwaySize; x++)
 			{
 				for (int y = 0; y < _chunkSize.y; y++)
 				{
@@ -895,23 +922,6 @@ public class GenerateFloor : MonoBehaviour
 					}
 				}
 			}
-		}
-
-		if (_leftTopChunk.x > chunkPosition.x)
-		{
-			_leftTopChunk.x = chunkPosition.x;
-		}
-		if (_leftTopChunk.y < chunkPosition.y)
-		{
-			_leftTopChunk.y = chunkPosition.y;
-		}
-		if (_rightDownChunk.x < chunkPosition.x)
-		{
-			_rightDownChunk.x = chunkPosition.x;
-		}
-		if (_rightDownChunk.y > chunkPosition.y)
-		{
-			_rightDownChunk.y = chunkPosition.y;
 		}
 	}
 }

@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Enemy : Character
 {
-    [SerializeField] protected EnemyWeapon Weapon { get; set; }
+    [SerializeField] protected EnemyWeapon WeaponInstance { get; private set; }
+
     protected override void Start()
     {
         base.Start();
-        Weapon = GetComponent<EnemyWeapon>();
+        WeaponInstance = GetComponent<EnemyWeapon>();
     }
 
     protected virtual void Update()
@@ -20,5 +21,4 @@ public class Enemy : Character
     {
         Destroy(gameObject);
     }
-
 }

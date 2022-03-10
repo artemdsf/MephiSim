@@ -71,7 +71,7 @@ public class CharactersManager : MonoBehaviour
 
     private void AddToList<T>(List<T> list, T element) where T : Character
     {
-        if (!list.Contains(element))
+        if (list.Contains(element) == false)
         {
             list.Add(element);
         }
@@ -104,5 +104,4 @@ public class CharactersManager : MonoBehaviour
             _enemies.Remove(character as Enemy);
         }
     }
-
 }
