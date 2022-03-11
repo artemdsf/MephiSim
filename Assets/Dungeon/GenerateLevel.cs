@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateLevel : Generate
 {
-	[SerializeField] int _baseRoomCount = 10;
+	[SerializeField] private int _baseRoomCount = 10;
 
 	public readonly Vector2Int _startPosition = new Vector2Int(_mapSize / 2, _mapSize / 2);
 
@@ -16,7 +16,6 @@ public class GenerateLevel : Generate
 		
 		for (int i = 0; i < _baseRoomCount; i++)
 		{
-			Debug.Log("Gen");
 			if (TryGenNextBaseRoom() == false)
 				break;
 		}
