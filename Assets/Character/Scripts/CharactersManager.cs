@@ -6,12 +6,12 @@ public class CharactersManager : MonoBehaviour
 {
     public static CharactersManager instance = null;
 
-    private List<Teacher> _teachers = new List<Teacher>();
+    private List<Enemy> _enemies = new List<Enemy>();
     private Player _player;
 
-    public int TeachersCount() 
+    public int EnemiesCount() 
     {
-        return _teachers.Count;
+        return _enemies.Count;
     }
 
     private void Awake()
@@ -36,32 +36,32 @@ public class CharactersManager : MonoBehaviour
     }
 
 
-    public Teacher FindNearestTeacher(Vector3 pos) 
+    public Enemy FindNearestEnemy(Vector3 pos) 
     {
-        Teacher foundTeacher;
+        Enemy foundEnemy;
         float closestDistSqr = 0;
 
-        if (_teachers.Count != 0)
+        if (_enemies.Count != 0)
         {
-            foundTeacher = _teachers[0];
-            closestDistSqr = Vector3.SqrMagnitude(pos - _teachers[0].transform.position);
+            foundEnemy = _enemies[0];
+            closestDistSqr = Vector3.SqrMagnitude(pos - _enemies[0].transform.position);
         }
         else
         {
-            foundTeacher = null;
+            foundEnemy = null;
         }
 
-        foreach (Teacher teachers in _teachers)
+        foreach (Enemy enemy in _enemies)
         {
-            float distSqr = Vector3.SqrMagnitude(pos - teachers.transform.position);
+            float distSqr = Vector3.SqrMagnitude(pos - enemy.transform.position);
             if (distSqr < closestDistSqr)
             {
                 closestDistSqr = distSqr;
-                foundTeacher = teachers;
+                foundEnemy = enemy;
             }
         }
 
-        return foundTeacher;
+        return foundEnemy;
     }
 
     public Player GetPlayer()
@@ -69,6 +69,17 @@ public class CharactersManager : MonoBehaviour
         return _player;
     }
 
+    private void AddToList<T>(List<T> list, T element) where T : Character
+    {
+        if (!list.Contains(element))
+        {
+            list.Add(element);
+        }
+        else
+        {
+            Debug.LogError("Adding duplicates of characters is not allowed", element);
+        }
+    }
 
     public void AddCharacter(Character character)
     {
@@ -76,9 +87,9 @@ public class CharactersManager : MonoBehaviour
         {
             _player = character as Player;
         }
-        else if (character is Teacher)
+        else if (character is Enemy)
         {
-           UsefulFuncs.AddToListWithoutDuplicates(_teachers, character as Teacher);
+            AddToList(_enemies, character as Enemy);
         }
     }
 
@@ -88,9 +99,9 @@ public class CharactersManager : MonoBehaviour
         {
             _player = null;
         }
-        else if (character is Teacher)
+        else if (character is Enemy)
         {
-            _teachers.Remove(character as Teacher);
+            _enemies.Remove(character as Enemy);
         }
     }
 

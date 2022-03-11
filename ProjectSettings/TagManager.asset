@@ -7,7 +7,6 @@ TagManager:
   - Enemy
   - Character
   - Collidable Tilemap
-  - Teacher
   layers:
   - Default
   - TransparentFX

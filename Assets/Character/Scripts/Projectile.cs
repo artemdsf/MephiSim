@@ -6,7 +6,6 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _damage = 50;
-    [SerializeField] private string _tagToDealDamage = "Player";
 
     public float Damage 
     {
@@ -32,11 +31,6 @@ public class Projectile : MonoBehaviour
     {
         if (collision.tag == "Collidable Tilemap")
         {
-            Destroy(gameObject);
-        }
-        else if (collision.tag == _tagToDealDamage)
-        {
-            collision.GetComponent<Character>().TakeDamage(Damage);
             Destroy(gameObject);
         }
     }

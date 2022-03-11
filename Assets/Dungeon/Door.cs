@@ -18,7 +18,7 @@ public class Door : MonoBehaviour
 
     private void Update()
     {
-        if (alreadyUsed && CharactersManager.instance.TeachersCount() == 0)
+        if (alreadyUsed && CharactersManager.instance.EnemiesCount() == 0)
         {
             Open();
         }
