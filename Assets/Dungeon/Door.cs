@@ -11,11 +11,6 @@ public class Door : MonoBehaviour
 
     private bool alreadyUsed = false;
 
-    private void Start()
-    {
-
-    }
-
     private void Update()
     {
         if (alreadyUsed && CharactersManager.instance.TeachersCount() == 0)
@@ -59,6 +54,4 @@ public class Door : MonoBehaviour
             StartCoroutine(CheckAnswer());
         }
     }
-
-
 }
