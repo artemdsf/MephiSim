@@ -2,15 +2,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-enum RoomType
+public enum RoomType
 {
+	EmptyRoom,
+	BaseRoom,
 	StartRoom,
 	BossRoom,
-	Room,
 	HallwayHoriz,
-	HallwayVertic,
-	HallwayRight,
-	HallwayLeft
+	HallwayVertic
+}
+
+public class Room
+{
+	public RoomType RoomType = RoomType.EmptyRoom;
+	public Vector2Int Position = Vector2Int.one * -1;
+
+	public int DistanceFromStart = 0;
+	public bool IsExtreme = true;
 }
 
 public class WallTile
@@ -25,23 +33,25 @@ public class WallTile
 	public int[] id = new int[9];
 }
 
-public class GenerateFloor : MonoBehaviour
+public abstract class Generate : MonoBehaviour
 {
 	// 1 - Generate floor
 	// 2 - Generate skirting board
 	// 3 - Generate wall in floor tilemap
 	// 4 - Generate collidable wall
 	// First chunk tile: left-down tile
-	private RoomType[,] _map = new RoomType[5, 15];
-	private readonly Vector3Int _chunkSize = new Vector3Int(18, 10, 0);
-	private readonly int _hallwaySize = 2;
 
-	[SerializeField] private int _roomCount = 10;
+	[SerializeField] public readonly Vector3Int _chunkSize = new Vector3Int(18, 10, 0);
+	[SerializeField] protected const int _mapSize = 15;
+	[SerializeField] private readonly int _hallwayWidth = 2;
+	[SerializeField] private readonly int _wallOffset = 2;
 
 	[SerializeField] private List<Sprite> _sprites = new List<Sprite>();
 
 	[SerializeField] private Tilemap _FloorTilemap;
 	[SerializeField] private Tilemap _CollidWallTilemap;
+
+	protected Room[,] _map = new Room[_mapSize, _mapSize];
 
 	#region Tiles
 	private Tile _baseFloorTile1;
@@ -121,14 +131,16 @@ public class GenerateFloor : MonoBehaviour
 	private Vector2Int _leftTopChunk = new Vector2Int(0, 0);
 	private Vector2Int _rightDownChunk = new Vector2Int(0, 0);
 
-	private void Start()
+	protected void Start()
 	{
-		_leftTopChunk = new Vector2Int(0, 14);
-		_rightDownChunk = new Vector2Int(14, 0);
+		_leftTopChunk = new Vector2Int(0, _mapSize - 1);
+		_rightDownChunk = new Vector2Int(_mapSize - 1, 0);
 
 		CreateTiles();
 
 		GenerateMap();
+
+		GenerateFloor();
 		SetSkirtingBoards();
 		SetWallTiles();
 		SetCollidWallTiles();
@@ -680,9 +692,9 @@ public class GenerateFloor : MonoBehaviour
 	{
 		int[] id = new int[9];
 
-		for (int i = (_leftTopChunk.x - 2) * _chunkSize.x; i <= (_rightDownChunk.x + 3) * _chunkSize.x; i++)
+		for (int i = (_leftTopChunk.x - _wallOffset) * _chunkSize.x; i <= (_rightDownChunk.x + _wallOffset + 1) * _chunkSize.x; i++)
 		{
-			for (int j = (_rightDownChunk.y - 2) * _chunkSize.y; j <= (_leftTopChunk.y + 3) * _chunkSize.y; j++)
+			for (int j = (_rightDownChunk.y - _wallOffset) * _chunkSize.y; j <= (_leftTopChunk.y + _wallOffset + 1) * _chunkSize.y; j++)
 			{
 				id = GetTileID(new Vector3Int(i, j, 0));
 
@@ -795,42 +807,11 @@ public class GenerateFloor : MonoBehaviour
 	}
 	#endregion
 
-	private void GenerateMap()
-	{
-		//GenerateChunk(Vector3Int.zero, RoomType.Room);
-		//GenerateChunk(Vector3Int.zero + Vector3Int.up, RoomType.HallwayVertic);
-		//GenerateChunk(Vector3Int.zero, RoomType.Room);
-		//GenerateChunk(Vector3Int.zero, RoomType.Room);
-		//GenerateChunk(Vector3Int.zero, RoomType.Room);
-		//GenerateChunk(Vector3Int.zero, RoomType.Room);
-
-		AddNewRoom(2, 0, RoomType.StartRoom);
-	}
-
-	private List<RoomType> GetRoomType(int x, int y)
-	{
-		List<RoomType> roomTypes = new List<RoomType>();
-
-		if (x > 0 && (_map[x - 1, y] == RoomType.Room || _map[x - 1, y] == RoomType.BossRoom))
-		{
-
-		}
-
-		return roomTypes;
-	}
-
-	// x, y: 0 - 14
-	private void AddNewRoom(int x, int y, RoomType roomType)
-	{
-		GenerateChunk(Vector3Int.zero + Vector3Int.up * x + Vector3Int.right * y, roomType);
-		_map[x, y] = roomType;
-	}
-
 	private void GenerateChunk(Vector3Int chunkPosition, RoomType roomType)
 	{
 		Vector3Int startPosition = chunkPosition * _chunkSize;
 
-		if (roomType == RoomType.Room || roomType == RoomType.StartRoom)
+		if (roomType == RoomType.BaseRoom || roomType == RoomType.StartRoom)
 		{
 			for (int x = 0; x < _chunkSize.x; x++)
 			{
@@ -865,7 +846,7 @@ public class GenerateFloor : MonoBehaviour
 		{
 			for (int x = 0; x < _chunkSize.x; x++)
 			{
-				for (int y = _chunkSize.y / 2 - _hallwaySize; y < _chunkSize.y / 2 + _hallwaySize; y++)
+				for (int y = _chunkSize.y / 2 - _hallwayWidth; y < _chunkSize.y / 2 + _hallwayWidth; y++)
 				{
 					if (x % 2 == 0)
 					{
@@ -894,7 +875,7 @@ public class GenerateFloor : MonoBehaviour
 		}
 		else if (roomType == RoomType.HallwayVertic)
 		{
-			for (int x = _chunkSize.x / 2 - _hallwaySize; x < _chunkSize.x / 2 + _hallwaySize; x++)
+			for (int x = _chunkSize.x / 2 - _hallwayWidth; x < _chunkSize.x / 2 + _hallwayWidth; x++)
 			{
 				for (int y = 0; y < _chunkSize.y; y++)
 				{
@@ -924,4 +905,68 @@ public class GenerateFloor : MonoBehaviour
 			}
 		}
 	}
+
+	private void GenerateFloor()
+	{
+		Room room;
+		for (int i = 0; i < _mapSize; i++)
+		{
+			for (int j = 0; j < _mapSize; j++)
+			{
+				room = _map[i, j];
+
+				if (room != null)
+				{
+					GenerateChunk(Vector3Int.right * room.Position.x + Vector3Int.up * room.Position.y, room.RoomType);
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Add new room to array and spawn
+	/// </summary>
+	/// <param name="x">0 - 14</param>
+	/// <param name="y">0 - 14</param>
+	/// <param name="roomType">Room type</param>
+	protected Room AddNewRoom(Vector2Int position, RoomType roomType)
+	{
+		Room room = new Room();
+		room.RoomType = roomType;
+		room.Position = position;
+
+		_map[position.x, position.y] = room;
+
+		return room;
+	}
+
+	protected Room ConnectNewRoom(Room currentRoom, Vector2Int direction, RoomType newRoom)
+	{
+		RoomType hallType = RoomType.EmptyRoom;
+
+		if (direction == Vector2Int.right || direction == Vector2Int.left)
+		{
+			hallType = RoomType.HallwayHoriz;
+		}
+		else if (direction == Vector2Int.up || direction == Vector2Int.down)
+		{
+			hallType = RoomType.HallwayVertic;
+		}
+		else
+		{
+			hallType = RoomType.EmptyRoom;
+			direction = Vector2Int.right;
+			Debug.LogError("Incorrect direction");
+		}
+
+		AddNewRoom(currentRoom.Position + direction, hallType);
+		Room room = AddNewRoom(currentRoom.Position + direction * 2, newRoom);
+
+		currentRoom.IsExtreme = false;
+		room.DistanceFromStart = room.DistanceFromStart = 1;
+
+		return room;
+	}
+
+	protected abstract void GenerateMap();
 }

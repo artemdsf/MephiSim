@@ -299,7 +299,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1040344968}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9708c9f1834dd37449b0139b08c1a527, type: 3}
+  m_Script: {fileID: 11500000, guid: 8745bb5ed7af68f469a23f7b1ad34098, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _sprites:
@@ -360,6 +360,7 @@ MonoBehaviour:
   - {fileID: -7642704699816556683, guid: c0f1cc896ff4eb34e9fd9aa4047ce991, type: 3}
   _FloorTilemap: {fileID: 1583831027}
   _CollidWallTilemap: {fileID: 1098877846}
+  _baseRoomCount: 30
 --- !u!156049354 &1040344970
 Grid:
   m_ObjectHideFlags: 0
