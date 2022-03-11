@@ -93,4 +93,5 @@ public class CharactersManager : MonoBehaviour
             _teachers.Remove(character as Teacher);
         }
     }
+
 }

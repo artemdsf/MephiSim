@@ -5,10 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Weapon))]
 public class Anatoly : Teacher
 {
+
     [SerializeField] float _shootingCooldown;
-    [SerializeField] float _timeBeforeChangeDiraction;
-    [SerializeField] int _shotingDirections = 8;
-    [SerializeField] float _angleOffset = 20;
+    [SerializeField] float _changeDirectionAfterSeconds;
 
     Vector2 _movementDirection = Vector2.right;
 
@@ -32,21 +31,25 @@ public class Anatoly : Teacher
         {
             yield return new WaitForSeconds(_shootingCooldown);
 
-            for (int i = 0; i < _shotingDirections; i++)
+            int directions = 8;
+
+            for (int i = 0; i < directions; i++)
             {
-                Vector2 direction = Quaternion.Euler(0, 0, startAngle + 360 * i / _shotingDirections) * Vector2.up;
-                WeaponInstance.Shoot(direction);
+                Vector2 direction = Quaternion.Euler(0, 0, startAngle + 360 * i / directions) * Vector2.up;
+                Weapon.Shoot(direction);
             }
 
-            startAngle = (startAngle + _angleOffset) % 360;
+            startAngle = (startAngle + 20) % 360;
         }
+
     }
 
     private IEnumerator ChangeDirectionPerTime()
     {
         while (true)
         {
-            yield return new WaitForSeconds(_timeBeforeChangeDiraction);
+            yield return new WaitForSeconds(_changeDirectionAfterSeconds);
+
         }
     }
 
