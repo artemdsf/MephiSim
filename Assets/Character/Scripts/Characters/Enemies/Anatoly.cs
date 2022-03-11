@@ -35,7 +35,7 @@ public class Anatoly : Teacher
             for (int i = 0; i < _shotingDirections; i++)
             {
                 Vector2 direction = Quaternion.Euler(0, 0, startAngle + 360 * i / _shotingDirections) * Vector2.up;
-                WeaponInstance.Shoot(direction);
+                Weapon.Shoot(direction);
             }
 
             startAngle = (startAngle + _angleOffset) % 360;
