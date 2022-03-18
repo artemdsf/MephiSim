@@ -15,7 +15,7 @@ public abstract class Character : MonoBehaviour
 
     private LayerMask _collidable;
     private Animator _animator;
-
+    public Vector3 Velocity { private set; get; }
     
     public Vector2 Size 
     {
@@ -218,6 +218,7 @@ public abstract class Character : MonoBehaviour
             WalkingAnim(finalDirection);
         }
 
+        Velocity = finalDirection;
         transform.position += finalDirection;
     }
 
