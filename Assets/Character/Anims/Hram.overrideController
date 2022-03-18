@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Hram
+  m_Controller: {fileID: 9100000, guid: 1688c35e22b7d354abbb1853a6e1d370, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: c24b878c8b7fe6f41aad843b4e74d892, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1637f888e4fffec448025b1388d165f7, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5096888af180c014583b91d448b48aa5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 42ea5311348bd50498a20b6f2e9a7fb9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 401f33403357d4c4b865f0dcf8d31778, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 972b5ca30785f2c4e9194bed5f6dac68, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: c26cbec713834564dbb5e7ef64a0eadf, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3efbfbb5970052d4cb511c072abe28cf, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: efef4bff2d858344695531b87c906e3e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d95302e8e97cebe40802942e77fae2aa, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 77e7e640f3de52e4ea07d8173834ca82, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a76b5a895e8f46845b9b876df44660a6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7eaec8078268dcf4692cda2bde48c8a3, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 74377e70287123248b9063e2f6171bf1, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: b33c2efd43906e548b47eceb4fd5461e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 04428c803435f474d9316b53fba99756, type: 2}

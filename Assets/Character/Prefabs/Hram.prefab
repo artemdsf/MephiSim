@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 6495728928813995474}
   - component: {fileID: 8126783888053254905}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Hram
   m_TagString: Teacher
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,8 +106,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 6164395428596610570, guid: 19169e1ca81a6d3409b39f48c344753a, type: 3}
-  m_Color: {r: 1, g: 0.081130974, b: 0.07075471, a: 1}
+  m_Sprite: {fileID: 4242014993061589701, guid: 9ded6fe234d1aef4382bc12a749e01da, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -170,7 +170,7 @@ Animator:
   m_GameObject: {fileID: 6495728928813995437}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1688c35e22b7d354abbb1853a6e1d370, type: 2}
+  m_Controller: {fileID: 22100000, guid: 8d736334ed390994495944974d5cc5e4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -194,7 +194,9 @@ MonoBehaviour:
   _characterBottom: {fileID: 6495728928659984152}
   _maxHP: 100
   _defaultDef: 10
-  _defaultSpeed: 10
+  _defaultSpeed: 7
   _size: {x: 1, y: 2.2}
-  _shootingCooldown: 1
-  _changeDirectionAfterSeconds: 2
+  _shootingCooldown: 0.3
+  _timeBeforeChangeDiraction: 1
+  _shotingDirections: 8
+  _angleOffset: 20
