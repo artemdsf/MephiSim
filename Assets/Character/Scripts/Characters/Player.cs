@@ -7,8 +7,43 @@ public class Player : Character
 {
     private Weapon _weapon;
 
+    private float _mana;
+
+    public float Mana
+    {
+        get
+        {
+            return _mana;
+        }
+
+        private set 
+        {
+            if (_mana >= 0)
+            {
+                _mana = value;
+            }
+            else
+            {
+                _mana = 0;
+            }
+        }
+    }
+
+    [SerializeField] private float _maxMana;
+
+    public float MaxMana
+    {
+        get
+        {
+            return _maxMana;
+        }
+    }
+
+
     protected override void Start()
     {
+
+
         _weapon = GetComponent<Weapon>();
         if (_weapon == null) 
         {

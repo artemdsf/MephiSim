@@ -1,4 +1,4 @@
-using System.Collections;
+        using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -12,6 +12,32 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private float _defaultDef = 10;
     [SerializeField] private float _defaultSpeed = 10;
     [SerializeField] private Vector2 _size = new Vector2(1, 2);
+
+    public float MaxHP 
+    {
+        get 
+        {
+            return _maxHP;
+        } 
+    }
+    public float DefaultDef
+    {
+        get
+        {
+            return _defaultDef;
+        }
+    }
+
+
+    public float DefaultSpeed
+    {
+        get
+        {
+            return _defaultSpeed;
+        }
+    }
+
+
 
     private LayerMask _collidable;
     private Animator _animator;
