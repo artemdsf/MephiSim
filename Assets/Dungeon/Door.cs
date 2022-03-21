@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -19,20 +18,16 @@ public class Door : MonoBehaviour
         }
     }
 
-    private void Close()
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        _doorCollider.isTrigger = false;
-        _doorCollider.gameObject.layer = LayerMask.NameToLayer("Collidable Tilemap");
-        alreadyUsed = true;
+        if (collision.tag == "Player" && alreadyUsed == false)
+        {
+            _task.gameObject.SetActive(true);
+            StartCoroutine(CheckAnswer());
+        }
     }
 
-    private void Open()
-    {
-        _doorCollider.isTrigger = true;
-        _doorCollider.gameObject.layer = 0;
-    }
-
-    IEnumerator CheckAnswer()
+    private IEnumerator CheckAnswer()
     {
         bool isCorrect = false;
         while (!isCorrect)
@@ -46,12 +41,16 @@ public class Door : MonoBehaviour
         Close();
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void Close()
     {
-        if (collision.tag == "Player" && !alreadyUsed)
-        {
-            _task.gameObject.SetActive(true);
-            StartCoroutine(CheckAnswer());
-        }
+        _doorCollider.isTrigger = false;
+        _doorCollider.gameObject.layer = LayerMask.NameToLayer("Collidable Tilemap");
+        alreadyUsed = true;
+    }
+
+    private void Open()
+    {
+        _doorCollider.isTrigger = true;
+        _doorCollider.gameObject.layer = 0;
     }
 }

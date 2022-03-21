@@ -7,9 +7,19 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] float _maxDistance = 5;
     [SerializeField] float _speedMult = 10;
-    void Update()
+
+    private Player _player;
+
+	private void Start()
+	{
+        _player = CharactersManager.instance.GetPlayer();
+
+        transform.position = _player.transform.position + Vector3.back;
+    }
+
+	private void Update()
     {
-        Vector2 playerPos = (Vector2)CharactersManager.instance.GetPlayer().transform.position;
+        Vector2 playerPos = (Vector2)_player.transform.position;
 
         if (Vector2.Distance(playerPos, (Vector2)transform.position) > _maxDistance)
         {

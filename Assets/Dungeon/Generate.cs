@@ -49,6 +49,7 @@ public abstract class Generate : MonoBehaviour
 	[SerializeField] private List<Sprite> _sprites = new List<Sprite>();
 
 	[SerializeField] private Tilemap _FloorTilemap;
+	[SerializeField] private Tilemap _WallTilemap;
 	[SerializeField] private Tilemap _CollidWallTilemap;
 
 	protected Room[,] _map = new Room[_mapSize, _mapSize];
@@ -675,13 +676,13 @@ public abstract class Generate : MonoBehaviour
 				{
 					if (i % 2 == 0)
 					{
-						_FloorTilemap.SetTile(new Vector3Int(i, j + 2, 0), _baseWallTile1);
-						_FloorTilemap.SetTile(new Vector3Int(i, j + 1, 0), _baseWallTile3);
+						_WallTilemap.SetTile(new Vector3Int(i, j + 2, 0), _baseWallTile1);
+						_WallTilemap.SetTile(new Vector3Int(i, j + 1, 0), _baseWallTile3);
 					}
 					else
 					{
-						_FloorTilemap.SetTile(new Vector3Int(i, j + 2, 0), _baseWallTile2);
-						_FloorTilemap.SetTile(new Vector3Int(i, j + 1, 0), _baseWallTile4);
+						_WallTilemap.SetTile(new Vector3Int(i, j + 2, 0), _baseWallTile2);
+						_WallTilemap.SetTile(new Vector3Int(i, j + 1, 0), _baseWallTile4);
 					}
 				}
 			}
@@ -763,47 +764,56 @@ public abstract class Generate : MonoBehaviour
 	#region HasFunctions
 	private bool Has(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition);
+		return _FloorTilemap.HasTile(tilePosition) || 
+			_WallTilemap.HasTile(tilePosition);
 	}
 
 	private bool HasRight(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition + Vector3Int.right);
+		return _FloorTilemap.HasTile(tilePosition + Vector3Int.right) || 
+			_WallTilemap.HasTile(tilePosition + Vector3Int.right);
 	}
 
 	private bool HasRightDown(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition + Vector3Int.right + Vector3Int.down);
+		return _FloorTilemap.HasTile(tilePosition + Vector3Int.right + Vector3Int.down) || 
+			_WallTilemap.HasTile(tilePosition + Vector3Int.right + Vector3Int.down);
 	}
 
 	private bool HasDown(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition + Vector3Int.down);
+		return _FloorTilemap.HasTile(tilePosition + Vector3Int.down) ||
+			_WallTilemap.HasTile(tilePosition + Vector3Int.down);
 	}
 
 	private bool HasLeftDown(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition + Vector3Int.left + Vector3Int.down);
+		return _FloorTilemap.HasTile(tilePosition + Vector3Int.left + Vector3Int.down) ||
+			_WallTilemap.HasTile(tilePosition + Vector3Int.left + Vector3Int.down);
 	}
 
 	private bool HasLeft(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition + Vector3Int.left);
+		return _FloorTilemap.HasTile(tilePosition + Vector3Int.left) ||
+			_WallTilemap.HasTile(tilePosition + Vector3Int.left);
 	}
 
 	private bool HasLeftUp(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition + Vector3Int.left + Vector3Int.up);
+		return _FloorTilemap.HasTile(tilePosition + Vector3Int.left + Vector3Int.up) ||
+			_WallTilemap.HasTile(tilePosition + Vector3Int.left + Vector3Int.up);
 	}
 
 	private bool HasUp(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition + Vector3Int.up);
+		return _FloorTilemap.HasTile(tilePosition + Vector3Int.up) ||
+			_WallTilemap.HasTile(tilePosition + Vector3Int.up);
 	}
 
 	private bool HasRightUp(Vector3Int tilePosition)
 	{
-		return _FloorTilemap.HasTile(tilePosition + Vector3Int.right + Vector3Int.up);
+		return _FloorTilemap.HasTile(tilePosition + Vector3Int.right + Vector3Int.up) ||
+			_WallTilemap.HasTile(tilePosition + Vector3Int.right + Vector3Int.up);
 	}
 	#endregion
 
