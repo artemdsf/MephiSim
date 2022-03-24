@@ -2,37 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum RoomType
-{
-	EmptyRoom,
-	BaseRoom,
-	StartRoom,
-	BossRoom,
-	HallwayHoriz,
-	HallwayVertic
-}
-
-public class Room
-{
-	public RoomType RoomType = RoomType.EmptyRoom;
-	public Vector2Int Position = Vector2Int.one * -1;
-
-	public int DistanceFromStart = 0;
-	public bool IsExtreme = true;
-}
-
-public class WallTile
-{
-	public WallTile(Tile tile, int[] arr)
-	{
-		this.tile = tile;
-		id = arr;
-	}
-
-	public Tile tile;
-	public int[] id = new int[9];
-}
-
 public abstract class Generate : MonoBehaviour
 {
 	// 1 - Generate floor
@@ -41,10 +10,10 @@ public abstract class Generate : MonoBehaviour
 	// 4 - Generate collidable wall
 	// First chunk tile: left-down tile
 
-	[SerializeField] public readonly Vector3Int _chunkSize = new Vector3Int(18, 10, 0);
-	[SerializeField] protected const int _mapSize = 15;
-	[SerializeField] private readonly int _hallwayWidth = 2;
-	[SerializeField] private readonly int _wallOffset = 2;
+	public readonly Vector3Int _chunkSize = new Vector3Int(18, 10, 0);
+	protected const int _mapSize = 15;
+	private readonly int _hallwayWidth = 2;
+	private readonly int _wallOffset = 2;
 
 	[SerializeField] private List<Sprite> _sprites = new List<Sprite>();
 
