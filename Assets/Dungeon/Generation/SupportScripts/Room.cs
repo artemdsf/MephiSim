@@ -18,6 +18,14 @@ public class Room
 		LevelMap.Map.Add(this);
 	}
 
+	public Vector3 CenterPos 
+	{
+		get
+		{
+			return LevelMap.GetChunkCenter(Position);
+		}
+	}
+
 	public Vector3Int Position;
 	public RoomType RoomType;
 
@@ -27,6 +35,8 @@ public class Room
 	public bool IsDownOpen = false;
 
 	public bool IsExtreme = true;
+
+	public bool IsVisited = false;
 
 	public int DistanceFromStart;
 }
