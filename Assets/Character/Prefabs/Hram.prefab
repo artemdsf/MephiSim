@@ -59,7 +59,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6495728928813995437}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.958, y: -13.004708, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6495728928659984152}
@@ -196,7 +196,7 @@ MonoBehaviour:
   _defaultDef: 10
   _defaultSpeed: 7
   _size: {x: 1, y: 2.2}
-  _shootingCooldown: 0.3
+  _shootingCooldown: 0.5
   _timeBeforeChangeDiraction: 1
   _shotingDirections: 8
   _angleOffset: 20
