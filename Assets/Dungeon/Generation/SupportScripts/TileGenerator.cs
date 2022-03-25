@@ -135,23 +135,52 @@ public class TileGenerator : MonoBehaviour
 		switch (room.RoomType)
 		{
 			case RoomType.StartRoom:
-				CopyTilemap(room, _roomPrefabContainer.StartRooms[Random.Range(0, _roomPrefabContainer.StartRooms.Count)]);
+				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.StartRooms));
 				break;
 			case RoomType.EnemyRoom:
-				CopyTilemap(room, _roomPrefabContainer.EnemyRooms[Random.Range(0, _roomPrefabContainer.EnemyRooms.Count)]);
+				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.EnemyRooms));
 				break;
 			case RoomType.SpecialRoom:
-				CopyTilemap(room, _roomPrefabContainer.SpecialRooms[Random.Range(0, _roomPrefabContainer.SpecialRooms.Count)]);
+				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.SpecialRooms));
 				break;
 			case RoomType.DoubeRoom:
-				CopyTilemap(room, _roomPrefabContainer.DoubeRooms[Random.Range(0, _roomPrefabContainer.DoubeRooms.Count)]);
+				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.DoubeRooms));
 				break;
 			case RoomType.Hallway:
-				CopyTilemap(room, _roomPrefabContainer.Hallways[Random.Range(0, _roomPrefabContainer.Hallways.Count)]);
+				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.Hallways));
 				break;
 			default:
 				throw new UnityException("Invalid room type");
 		}
+	}
+
+	/// <summary>
+	/// Get room from prefab container
+	/// </summary>
+	/// <param name="room">Room to spawn</param>
+	/// <param name="list">Container</param>
+	/// <returns>Room prefab</returns>
+	private RoomPrefab GetRoomPrefab(Room room, List<RoomPrefab> list)
+	{
+		bool IsLeftMatch;
+		bool IsRightMatch;
+		bool IsUpMatch;
+		bool IsDownMatch;
+
+		foreach (var roomPrefab in list)
+		{
+			IsLeftMatch = room.IsLeftOpen == roomPrefab.IsLeftOpen;
+			IsRightMatch = room.IsRightOpen == roomPrefab.IsRightOpen;
+			IsUpMatch = room.IsUpOpen == roomPrefab.IsUpOpen;
+			IsDownMatch = room.IsDownOpen == roomPrefab.IsDownOpen;
+
+			if (IsLeftMatch && IsRightMatch && IsUpMatch && IsDownMatch)
+			{
+				return roomPrefab;
+			}
+		}
+
+		return null;
 	}
 
 	/// <summary>
@@ -161,6 +190,11 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="prefab">Room prefab</param>
 	private void CopyTilemap(Room room, RoomPrefab prefab)
 	{
+		if (prefab == null)
+		{
+			throw new UnityException("Prefab not found");
+		}
+
 		Vector3Int tilePositionInPrefab;
 		Vector3Int tilePositionInRoom;
 
