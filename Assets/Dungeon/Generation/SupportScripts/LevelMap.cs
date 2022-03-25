@@ -3,9 +3,12 @@ using UnityEngine;
 
 public static class LevelMap
 {
-	public static readonly int MapSize = 15;
+	public static int LeftChunk = 0;
+	public static int RightChunk = 0;
+	public static int UpChunk = 0;
+	public static int DownChunk = 0;
+
 	public static readonly Vector3Int ChunkSize = new Vector3Int(18, 10, 0);
-	public static readonly Vector3Int StartPosition = new Vector3Int(MapSize / 2, MapSize / 2, 0);
 
 	public static List<Room> Map = new List<Room>();
 
@@ -20,6 +23,20 @@ public static class LevelMap
 		return null;
 	}
 
-	public static readonly int RightExtremeTilePosition = (MapSize + 1) * ChunkSize.x;
-	public static readonly int UpExtremeTilePosition = (MapSize + 1) * ChunkSize.y;
+	public static int LeftPosition()
+	{
+		return (LeftChunk - 1) * ChunkSize.x;
+	}
+	public static int RightPosition()
+	{
+		return (RightChunk + 2) * ChunkSize.x;
+	}
+	public static int DownPosition()
+	{
+		return (DownChunk - 1) * ChunkSize.y;
+	}
+	public static int UpPosition()
+	{
+		return (UpChunk + 2) * ChunkSize.y;
+	}
 }

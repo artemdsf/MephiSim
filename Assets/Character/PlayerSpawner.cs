@@ -8,9 +8,7 @@ public class PlayerSpawner : MonoBehaviour
 
     private void Start()
     {
-        Vector3 startPosition = new Vector3(
-            (LevelMap.StartPosition.x + 0.5f) * LevelMap.ChunkSize.x,
-            (LevelMap.StartPosition.y + 0.5f) * LevelMap.ChunkSize.y, 0);
+        Vector3 startPosition = (Vector3)LevelMap.ChunkSize * 0.5f;
 
         Instantiate(_player, startPosition, Quaternion.identity);
     }

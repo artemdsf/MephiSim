@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum RoomType
 {
 	StartRoom,
 	EnemyRoom,
-	SpecialRoom,
-	DoubeRoom,
 	Hallway
 }
 

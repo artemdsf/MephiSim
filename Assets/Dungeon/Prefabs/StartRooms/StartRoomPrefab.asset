@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 7296e35345a7ce94fb580bfb4a97ade8, type: 3}
   m_Name: StartRoomPrefab
   m_EditorClassIdentifier: Assembly-CSharp::StartRoomPrefab
-  Tilemap: {fileID: 5126987788094410259, guid: 15e179c72603a06478cfa4fb062b0a99, type: 3}
-  LeftDownCorner: {x: -18, y: -1, z: 0}
-  IsRightOpen: 0
-  IsLeftOpen: 0
-  IsUpOpen: 0
-  IsDownOpen: 0
+  Room: {fileID: 5126987788094410262, guid: ac031c717474c8748b5dc24c24ca4ceb, type: 3}
+  _leftDownCorner: {x: -18, y: -1, z: 0}
+  IsRightOpen: 1
+  IsLeftOpen: 1
+  IsUpOpen: 1
+  IsDownOpen: 1

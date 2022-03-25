@@ -466,6 +466,9 @@ MonoBehaviour:
   _FloorTilemap: {fileID: 1583831027}
   _WallTilemap: {fileID: 813825501}
   _CollidWallTilemap: {fileID: 1098877846}
+  _roomCountToSpawn: 100
+  _chanceToChangeRoom: 10
+  _hallwayMaxLenght: 2
 --- !u!156049354 &1040344970
 Grid:
   m_ObjectHideFlags: 0
@@ -486,7 +489,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1040344968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1583831029}

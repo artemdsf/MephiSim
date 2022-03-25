@@ -41,6 +41,19 @@ public class TileGenerator : MonoBehaviour
 	private Tile _tile;
 
 	/// <summary>
+	/// Grid for generation
+	/// </summary>
+	protected Transform grid;
+	/// <summary>
+	/// List of free to spawn rooms
+	/// </summary>
+	protected List<Room> freeToSpawnRooms = new List<Room>();
+	/// <summary>
+	/// List of free to spawn rooms
+	/// </summary>
+	protected List<Room> freeToSpawnHallways = new List<Room>();
+
+	/// <summary>
 	/// List of wall tiles
 	/// </summary>
 	private List<TileWithID> _wallTiles = new List<TileWithID>();
@@ -60,7 +73,7 @@ public class TileGenerator : MonoBehaviour
 	/// <returns>Spawned room</returns>
 	protected Room AddStartRoom()
 	{
-		return new Room(LevelMap.StartPosition, RoomType.StartRoom, 0);
+		return new Room(Vector3Int.zero, RoomType.StartRoom, 0);
 	}
 
 	/// <summary>
@@ -140,12 +153,6 @@ public class TileGenerator : MonoBehaviour
 			case RoomType.EnemyRoom:
 				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.EnemyRooms));
 				break;
-			case RoomType.SpecialRoom:
-				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.SpecialRooms));
-				break;
-			case RoomType.DoubeRoom:
-				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.DoubeRooms));
-				break;
 			case RoomType.Hallway:
 				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.Hallways));
 				break;
@@ -162,24 +169,33 @@ public class TileGenerator : MonoBehaviour
 	/// <returns>Room prefab</returns>
 	private RoomPrefab GetRoomPrefab(Room room, List<RoomPrefab> list)
 	{
-		bool IsLeftMatch;
-		bool IsRightMatch;
-		bool IsUpMatch;
-		bool IsDownMatch;
+		List<RoomPrefab> newList = new List<RoomPrefab>();
+
+		bool IsLeftMatch = true;
+		bool IsRightMatch = true;
+		bool IsUpMatch = true;
+		bool IsDownMatch = true;
 
 		foreach (var roomPrefab in list)
 		{
-			IsLeftMatch = room.IsLeftOpen == roomPrefab.IsLeftOpen;
-			IsRightMatch = room.IsRightOpen == roomPrefab.IsRightOpen;
-			IsUpMatch = room.IsUpOpen == roomPrefab.IsUpOpen;
-			IsDownMatch = room.IsDownOpen == roomPrefab.IsDownOpen;
+			if (room.RoomType == RoomType.Hallway)
+			{
+				IsLeftMatch = room.IsLeftOpen == roomPrefab.IsLeftOpen;
+				IsRightMatch = room.IsRightOpen == roomPrefab.IsRightOpen;
+				IsUpMatch = room.IsUpOpen == roomPrefab.IsUpOpen;
+				IsDownMatch = room.IsDownOpen == roomPrefab.IsDownOpen;
+			}
 
 			if (IsLeftMatch && IsRightMatch && IsUpMatch && IsDownMatch)
 			{
-				return roomPrefab;
+				newList.Add(roomPrefab);
 			}
 		}
 
+		if (newList.Count > 0)
+		{
+			return newList[Random.Range(0, newList.Count)];
+		}
 		return null;
 	}
 
@@ -198,17 +214,33 @@ public class TileGenerator : MonoBehaviour
 		Vector3Int tilePositionInPrefab;
 		Vector3Int tilePositionInRoom;
 
+		Tilemap tilemap = prefab.Room.GetComponent<Tilemap>();
+
+		if (tilemap == null)
+		{
+			throw new UnityException("Tilemap is null");
+		}
+
 		for (int i = 0; i < LevelMap.ChunkSize.x; i++)
 		{
 			for (int j = 0; j < LevelMap.ChunkSize.y; j++)
 			{
 				tilePositionInPrefab = prefab.LeftDownCorner + new Vector3Int(i, j, 0);
-				if (prefab.Tilemap.HasTile(tilePositionInPrefab))
+				if (tilemap.HasTile(tilePositionInPrefab))
 				{
 					tilePositionInRoom = room.Position * LevelMap.ChunkSize + new Vector3Int(i, j, 0);
 					_FloorTilemap.SetTile(tilePositionInRoom, GetFloorTile(i, j));
 				}
 			}
+		}
+
+		Vector3 roomPosition;
+
+		foreach (Transform child in prefab.Room.transform)
+		{
+			roomPosition = room.Position * LevelMap.ChunkSize + child.position - prefab.LeftDownCorner;
+
+			Instantiate(child, roomPosition, Quaternion.identity, grid);
 		}
 	}
 
@@ -245,9 +277,14 @@ public class TileGenerator : MonoBehaviour
 	{
 		int[] id = new int[9];
 
-		for (int i = 0; i <= LevelMap.RightExtremeTilePosition; i++)
+		int left = LevelMap.LeftPosition();
+		int right = LevelMap.RightPosition();
+		int down = LevelMap.DownPosition();
+		int up = LevelMap.UpPosition();
+
+		for (int i = left; i <= right; i++)
 		{
-			for (int j = 0; j <= LevelMap.UpExtremeTilePosition; j++)
+			for (int j = down; j <= up; j++)
 			{
 				id = GetTileID(new Vector3Int(i, j, 0));
 
@@ -264,9 +301,14 @@ public class TileGenerator : MonoBehaviour
 	/// </summary>
 	private void SetWallTiles()
 	{
-		for (int i = LevelMap.RightExtremeTilePosition; i >= 0; i--)
+		int left = LevelMap.LeftPosition();
+		int right = LevelMap.RightPosition();
+		int down = LevelMap.DownPosition();
+		int up = LevelMap.UpPosition();
+
+		for (int i = right; i >= left; i--)
 		{
-			for (int j = LevelMap.UpExtremeTilePosition; j >= 0; j--)
+			for (int j = up; j >= down; j--)
 			{
 				if (Has(new Vector3Int(i, j, 0)) && HasUp(new Vector3Int(i, j, 0)) == false)
 				{
@@ -292,9 +334,14 @@ public class TileGenerator : MonoBehaviour
 	{
 		int[] id = new int[9];
 
-		for (int i = 0; i <= LevelMap.RightExtremeTilePosition; i++)
+		int left = LevelMap.LeftPosition();
+		int right = LevelMap.RightPosition();
+		int down = LevelMap.DownPosition();
+		int up = LevelMap.UpPosition();
+
+		for (int i = left; i <= right; i++)
 		{
-			for (int j = 0; j <= LevelMap.UpExtremeTilePosition; j++)
+			for (int j = down; j <= up; j++)
 			{
 				id = GetTileID(new Vector3Int(i, j, 0));
 
@@ -431,6 +478,7 @@ public class TileGenerator : MonoBehaviour
 			0, 0, 0
 		});
 
+		//Black wall
 		CreateCollidWallTile(new int[]
 		{
 			1, 1, 1,
@@ -464,16 +512,16 @@ public class TileGenerator : MonoBehaviour
 
 		CreateCollidWallTile(2, new int[]
 		{
-			1, 1, 2,
+			2, 1, 2,
 			1, 1, 0,
-			2, 0, 0
+			2, 0, 2
 		});
 
 		CreateCollidWallTile(3, new int[]
 		{
-			2, 1, 1,
+			2, 1, 2,
 			0, 1, 1,
-			0, 0, 2
+			2, 0, 2
 		});
 
 		CreateCollidWallTile(4, new int[]
@@ -506,16 +554,16 @@ public class TileGenerator : MonoBehaviour
 
 		CreateCollidWallTile(11, new int[]
 		{
-			2, 0, 0,
+			2, 0, 2,
 			1, 1, 0,
-			1, 1, 2
+			2, 1, 2
 		});
 
 		CreateCollidWallTile(12, new int[]
 		{
-			0, 0, 2,
+			2, 0, 2,
 			0, 1, 1,
-			2, 1, 1
+			2, 1, 2
 		});
 
 		CreateCollidWallTile(13, new int[]
@@ -903,5 +951,124 @@ public class TileGenerator : MonoBehaviour
 		if (direction == Vector3Int.down)
 			return true;
 		return false;
+	}
+
+	/// <summary>
+	/// Get random direction to empty room
+	/// </summary>
+	/// <param name="position">Start position</param>
+	/// <returns>Direction</returns>
+	protected Vector3Int GetRandomDirection(Vector3Int position)
+	{
+		List<Vector3Int> directions = new List<Vector3Int>();
+
+		if (IsChunkFree(Vector3Int.left + position))
+			directions.Add(Vector3Int.left);
+		if (IsChunkFree(Vector3Int.right + position))
+			directions.Add(Vector3Int.right);
+		if (IsChunkFree(Vector3Int.up + position))
+			directions.Add(Vector3Int.up);
+		if (IsChunkFree(Vector3Int.down + position))
+			directions.Add(Vector3Int.down);
+
+		if (directions.Count > 0)
+			return directions[Random.Range(0, directions.Count)];
+		return Vector3Int.zero;
+	}
+
+	/// <summary>
+	/// Get random free to spawn room
+	/// </summary>
+	/// <param name="list">List of rooms</param>
+	/// <param name="lastRoom">Last room</param>
+	/// <param name="chanceToChangeLastRoom">Chance to change last room</param>
+	/// <returns>Room</returns>
+	protected Room GetRandomRoom(List<Room> list, Room lastRoom, float chanceToChangeLastRoom)
+	{
+		if (Random.Range(0, 100) > chanceToChangeLastRoom)
+		{
+			foreach (var item in list)
+			{
+				if (lastRoom.Position == item.Position)
+				{
+					return lastRoom;
+				}
+			}
+		}
+		if (list.Count > 0)
+			return list[Random.Range(0, list.Count)];
+		return null;
+	}
+
+	/// <summary>
+	/// Get random type of room
+	/// </summary>
+	/// <returns>Room type</returns>
+	protected RoomType GetRandomTypeRoom(int i)
+	{
+		if (i % 2 == 0)
+			return RoomType.Hallway;
+		return RoomType.EnemyRoom;
+	}
+
+	/// <summary>
+	/// Set lists with free rooms
+	/// </summary>
+	protected void SetFreeRoomLists()
+	{
+		for (int i = 0; i < freeToSpawnHallways.Count; i++)
+		{
+			freeToSpawnHallways.RemoveAt(0);
+		}
+		for (int i = 0; i < freeToSpawnRooms.Count; i++)
+		{
+			freeToSpawnRooms.RemoveAt(0);
+		}
+
+		foreach (var item in LevelMap.Map)
+		{
+			if (item.RoomType == RoomType.Hallway)
+			{
+				freeToSpawnHallways.Add(item);
+			}
+			else
+			{
+				freeToSpawnRooms.Add(item);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Set map size
+	/// </summary>
+	protected void CountMapSize()
+	{
+		foreach (var room in LevelMap.Map)
+		{
+			if (room.Position.x > LevelMap.RightChunk)
+				LevelMap.RightChunk = room.Position.x;
+			else if (room.Position.x < LevelMap.LeftChunk)
+				LevelMap.LeftChunk = room.Position.x;
+			if (room.Position.y > LevelMap.UpChunk)
+				LevelMap.UpChunk = room.Position.y;
+			else if (room.Position.y < LevelMap.DownChunk)
+				LevelMap.DownChunk = room.Position.y;
+		}
+	}
+
+	/// <summary>
+	/// Check if the chunk is free
+	/// </summary>
+	/// <param name="position">Chunk position</param>
+	/// <returns>Is free</returns>
+	private bool IsChunkFree(Vector3Int position)
+	{
+		foreach (var room in LevelMap.Map)
+		{
+			if (room.Position == position)
+				return false;
+		}
+
+		return true;
 	}
 }
