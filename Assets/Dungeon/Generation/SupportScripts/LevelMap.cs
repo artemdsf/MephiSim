@@ -20,6 +20,21 @@ public static class LevelMap
 		return null;
 	}
 
+	public static Vector3Int WorldCoordsToGrid(Vector3 pos)
+	{
+		return new Vector3Int((int)(pos.x / ChunkSize.x), (int)(pos.y / ChunkSize.y), 0);
+	}
+
+	public static Vector3 GridCoordsToWorld(Vector3Int pos)
+	{
+		return new Vector3(pos.x * ChunkSize.x, pos.y * ChunkSize.y, 0);
+	}
+
+	public static Vector3 GetChunkCenter(Vector3Int posInGrid)
+	{
+		return GridCoordsToWorld(posInGrid) + new Vector3(ChunkSize.x, ChunkSize.y) / 2;
+	}
+
 	public static readonly int RightExtremeTilePosition = (MapSize + 1) * ChunkSize.x;
 	public static readonly int UpExtremeTilePosition = (MapSize + 1) * ChunkSize.y;
 }
