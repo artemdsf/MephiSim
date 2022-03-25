@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(WallGenerator))]
-public class LevelGenerator : MonoBehaviour
+public class LevelGenerator : TileGenerator
 {
-	private WallGenerator _wallGenerator;
-
 	private void Start()
 	{
-		_wallGenerator = GetComponent<WallGenerator>();
-
 		GenerateLevel();
 	}
 
+	/// <summary>
+	/// Generate level
+	/// </summary>
 	private void GenerateLevel()
 	{
-		
+		AddStartRoom();
+
+		GenerateFloor();
 	}
 }
