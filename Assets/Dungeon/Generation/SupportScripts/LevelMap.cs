@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,11 +5,11 @@ public static class LevelMap
 {
 	public static readonly int MapSize = 15;
 	public static readonly Vector3Int ChunkSize = new Vector3Int(18, 10, 0);
-	public static readonly Vector2Int StartPosition = new Vector2Int(MapSize / 2, MapSize / 2);
+	public static readonly Vector3Int StartPosition = new Vector3Int(MapSize / 2, MapSize / 2, 0);
 
 	public static List<Room> Map = new List<Room>();
 
-	public static Room GetRoom(Vector2Int position)
+	public static Room GetRoom(Vector3Int position)
 	{
 		foreach (var room in Map)
 		{

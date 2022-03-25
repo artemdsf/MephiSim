@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: tilesGranit_15
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -4332983073375034247, guid: 2c44c4175475a9549803d5e88bcee464, type: 3}
+  m_Sprite: {fileID: -4332983073375034247, guid: 43ffeaa8c82cb0b4984b5fef6db96c60, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

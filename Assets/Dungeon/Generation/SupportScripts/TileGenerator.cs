@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -70,10 +69,11 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="lastRoom">Existing room</param>
 	/// <param name="direction">Direction to spawn</param>
 	/// <param name="roomType">Type of new room</param>
-	/// <param name="distance">The distance of the new room from the start</param>
 	/// <returns>Spawned room</returns>
-	protected Room AddNextRoom(Room lastRoom, Vector2Int direction, RoomType roomType, int distance)
+	protected Room AddNextRoom(Room lastRoom, Vector3Int direction, RoomType roomType)
 	{
+		int distance = lastRoom.DistanceFromStart + 1;
+
 		if (IsDirectionCorrect(direction) == false)
 		{
 			throw new UnityException("Invalid direction");
@@ -85,22 +85,22 @@ public class TileGenerator : MonoBehaviour
 
 		Room room = new Room(lastRoom.Position + direction, roomType, distance);
 
-		if (direction == Vector2Int.left)
+		if (direction == Vector3Int.left)
 		{
 			lastRoom.IsLeftOpen = true;
 			room.IsRightOpen = true;
 		}
-		else if (direction == Vector2Int.right)
+		else if (direction == Vector3Int.right)
 		{
 			lastRoom.IsRightOpen = true;
 			room.IsLeftOpen = true;
 		}
-		else if (direction == Vector2Int.up)
+		else if (direction == Vector3Int.up)
 		{
 			lastRoom.IsUpOpen = true;
 			room.IsDownOpen = true;
 		}
-		else if (direction == Vector2Int.down)
+		else if (direction == Vector3Int.down)
 		{
 			lastRoom.IsDownOpen = true;
 			room.IsUpOpen = true;
@@ -149,6 +149,8 @@ public class TileGenerator : MonoBehaviour
 			case RoomType.Hallway:
 				CopyTilemap(room, _roomPrefabContainer.Hallways[Random.Range(0, _roomPrefabContainer.Hallways.Count)]);
 				break;
+			default:
+				throw new UnityException("Invalid room type");
 		}
 	}
 
@@ -159,16 +161,18 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="prefab">Room prefab</param>
 	private void CopyTilemap(Room room, RoomPrefab prefab)
 	{
-		Vector3Int tilePosition;
+		Vector3Int tilePositionInPrefab;
+		Vector3Int tilePositionInRoom;
 
 		for (int i = 0; i < LevelMap.ChunkSize.x; i++)
 		{
 			for (int j = 0; j < LevelMap.ChunkSize.y; j++)
 			{
-				if (prefab.Tilemap.HasTile(new Vector3Int(i, j, 0)))
+				tilePositionInPrefab = prefab.LeftDownCorner + new Vector3Int(i, j, 0);
+				if (prefab.Tilemap.HasTile(tilePositionInPrefab))
 				{
-					tilePosition = prefab.LeftDownCorner + new Vector3Int(i, j, 0);
-					_FloorTilemap.SetTile(tilePosition, GetFloorTile(i, j));
+					tilePositionInRoom = room.Position * LevelMap.ChunkSize + new Vector3Int(i, j, 0);
+					_FloorTilemap.SetTile(tilePositionInRoom, GetFloorTile(i, j));
 				}
 			}
 		}
@@ -235,11 +239,11 @@ public class TileGenerator : MonoBehaviour
 					if (i % 2 == 0)
 					{
 						_WallTilemap.SetTile(new Vector3Int(i, j + 2, 0), _nonCollidWallTiles[0]);
-						_WallTilemap.SetTile(new Vector3Int(i, j + 1, 0), _nonCollidWallTiles[1]);
+						_WallTilemap.SetTile(new Vector3Int(i, j + 1, 0), _nonCollidWallTiles[2]);
 					}
 					else
 					{
-						_WallTilemap.SetTile(new Vector3Int(i, j + 2, 0), _nonCollidWallTiles[2]);
+						_WallTilemap.SetTile(new Vector3Int(i, j + 2, 0), _nonCollidWallTiles[1]);
 						_WallTilemap.SetTile(new Vector3Int(i, j + 1, 0), _nonCollidWallTiles[3]);
 					}
 				}
@@ -341,6 +345,20 @@ public class TileGenerator : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Create empty tile
+	/// </summary>
+	/// <param name="spriteIndex">Sprite index</param>
+	/// <param name="tileID">Tile ID</param>
+	private void CreateCollidWallTile(int[] tileID)
+	{
+		_tile = ScriptableObject.CreateInstance<Tile>();
+
+		TileWithID tile = new TileWithID(_tile, tileID);
+
+		_wallTiles.Add(tile);
+	}
+
+	/// <summary>
 	/// Create wall tile
 	/// </summary>
 	/// <param name="spriteIndex">Sprite index</param>
@@ -377,6 +395,13 @@ public class TileGenerator : MonoBehaviour
 			0, 0, 0,
 			0, 0, 0,
 			0, 0, 0
+		});
+
+		CreateCollidWallTile(new int[]
+		{
+			1, 1, 1,
+			1, 1, 1,
+			1, 1, 1
 		});
 
 		CreateNonCollidWallTile(6);
@@ -833,15 +858,15 @@ public class TileGenerator : MonoBehaviour
 	/// </summary>
 	/// <param name="direction">Direction</param>
 	/// <returns>Is correct</returns>
-	private bool IsDirectionCorrect(Vector2Int direction)
+	private bool IsDirectionCorrect(Vector3Int direction)
 	{
-		if (direction == Vector2Int.left)
+		if (direction == Vector3Int.left)
 			return true;
-		if (direction == Vector2Int.right)
+		if (direction == Vector3Int.right)
 			return true;
-		if (direction == Vector2Int.up)
+		if (direction == Vector3Int.up)
 			return true;
-		if (direction == Vector2Int.down)
+		if (direction == Vector3Int.down)
 			return true;
 		return false;
 	}

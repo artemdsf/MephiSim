@@ -461,8 +461,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 373fd378ae57b44489ac2c6ecddc3da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomPalette: {fileID: 0}
-  _roomPrefabContainer: {fileID: 0}
+  _roomPalette: {fileID: 11400000, guid: 74d15ca4a69020b4f9a72404c74f1904, type: 2}
+  _roomPrefabContainer: {fileID: 11400000, guid: e79b2f32d1a1238459b0a66b8eb71b55, type: 2}
   _FloorTilemap: {fileID: 1583831027}
   _WallTilemap: {fileID: 813825501}
   _CollidWallTilemap: {fileID: 1098877846}

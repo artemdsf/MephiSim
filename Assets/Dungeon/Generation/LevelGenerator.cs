@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelGenerator : TileGenerator
 {
+	private Room _lastRoom;
+
 	private void Start()
 	{
 		GenerateLevel();
@@ -14,7 +14,9 @@ public class LevelGenerator : TileGenerator
 	/// </summary>
 	private void GenerateLevel()
 	{
-		AddStartRoom();
+		_lastRoom = AddStartRoom();
+
+		_lastRoom = AddNextRoom(_lastRoom, Vector3Int.right, RoomType.Hallway);
 
 		GenerateFloor();
 	}

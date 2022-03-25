@@ -13,15 +13,16 @@ public enum RoomType
 
 public class Room
 {
-	public Room(Vector2Int position, RoomType roomType, int distance)
+	public Room(Vector3Int position, RoomType roomType, int distance)
 	{
 		Position = position;
 		DistanceFromStart = distance;
+		RoomType = roomType;
 
 		LevelMap.Map.Add(this);
 	}
 
-	public Vector2Int Position;
+	public Vector3Int Position;
 	public RoomType RoomType;
 
 	public bool IsRightOpen = false;
