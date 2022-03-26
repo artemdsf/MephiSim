@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7296e35345a7ce94fb580bfb4a97ade8, type: 3}
+  m_Name: RD
+  m_EditorClassIdentifier: Assembly-CSharp::HallwayPrefab
+  Room: {fileID: 8728272184821302073, guid: bccce9c9f7590854e893161ba92d2933, type: 3}
+  _leftDownCorner: {x: -18, y: -1, z: 0}
+  IsRightOpen: 1
+  IsLeftOpen: 0
+  IsUpOpen: 0
+  IsDownOpen: 1

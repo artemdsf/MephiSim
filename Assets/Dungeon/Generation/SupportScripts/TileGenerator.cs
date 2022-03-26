@@ -16,6 +16,7 @@ public class TileWithID
 
 public class TileGenerator : MonoBehaviour
 {
+
 	/// <summary>
 	/// Palette of tiles
 	/// </summary>
@@ -37,7 +38,7 @@ public class TileGenerator : MonoBehaviour
 	/// Collidable wall tilemap
 	/// </summary>
 	[SerializeField] private Tilemap _CollidWallTilemap;
-	
+
 	private Tile _tile;
 
 	/// <summary>
@@ -48,10 +49,6 @@ public class TileGenerator : MonoBehaviour
 	/// List of free to spawn rooms
 	/// </summary>
 	protected List<Room> freeToSpawnRooms = new List<Room>();
-	/// <summary>
-	/// List of free to spawn rooms
-	/// </summary>
-	protected List<Room> freeToSpawnHallways = new List<Room>();
 
 	/// <summary>
 	/// List of wall tiles
@@ -73,7 +70,11 @@ public class TileGenerator : MonoBehaviour
 	/// <returns>Spawned room</returns>
 	protected Room AddStartRoom()
 	{
-		return new Room(Vector3Int.zero, RoomType.StartRoom, 0);
+		Room room = new Room(Vector3Int.zero, RoomType.StartRoom, 0);
+
+		freeToSpawnRooms.Add(room);
+
+		return room;
 	}
 
 	/// <summary>
@@ -86,6 +87,7 @@ public class TileGenerator : MonoBehaviour
 	protected Room AddNextRoom(Room lastRoom, Vector3Int direction, RoomType roomType)
 	{
 		int distance = lastRoom.DistanceFromStart + 1;
+		lastRoom.IsExtreme = false;
 
 		if (IsDirectionCorrect(direction) == false)
 		{
@@ -98,25 +100,9 @@ public class TileGenerator : MonoBehaviour
 
 		Room room = new Room(lastRoom.Position + direction, roomType, distance);
 
-		if (direction == Vector3Int.left)
+		if (roomType == RoomType.EnemyRoom)
 		{
-			lastRoom.IsLeftOpen = true;
-			room.IsRightOpen = true;
-		}
-		else if (direction == Vector3Int.right)
-		{
-			lastRoom.IsRightOpen = true;
-			room.IsLeftOpen = true;
-		}
-		else if (direction == Vector3Int.up)
-		{
-			lastRoom.IsUpOpen = true;
-			room.IsDownOpen = true;
-		}
-		else if (direction == Vector3Int.down)
-		{
-			lastRoom.IsDownOpen = true;
-			room.IsUpOpen = true;
+			freeToSpawnRooms.Add(room);
 		}
 
 		return room;
@@ -180,10 +166,10 @@ public class TileGenerator : MonoBehaviour
 		{
 			if (room.RoomType == RoomType.Hallway)
 			{
-				IsLeftMatch = room.IsLeftOpen == roomPrefab.IsLeftOpen;
-				IsRightMatch = room.IsRightOpen == roomPrefab.IsRightOpen;
-				IsUpMatch = room.IsUpOpen == roomPrefab.IsUpOpen;
-				IsDownMatch = room.IsDownOpen == roomPrefab.IsDownOpen;
+				IsLeftMatch = IsChunkFree(room.Position + Vector3Int.left) != roomPrefab.IsLeftOpen;
+				IsRightMatch = IsChunkFree(room.Position + Vector3Int.right) != roomPrefab.IsRightOpen;
+				IsUpMatch = IsChunkFree(room.Position + Vector3Int.up) != roomPrefab.IsUpOpen;
+				IsDownMatch = IsChunkFree(room.Position + Vector3Int.down) != roomPrefab.IsDownOpen;
 			}
 
 			if (IsLeftMatch && IsRightMatch && IsUpMatch && IsDownMatch)
@@ -193,9 +179,7 @@ public class TileGenerator : MonoBehaviour
 		}
 
 		if (newList.Count > 0)
-		{
 			return newList[Random.Range(0, newList.Count)];
-		}
 		return null;
 	}
 
@@ -207,9 +191,7 @@ public class TileGenerator : MonoBehaviour
 	private void CopyTilemap(Room room, RoomPrefab prefab)
 	{
 		if (prefab == null)
-		{
 			throw new UnityException("Prefab not found");
-		}
 
 		Vector3Int tilePositionInPrefab;
 		Vector3Int tilePositionInRoom;
@@ -217,12 +199,9 @@ public class TileGenerator : MonoBehaviour
 		Tilemap tilemap = prefab.Room.GetComponent<Tilemap>();
 
 		if (tilemap == null)
-		{
 			throw new UnityException("Tilemap is null");
-		}
 
 		for (int i = 0; i < LevelMap.ChunkSize.x; i++)
-		{
 			for (int j = 0; j < LevelMap.ChunkSize.y; j++)
 			{
 				tilePositionInPrefab = prefab.LeftDownCorner + new Vector3Int(i, j, 0);
@@ -232,7 +211,6 @@ public class TileGenerator : MonoBehaviour
 					_FloorTilemap.SetTile(tilePositionInRoom, GetFloorTile(i, j));
 				}
 			}
-		}
 
 		Vector3 roomPosition;
 
@@ -253,21 +231,13 @@ public class TileGenerator : MonoBehaviour
 	private Tile GetFloorTile(int x, int y)
 	{
 		if (x % 2 == 0 && y % 2 == 0)
-		{
 			return _floorTiles[0];
-		}
-		else if(x % 2 == 1 && y % 2 == 0)
-		{
+		else if (x % 2 == 1 && y % 2 == 0)
 			return _floorTiles[1];
-		}
 		else if (x % 2 == 0 && y % 2 == 1)
-		{
 			return _floorTiles[2];
-		}
 		else
-		{
 			return _floorTiles[3];
-		}
 	}
 
 	/// <summary>
@@ -283,17 +253,13 @@ public class TileGenerator : MonoBehaviour
 		int up = LevelMap.UpPosition();
 
 		for (int i = left; i <= right; i++)
-		{
 			for (int j = down; j <= up; j++)
 			{
 				id = GetTileID(new Vector3Int(i, j, 0));
 
 				if (id[4] == 1)
-				{
 					_FloorTilemap.SetTile(new Vector3Int(i, j, 1), GetTileByID(id).tile);
-				}
 			}
-		}
 	}
 
 	/// <summary>
@@ -307,11 +273,8 @@ public class TileGenerator : MonoBehaviour
 		int up = LevelMap.UpPosition();
 
 		for (int i = right; i >= left; i--)
-		{
 			for (int j = up; j >= down; j--)
-			{
 				if (Has(new Vector3Int(i, j, 0)) && HasUp(new Vector3Int(i, j, 0)) == false)
-				{
 					if (i % 2 == 0)
 					{
 						_WallTilemap.SetTile(new Vector3Int(i, j + 2, 0), _nonCollidWallTiles[0]);
@@ -322,9 +285,6 @@ public class TileGenerator : MonoBehaviour
 						_WallTilemap.SetTile(new Vector3Int(i, j + 2, 0), _nonCollidWallTiles[1]);
 						_WallTilemap.SetTile(new Vector3Int(i, j + 1, 0), _nonCollidWallTiles[3]);
 					}
-				}
-			}
-		}
 	}
 
 	/// <summary>
@@ -340,17 +300,13 @@ public class TileGenerator : MonoBehaviour
 		int up = LevelMap.UpPosition();
 
 		for (int i = left; i <= right; i++)
-		{
 			for (int j = down; j <= up; j++)
 			{
 				id = GetTileID(new Vector3Int(i, j, 0));
 
 				if (id[4] == 0)
-				{
 					_CollidWallTilemap.SetTile(new Vector3Int(i, j, 1), GetTileByID(id).tile);
-				}
 			}
-		}
 	}
 
 	/// <summary>
@@ -392,17 +348,11 @@ public class TileGenerator : MonoBehaviour
 			bool correctTile = true;
 
 			for (int i = 0; i < 9; i++)
-			{
 				if (tile.id[i] != 2 && tile.id[i] != id[i])
-				{
 					correctTile = false;
-				}
-			}
 
 			if (correctTile)
-			{
 				return tile;
-			}
 		}
 
 		return _wallTiles[0];
@@ -929,9 +879,7 @@ public class TileGenerator : MonoBehaviour
 	private int BoolToInt(bool flag)
 	{
 		if (flag)
-		{
 			return 1;
-		}
 		return 0;
 	}
 
@@ -942,6 +890,8 @@ public class TileGenerator : MonoBehaviour
 	/// <returns>Is correct</returns>
 	private bool IsDirectionCorrect(Vector3Int direction)
 	{
+		if (direction == Vector3Int.zero)
+			return true;
 		if (direction == Vector3Int.left)
 			return true;
 		if (direction == Vector3Int.right)
@@ -951,6 +901,29 @@ public class TileGenerator : MonoBehaviour
 		if (direction == Vector3Int.down)
 			return true;
 		return false;
+	}
+
+	/// <summary>
+	/// Get random direction to empty room
+	/// </summary>
+	/// <param name="position">Start position</param>
+	/// <returns>Direction</returns>
+	protected Vector3Int GetRandomDirectionWithFreeArea(Vector3Int position)
+	{
+		List<Vector3Int> directions = new List<Vector3Int>();
+
+		if (IsAreaFree(Vector3Int.left + position))
+			directions.Add(Vector3Int.left);
+		if (IsAreaFree(Vector3Int.right + position))
+			directions.Add(Vector3Int.right);
+		if (IsAreaFree(Vector3Int.up + position))
+			directions.Add(Vector3Int.up);
+		if (IsAreaFree(Vector3Int.down + position))
+			directions.Add(Vector3Int.down);
+
+		if (directions.Count > 0)
+			return directions[Random.Range(0, directions.Count)];
+		return Vector3Int.zero;
 	}
 
 	/// <summary>
@@ -983,77 +956,51 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="lastRoom">Last room</param>
 	/// <param name="chanceToChangeLastRoom">Chance to change last room</param>
 	/// <returns>Room</returns>
-	protected Room GetRandomRoom(List<Room> list, Room lastRoom, float chanceToChangeLastRoom)
+	protected Room GetRandomLastRoom(Room lastRoom, int chanceToChangeLastRoom)
 	{
-		if (Random.Range(0, 100) > chanceToChangeLastRoom)
-		{
-			foreach (var item in list)
-			{
+		if (Random.Range(1, 100) >= chanceToChangeLastRoom && lastRoom != null)
+			foreach (var item in freeToSpawnRooms)
 				if (lastRoom.Position == item.Position)
-				{
 					return lastRoom;
-				}
-			}
-		}
-		if (list.Count > 0)
-			return list[Random.Range(0, list.Count)];
+
+		if (freeToSpawnRooms.Count > 0)
+			return freeToSpawnRooms[Random.Range(0, freeToSpawnRooms.Count)];
 		return null;
 	}
 
 	/// <summary>
-	/// Get random type of room
+	/// Check if the chunk is free
 	/// </summary>
-	/// <returns>Room type</returns>
-	protected RoomType GetRandomTypeRoom(int i)
-	{
-		if (i % 2 == 0)
-			return RoomType.Hallway;
-		return RoomType.EnemyRoom;
-	}
-
-	/// <summary>
-	/// Set lists with free rooms
-	/// </summary>
-	protected void SetFreeRoomLists()
-	{
-		for (int i = 0; i < freeToSpawnHallways.Count; i++)
-		{
-			freeToSpawnHallways.RemoveAt(0);
-		}
-		for (int i = 0; i < freeToSpawnRooms.Count; i++)
-		{
-			freeToSpawnRooms.RemoveAt(0);
-		}
-
-		foreach (var item in LevelMap.Map)
-		{
-			if (item.RoomType == RoomType.Hallway)
-			{
-				freeToSpawnHallways.Add(item);
-			}
-			else
-			{
-				freeToSpawnRooms.Add(item);
-			}
-		}
-	}
-
-	/// <summary>
-	/// Set map size
-	/// </summary>
-	protected void CountMapSize()
+	/// <param name="position">Chunk position</param>
+	/// <returns>Is free</returns>
+	private bool IsAreaFree(Vector3Int position)
 	{
 		foreach (var room in LevelMap.Map)
 		{
-			if (room.Position.x > LevelMap.RightChunk)
-				LevelMap.RightChunk = room.Position.x;
-			else if (room.Position.x < LevelMap.LeftChunk)
-				LevelMap.LeftChunk = room.Position.x;
-			if (room.Position.y > LevelMap.UpChunk)
-				LevelMap.UpChunk = room.Position.y;
-			else if (room.Position.y < LevelMap.DownChunk)
-				LevelMap.DownChunk = room.Position.y;
+			if (room.RoomType == RoomType.EnemyRoom || room.RoomType == RoomType.StartRoom)
+			{
+				if (room.Position == position + Vector3Int.left + Vector3Int.up)
+					return false;
+				if (room.Position == position + Vector3Int.left + Vector3Int.down)
+					return false;
+				if (room.Position == position + Vector3Int.right + Vector3Int.up)
+					return false;
+				if (room.Position == position + Vector3Int.right + Vector3Int.down)
+					return false;
+				if (room.Position == position + Vector3Int.left)
+					return false;
+				if (room.Position == position + Vector3Int.up)
+					return false;
+				if (room.Position == position + Vector3Int.down)
+					return false;
+				if (room.Position == position + Vector3Int.right)
+					return false;
+			}
+			if (room.Position == position)
+				return false;
 		}
+
+		return true;
 	}
 
 	/// <summary>
@@ -1064,10 +1011,8 @@ public class TileGenerator : MonoBehaviour
 	private bool IsChunkFree(Vector3Int position)
 	{
 		foreach (var room in LevelMap.Map)
-		{
 			if (room.Position == position)
 				return false;
-		}
 
 		return true;
 	}

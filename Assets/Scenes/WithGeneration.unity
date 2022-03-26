@@ -151,7 +151,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4983103566549985728, guid: 941bdd93266615f40b342bb12da1658c, type: 3}
       propertyPath: m_Value
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4983103566549985728, guid: 941bdd93266615f40b342bb12da1658c, type: 3}
       propertyPath: m_Interactable
@@ -467,8 +467,7 @@ MonoBehaviour:
   _WallTilemap: {fileID: 813825501}
   _CollidWallTilemap: {fileID: 1098877846}
   _roomCountToSpawn: 100
-  _chanceToChangeRoom: 10
-  _hallwayMaxLenght: 2
+  _chanceToChangeRoom: 50
 --- !u!156049354 &1040344970
 Grid:
   m_ObjectHideFlags: 0

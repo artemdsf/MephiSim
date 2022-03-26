@@ -39,4 +39,37 @@ public static class LevelMap
 	{
 		return (UpChunk + 2) * ChunkSize.y;
 	}
+
+	public static Vector3Int WorldCoordsToGrid(Vector3 pos)
+	{
+		return new Vector3Int((int)(pos.x / ChunkSize.x), (int)(pos.y / ChunkSize.y), 0);
+	}
+
+	public static Vector3 GridCoordsToWorld(Vector3Int pos)
+	{
+		return new Vector3(pos.x * ChunkSize.x, pos.y * ChunkSize.y, 0);
+	}
+
+	public static Vector3 GetChunkCenter(Vector3Int posInGrid)
+	{
+		return GridCoordsToWorld(posInGrid) + new Vector3(ChunkSize.x, ChunkSize.y) / 2;
+	}
+
+	/// <summary>
+	/// Set map size
+	/// </summary>
+	public static void CountMapSize()
+	{
+		foreach (var room in Map)
+		{
+			if (room.Position.x > RightChunk)
+				RightChunk = room.Position.x;
+			else if (room.Position.x < LeftChunk)
+				LeftChunk = room.Position.x;
+			if (room.Position.y > UpChunk)
+				UpChunk = room.Position.y;
+			else if (room.Position.y < DownChunk)
+				DownChunk = room.Position.y;
+		}
+	}
 }

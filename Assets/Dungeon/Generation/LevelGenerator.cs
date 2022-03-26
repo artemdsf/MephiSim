@@ -3,16 +3,17 @@ using UnityEngine;
 
 public class LevelGenerator : TileGenerator
 {
+	[Min(0)]
 	[SerializeField] private int _roomCountToSpawn;
 	[Range(0, 100)]
-	[SerializeField] private float _chanceToChangeRoom;
-	[SerializeField] private int _hallwayMaxLenght;
+	[SerializeField] private int _chanceToChangeRoom = 0;
 
 	private Room _lastRoom;
-	private Vector3Int _direction;
-	private RoomType _roomType;
+
+	private Vector3Int _directionToSpawn;
+
 	private bool _correctRemove;
-	private List<Room> _freeRooms;
+	private const int _hallwayMaxLenght = 2;
 	private int _hallwayLenght = 0;
 
 	private void Start()
@@ -27,61 +28,90 @@ public class LevelGenerator : TileGenerator
 	/// </summary>
 	private void GenerateLevel()
 	{
+		int maxCountInterations = 1000;
+		int countIterations = 0;
+
 		_lastRoom = AddStartRoom();
 
-		for (int i = 0; i < _roomCountToSpawn; i++)
+		for (int roomCount = 0; roomCount < _roomCountToSpawn || _hallwayLenght != 0;)
 		{
-			SetFreeRoomLists();
-
-			while (true)
+			while (countIterations < maxCountInterations)
 			{
-				if (_hallwayLenght >= _hallwayMaxLenght)
-				{
-					_hallwayLenght = 0;
-					_roomType = RoomType.EnemyRoom;
-					_freeRooms = freeToSpawnHallways;
+				countIterations++;
 
-					_lastRoom = GetRandomRoom(_freeRooms, _lastRoom, _chanceToChangeRoom);
-				}
-				else if (_hallwayLenght == 0)
+				if (_hallwayLenght == 0)
 				{
+					_lastRoom = GetRandomLastRoom(_lastRoom, _chanceToChangeRoom);
+
+					_directionToSpawn = GetRandomDirection(_lastRoom.Position);
+
+					if (_directionToSpawn == Vector3Int.zero)
+					{
+						_correctRemove = freeToSpawnRooms.Remove(_lastRoom);
+
+						if (_correctRemove == false)
+							throw new UnityException("Invalid remove 1");
+
+						_lastRoom = GetRandomLastRoom(_lastRoom, 100);
+
+						continue;
+					}
+
+					_lastRoom = AddNextRoom(_lastRoom, _directionToSpawn, RoomType.Hallway);
 					_hallwayLenght++;
-					_roomType = RoomType.Hallway;
-					_freeRooms = freeToSpawnRooms;
+					break;
+				}
+				else if (_hallwayLenght < _hallwayMaxLenght)
+				{
+					_directionToSpawn = GetRandomDirectionWithFreeArea(_lastRoom.Position);
 
-					_lastRoom = GetRandomRoom(_freeRooms, _lastRoom, 0);
+					if (_directionToSpawn == Vector3Int.zero)
+					{
+						LevelMap.Map.Remove(_lastRoom);
+						_lastRoom = GetRandomLastRoom(_lastRoom, 100);
+						_hallwayLenght = 0;
+						continue;
+					}
+
+					_lastRoom = AddNextRoom(_lastRoom, _directionToSpawn, RoomType.Hallway);
+					_hallwayLenght++;
+					break;
 				}
 				else
 				{
-					_hallwayLenght++;
-					_roomType = RoomType.Hallway;
-					_freeRooms = freeToSpawnHallways;
+					_directionToSpawn = GetRandomDirectionWithFreeArea(_lastRoom.Position);
 
-					_lastRoom = GetRandomRoom(_freeRooms, _lastRoom, 0);
-				}
+					if (_directionToSpawn == Vector3Int.zero)
+					{
 
+						_lastRoom = AddNextRoom(_lastRoom, _directionToSpawn, RoomType.EnemyRoom);
+						roomCount++;
+						_hallwayLenght = 0;
 
-				if (_lastRoom == null)
+						_correctRemove = freeToSpawnRooms.Remove(_lastRoom);
+
+						if (_correctRemove == false)
+							throw new UnityException("Invalid remove 3");
+
+						_lastRoom = GetRandomLastRoom(_lastRoom, 100);
+
+						break;
+					}
+
+					_lastRoom = AddNextRoom(_lastRoom, _directionToSpawn, RoomType.EnemyRoom);
+					roomCount++;
+					_hallwayLenght = 0;
 					break;
-
-				_direction = GetRandomDirection(_lastRoom.Position);
-
-				if (_direction != Vector3Int.zero)
-				{
-					Debug.Log($"{_roomType}");
-					_lastRoom = AddNextRoom(_lastRoom, _direction, _roomType);
-					break;
 				}
+			}
 
-				Debug.Log("2");
-				_correctRemove = _freeRooms.Remove(_lastRoom);
-
-				if (_correctRemove == false)
-					throw new UnityException("Invalid remove");
+			if (countIterations >= maxCountInterations)
+			{
+				throw new UnityException("A lot of iterations");
 			}
 		}
 
-		CountMapSize();
+		LevelMap.CountMapSize();
 
 		GenerateFloor();
 	}

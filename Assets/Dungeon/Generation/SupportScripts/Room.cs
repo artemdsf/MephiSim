@@ -29,11 +29,6 @@ public class Room
 	public Vector3Int Position;
 	public RoomType RoomType;
 
-	public bool IsRightOpen = false;
-	public bool IsLeftOpen = false;
-	public bool IsUpOpen = false;
-	public bool IsDownOpen = false;
-
 	public bool IsExtreme = true;
 
 	public bool IsVisited = false;
