@@ -466,8 +466,8 @@ MonoBehaviour:
   _FloorTilemap: {fileID: 1583831027}
   _WallTilemap: {fileID: 813825501}
   _CollidWallTilemap: {fileID: 1098877846}
-  _roomCountToSpawn: 100
-  _chanceToChangeRoom: 50
+  _roomCountToSpawn: 40
+  _chanceToChangeRoom: 10
 --- !u!156049354 &1040344970
 Grid:
   m_ObjectHideFlags: 0
