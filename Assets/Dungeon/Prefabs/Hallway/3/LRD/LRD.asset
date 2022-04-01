@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7296e35345a7ce94fb580bfb4a97ade8, type: 3}
+  m_Script: {fileID: 11500000, guid: 64bd5b5337f4bc04988d584e4ab74d78, type: 3}
   m_Name: LRD
   m_EditorClassIdentifier: Assembly-CSharp::HallwayPrefab
   Room: {fileID: 8728272184821302073, guid: d3560a65ebf870146a60039a4855c018, type: 3}
