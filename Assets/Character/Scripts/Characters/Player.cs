@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Player : Character
 {
-    private Weapon _weapon;
+    private PlayerWeapon _weapon;
 
     private float _mana;
 
@@ -44,7 +44,7 @@ public class Player : Character
     {
 
 
-        _weapon = GetComponent<Weapon>();
+        _weapon = GetComponent<PlayerWeapon>();
         if (_weapon == null) 
         {
             Debug.LogWarning("There is no weapon script assigned to player", this);

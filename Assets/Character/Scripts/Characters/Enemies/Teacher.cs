@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Teacher : Enemy
 {
-    [SerializeField] protected Weapon Weapon { get; set; }
+    [SerializeField] protected EnemyWeapon Weapon { get; set; }
     protected override void Start()
     {
         base.Start();
-        Weapon = GetComponent<Weapon>();
+        Weapon = GetComponent<EnemyWeapon>();
     }
 
     protected virtual void Update()

@@ -1,19 +1,25 @@
 fileFormatVersion: 2
-guid: 8d92aaed621e5e2448d7253c94e14c97
+guid: 9228c1d3b08dd5d4ab983658e8046bf1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4709139536117854929
-    second: books-Sheet_0
+      213: -5634962403435445204
+    second: Some_items_0
   - first:
-      213: 4243775046953920145
-    second: books-Sheet_1
+      213: -4500271285004881504
+    second: Some_items_1
   - first:
-      213: 3719811486353198692
-    second: books-Sheet_2
+      213: 8445031700689576090
+    second: Some_items_2
   - first:
-      213: -5478378477830221555
-    second: books-Sheet_3
+      213: -2019319818350566060
+    second: Some_items_3
+  - first:
+      213: -6430927440653577532
+    second: Some_items_4
+  - first:
+      213: 7751520972996499344
+    second: Some_items_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -77,7 +83,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 128
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -89,7 +95,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 128
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -103,13 +109,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: books-Sheet_0
+      name: Some_items_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 32
-        height: 32
+        x: 7
+        y: 24
+        width: 18
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -117,20 +123,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f2d82ffba86c5aeb0800000000000000
-      internalID: -4709139536117854929
+      spriteID: c248c84ac879cc1b0800000000000000
+      internalID: -5634962403435445204
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: books-Sheet_1
+      name: Some_items_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
+        x: 103
+        y: 7
+        width: 64
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,20 +144,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 196ea54bbeae4ea30800000000000000
-      internalID: 4243775046953920145
+      spriteID: 0a1b4681c13db81c0800000000000000
+      internalID: -4500271285004881504
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: books-Sheet_2
+      name: Some_items_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
+        x: 223
+        y: 9
+        width: 59
+        height: 34
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,20 +165,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 46e0083a6dc6f9330800000000000000
-      internalID: 3719811486353198692
+      spriteID: a90e38c8697c23570800000000000000
+      internalID: 8445031700689576090
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: books-Sheet_3
+      name: Some_items_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
+        x: 296
+        y: 24
+        width: 12
+        height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -180,8 +186,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d01d8c3dcc3e8f3b0800000000000000
-      internalID: -5478378477830221555
+      spriteID: 455ee43f25fe9f3e0800000000000000
+      internalID: -2019319818350566060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Some_items_4
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 24
+        width: 22
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c21883b091c0c6a0800000000000000
+      internalID: -6430927440653577532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Some_items_5
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 19
+        width: 16
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0975270714fe29b60800000000000000
+      internalID: 7751520972996499344
       vertices: []
       indices: 
       edges: []

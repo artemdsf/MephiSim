@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Weapon))]
+[RequireComponent(typeof(EnemyWeapon))]
 public class Anatoly : Teacher
 {
     [SerializeField] float _shootingCooldown;
-    [SerializeField] float _timeBeforeChangeDiraction;
+    [SerializeField] float _timeBeforeChangeDirection;
     [SerializeField] int _shotingDirections = 8;
     [SerializeField] float _angleOffset = 20;
 
@@ -46,7 +46,8 @@ public class Anatoly : Teacher
     {
         while (true)
         {
-            yield return new WaitForSeconds(_timeBeforeChangeDiraction);
+            ChangeDirection();
+            yield return new WaitForSeconds(_timeBeforeChangeDirection);
         }
     }
 

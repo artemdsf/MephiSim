@@ -5,13 +5,12 @@ using UnityEngine.Tilemaps;
 
 public abstract class Character : MonoBehaviour
 {
-    [SerializeField] private Transform _characterBottom;
+    [SerializeField] private BoxCollider2D _characterBottom;
 
     //Default parameters
     [SerializeField] private float _maxHP = 100;
     [SerializeField] private float _defaultDef = 10;
     [SerializeField] private float _defaultSpeed = 10;
-    [SerializeField] private Vector2 _size = new Vector2(1, 2);
 
     public float MaxHP 
     {
@@ -47,7 +46,7 @@ public abstract class Character : MonoBehaviour
     {
         get 
         {
-            return _size; 
+            return _characterBottom.size; 
         }
     }
 
@@ -132,7 +131,7 @@ public abstract class Character : MonoBehaviour
 
     protected virtual void Start()
     {
-        _collidable = LayerMask.GetMask("Collidable Tilemap");
+        _collidable = LayerMask.GetMask("Obstacle");
         _animator = GetComponent<Animator>();
         
         CheckParameters();
@@ -154,7 +153,6 @@ public abstract class Character : MonoBehaviour
 
     public void Init(float maxHP, float defaultSpeed, float defaultDefense, Vector2 size)
     {
-        _size = size;
         _defaultDef = defaultDefense;
         _defaultSpeed = defaultSpeed;
         _maxHP = maxHP;
@@ -212,7 +210,7 @@ public abstract class Character : MonoBehaviour
 
     public bool IsSpaceFree(Vector2 pos)
     {
-        Collider2D collider = Physics2D.OverlapBox(pos, _size, 0, _collidable);
+        Collider2D collider = Physics2D.OverlapBox(pos, _characterBottom.size, 0, _collidable);
         return !collider || collider.isTrigger;
     }
 
@@ -220,15 +218,15 @@ public abstract class Character : MonoBehaviour
     {
         Vector3 finalDirection = direction.normalized * _speed * Time.deltaTime;
 
-        if (!IsSpaceFree(_characterBottom.position + finalDirection))
+        if (!IsSpaceFree(_characterBottom.transform.position + finalDirection))
         {
 
-            if (!IsSpaceFree(_characterBottom.position + finalDirection.x * Vector3.right))
+            if (!IsSpaceFree(_characterBottom.transform.position + finalDirection.x * Vector3.right))
             {
                 finalDirection.x = 0;
             }
 
-            if (!IsSpaceFree(_characterBottom.position + finalDirection.y * Vector3.up))
+            if (!IsSpaceFree(_characterBottom.transform.position + finalDirection.y * Vector3.up))
             {
                 finalDirection.y = 0;
             }

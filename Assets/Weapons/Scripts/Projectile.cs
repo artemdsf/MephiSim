@@ -30,7 +30,7 @@ public class Projectile : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Collidable Tilemap")
+        if (collision.tag == "CollideWithProjectiles")
         {
             Destroy(gameObject);
         }

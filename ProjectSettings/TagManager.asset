@@ -8,14 +8,17 @@ TagManager:
   - Character
   - Collidable Tilemap
   - Teacher
+  - PlayerBottom
+  - CollideWithProjectiles
+  - TeacherBottom
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Collidable Tilemap
+  - Collidable
   - Water
   - UI
-  - Character
+  - Obstacle
   - 
   - 
   - 
@@ -45,15 +48,15 @@ TagManager:
   - name: Tilemap
     uniqueID: 1491039997
     locked: 0
+  - name: Shadow
+    uniqueID: 917281987
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Bullets Top
-    uniqueID: 1994627895
+  - name: PickableBook
+    uniqueID: 3235334345
     locked: 0
-  - name: Player
-    uniqueID: 3852210577
-    locked: 0
-  - name: Bullets Bottom
-    uniqueID: 1255562663
+  - name: Character
+    uniqueID: 4285856015
     locked: 0

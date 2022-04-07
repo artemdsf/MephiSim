@@ -4,15 +4,18 @@ using UnityEngine;
 
 public static class UsefulFuncs
 {
-    public static void AddToListWithoutDuplicates<T>(List<T> list, T element) where T : Object
+    //returns true if succeed
+    public static bool AddToListWithoutDuplicates<T>(List<T> list, T element)
     {
         if (!list.Contains(element))
         {
             list.Add(element);
+            return true;
         }
         else
         {
-            Debug.LogError("Adding duplicates is not allowed\n" + list);
+            Debug.LogWarning($"Attemp to add duplicate of {element}");
+            return false;
         }
     }
 }
