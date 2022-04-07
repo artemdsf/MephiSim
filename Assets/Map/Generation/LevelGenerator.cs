@@ -9,17 +9,20 @@ public class LevelGenerator : TileGenerator
 	[SerializeField] private int _chanceToChangeRoom = 0;
 
 	private Room _lastRoom;
-
 	private Vector3Int _directionToSpawn;
 
-	private bool _correctRemove;
-	private const int _hallwayMaxLenght = 2;
+	private bool _isCorrectRemove;
+
 	private int _hallwayLenght = 0;
+	private const int _hallwayMaxLenght = 2;
+
+	private void Awake()
+	{
+		grid = GetComponent<Transform>();
+	}
 
 	private void Start()
 	{
-		grid = GetComponent<Transform>();
-
 		GenerateLevel();
 	}
 
@@ -47,9 +50,9 @@ public class LevelGenerator : TileGenerator
 
 					if (_directionToSpawn == Vector3Int.zero)
 					{
-						_correctRemove = freeToSpawnRooms.Remove(_lastRoom);
+						_isCorrectRemove = freeToSpawnRooms.Remove(_lastRoom);
 
-						if (_correctRemove == false)
+						if (_isCorrectRemove == false)
 							throw new UnityException("Invalid remove 1");
 
 						_lastRoom = GetRandomLastRoom(_lastRoom, 100);
@@ -88,9 +91,9 @@ public class LevelGenerator : TileGenerator
 						roomCount++;
 						_hallwayLenght = 0;
 
-						_correctRemove = freeToSpawnRooms.Remove(_lastRoom);
+						_isCorrectRemove = freeToSpawnRooms.Remove(_lastRoom);
 
-						if (_correctRemove == false)
+						if (_isCorrectRemove == false)
 							throw new UnityException("Invalid remove 3");
 
 						_lastRoom = GetRandomLastRoom(_lastRoom, 100);
@@ -111,8 +114,62 @@ public class LevelGenerator : TileGenerator
 			}
 		}
 
+		AddSpecialRooms();
 		LevelMap.CountMapSize();
-
 		GenerateFloor();
+	}
+
+	private void AddSpecialRooms()
+	{
+		//Add boss room
+		foreach (var room in freeToSpawnRooms)
+		{
+			if (room.IsExtreme && room.RoomType == RoomType.EnemyRoom)
+			{
+				LevelMap.Map.Remove(room);
+
+				if (CanSpawnBigRoom(room.Position, out Vector3Int lastPosition))
+				{
+					AddBossRoom(room.Position, lastPosition, room.DistanceFromStart + 1);
+					break;
+				}
+
+				LevelMap.Map.Add(room);
+			}
+		}
+	}
+
+	private void AddBossRoom(Vector3Int firstPosition, Vector3Int lastPosition, int distance)
+	{
+		int left, right, up, down;
+
+		if (firstPosition.x < lastPosition.x)
+		{
+			left = firstPosition.x;
+			right = lastPosition.x;
+		}
+		else
+		{
+			left = lastPosition.x;
+			right = firstPosition.x;
+		}
+		if (firstPosition.y < lastPosition.y)
+		{
+			down = firstPosition.y;
+			up = lastPosition.y;
+		}
+		else
+		{
+			down = lastPosition.y;
+			up = firstPosition.y;
+		}
+
+		for (int i = left; i <= right; i++)
+		{
+			for (int j = down; j <= up; j++)
+			{
+				new Room(new Vector3Int(i, j, 0), RoomType.BossRoom, distance);
+			}
+		}
 	}
 }

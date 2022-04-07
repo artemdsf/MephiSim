@@ -2,6 +2,7 @@ using UnityEngine;
 
 public enum RoomType
 {
+	BossRoom,
 	StartRoom,
 	EnemyRoom,
 	Hallway
@@ -33,5 +34,5 @@ public class Room
 
 	public bool IsVisited = false;
 
-	public int DistanceFromStart;
+	public int DistanceFromStart { get; }
 }
