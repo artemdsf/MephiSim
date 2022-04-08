@@ -39,11 +39,9 @@ public class Player : Character
     }
 
 
-    public delegate void PlayerChangedRoom(Room room);
-    public event PlayerChangedRoom ChangedRoom;
-
     protected override void Start()
     {
+
 
         _weapon = GetComponent<PlayerWeapon>();
         if (_weapon == null) 
