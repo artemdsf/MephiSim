@@ -60,3 +60,6 @@ TagManager:
   - name: Character
     uniqueID: 4285856015
     locked: 0
+  - name: TilemapCeiling
+    uniqueID: 1816423611
+    locked: 0

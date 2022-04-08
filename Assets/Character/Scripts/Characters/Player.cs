@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class Player : Character
 {
     private PlayerWeapon _weapon;
-
     private float _mana;
 
     public float Mana
@@ -40,9 +39,11 @@ public class Player : Character
     }
 
 
+    public delegate void PlayerChangedRoom(Room room);
+    public event PlayerChangedRoom ChangedRoom;
+
     protected override void Start()
     {
-
 
         _weapon = GetComponent<PlayerWeapon>();
         if (_weapon == null) 
@@ -55,13 +56,24 @@ public class Player : Character
 
     private void Update()
     {
+        //Movement
         Vector2 MovementDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Move(MovementDirection);
-
+        
+        //Shooting
         Teacher nearestEnemy = CharactersManager.instance.FindNearestTeacher(transform.position);
+
         if (_weapon && nearestEnemy != null && MovementDirection == Vector2.zero)
         {
             _weapon.Shoot(nearestEnemy.transform.position - _weapon.WeaponEnd.position);
+        }
+
+        //invoke event
+        Room currentRoom = LevelMap.GetRoom(LevelMap.WorldCoordsToGrid(transform.position));
+        if (currentRoom != null && currentRoom.IsVisited == false)
+        {
+            ChangedRoom(currentRoom);
+            currentRoom.IsVisited = true;
         }
 
     }
