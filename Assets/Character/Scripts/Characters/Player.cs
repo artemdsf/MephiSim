@@ -8,6 +8,9 @@ public class Player : Character
     private PlayerWeapon _weapon;
     private float _mana;
 
+    public delegate void RoomChangedDelegate(Room room);
+    public event RoomChangedDelegate ChangedRoom;
+
     public float Mana
     {
         get
