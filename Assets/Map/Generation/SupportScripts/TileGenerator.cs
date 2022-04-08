@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -42,8 +43,6 @@ public class TileGenerator : MonoBehaviour
 	/// Size of big room
 	/// </summary>
 	[SerializeField] private Vector2Int _bigRoomSize = new Vector2Int(1, 1);
-
-	private Tile _tile;
 
 	/// <summary>
 	/// Grid for generation
@@ -137,6 +136,9 @@ public class TileGenerator : MonoBehaviour
 	{
 		switch (room.RoomType)
 		{
+			case RoomType.LibRoom:
+				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.LibRooms));
+				break;
 			case RoomType.BossRoom:
 				CopyTilemap(room, GetRoomPrefab(room, _roomPrefabContainer.BossRooms));
 				break;
@@ -411,12 +413,12 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="tileID">Tile ID</param>
 	private void CreateCollidWallTile(int spriteIndex, int[] tileID)
 	{
-		_tile = ScriptableObject.CreateInstance<Tile>();
+		Tile tile = ScriptableObject.CreateInstance<Tile>();
 
-		_tile.sprite = _roomPalette.Sprites[spriteIndex];
-		TileWithID tile = new TileWithID(_tile, tileID);
+		tile.sprite = _roomPalette.Sprites[spriteIndex];
+		TileWithID tileWithID = new TileWithID(tile, tileID);
 
-		_wallTiles.Add(tile);
+		_wallTiles.Add(tileWithID);
 	}
 
 	/// <summary>
@@ -426,11 +428,11 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="tileID">Tile ID</param>
 	private void CreateCollidWallTile(int[] tileID)
 	{
-		_tile = ScriptableObject.CreateInstance<Tile>();
+		Tile tile = ScriptableObject.CreateInstance<Tile>();
 
-		TileWithID tile = new TileWithID(_tile, tileID);
+		TileWithID tileWithID = new TileWithID(tile, tileID);
 
-		_wallTiles.Add(tile);
+		_wallTiles.Add(tileWithID);
 	}
 
 	/// <summary>
@@ -439,11 +441,11 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="spriteIndex">Sprite index</param>
 	private void CreateNonCollidWallTile(int spriteIndex)
 	{
-		_tile = ScriptableObject.CreateInstance<Tile>();
+		Tile tile = ScriptableObject.CreateInstance<Tile>();
 
-		_tile.sprite = _roomPalette.Sprites[spriteIndex];
+		tile.sprite = _roomPalette.Sprites[spriteIndex];
 
-		_nonCollidWallTiles.Add(_tile);
+		_nonCollidWallTiles.Add(tile);
 	}
 
 	/// <summary>
@@ -452,11 +454,11 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="spriteIndex">Sprite index</param>
 	private void CreateFloorTile(int spriteIndex)
 	{
-		_tile = ScriptableObject.CreateInstance<Tile>();
+		Tile tile = ScriptableObject.CreateInstance<Tile>();
 
-		_tile.sprite = _roomPalette.Sprites[spriteIndex];
+		tile.sprite = _roomPalette.Sprites[spriteIndex];
 
-		_floorTiles.Add(_tile);
+		_floorTiles.Add(tile);
 	}
 
 	/// <summary>
@@ -1042,31 +1044,13 @@ public class TileGenerator : MonoBehaviour
 	/// <returns>Direction</returns>
 	protected Vector3Int GetRandomDirectionWithFreeArea(Vector3Int position)
 	{
-		List<Vector3Int> directions = new List<Vector3Int>();
+		Vector3Int[] directions = { Vector3Int.left, Vector3Int.right, Vector3Int.up, Vector3Int.down };
 
-		if (IsAreaFree(Vector3Int.left + position))
-		{
-			directions.Add(Vector3Int.left);
-		}
+		directions = directions.Where(direction => IsAreaFree(direction + position)).ToArray();
 
-		if (IsAreaFree(Vector3Int.right + position))
+		if (directions.Length > 0)
 		{
-			directions.Add(Vector3Int.right);
-		}
-
-		if (IsAreaFree(Vector3Int.up + position))
-		{
-			directions.Add(Vector3Int.up);
-		}
-
-		if (IsAreaFree(Vector3Int.down + position))
-		{
-			directions.Add(Vector3Int.down);
-		}
-
-		if (directions.Count > 0)
-		{
-			return directions[Random.Range(0, directions.Count)];
+			return directions[Random.Range(0, directions.Length)];
 		}
 
 		return Vector3Int.zero;
@@ -1079,31 +1063,13 @@ public class TileGenerator : MonoBehaviour
 	/// <returns>Direction</returns>
 	protected Vector3Int GetRandomDirection(Vector3Int position)
 	{
-		List<Vector3Int> directions = new List<Vector3Int>();
+		Vector3Int[] directions = { Vector3Int.left, Vector3Int.right, Vector3Int.up, Vector3Int.down };
 
-		if (IsChunkFree(Vector3Int.left + position))
-		{
-			directions.Add(Vector3Int.left);
-		}
+		directions = directions.Where(direction => IsChunkFree(direction + position)).ToArray();
 
-		if (IsChunkFree(Vector3Int.right + position))
+		if (directions.Length > 0)
 		{
-			directions.Add(Vector3Int.right);
-		}
-
-		if (IsChunkFree(Vector3Int.up + position))
-		{
-			directions.Add(Vector3Int.up);
-		}
-
-		if (IsChunkFree(Vector3Int.down + position))
-		{
-			directions.Add(Vector3Int.down);
-		}
-
-		if (directions.Count > 0)
-		{
-			return directions[Random.Range(0, directions.Count)];
+			return directions[Random.Range(0, directions.Length)];
 		}
 
 		return Vector3Int.zero;
@@ -1116,7 +1082,7 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="lastRoom">Last room</param>
 	/// <param name="chanceToChangeLastRoom">Chance to change last room</param>
 	/// <returns>Room</returns>
-	protected Room GetRandomLastRoom(Room lastRoom, int chanceToChangeLastRoom)
+	protected Room GetRandomRoom(Room lastRoom, int chanceToChangeLastRoom = 100)
 	{
 		if (Random.Range(1, 100) >= chanceToChangeLastRoom && lastRoom != null)
 		{
@@ -1135,6 +1101,233 @@ public class TileGenerator : MonoBehaviour
 		}
 
 		return null;
+	}
+
+	/// <summary>
+	/// Get random extreme room
+	/// </summary>
+	/// <returns>Random room</returns>
+	protected Room GetRandomExtremeRoom()
+	{
+		foreach (var room in LevelMap.Map)
+		{
+			if (room.IsExtreme)
+			{
+				return room;
+			}
+		}
+
+		return null;
+	}
+
+	/// <summary>
+	/// Add new hallway
+	/// </summary>
+	/// <param name="lastRoom">Room to connect hallway</param>
+	/// <param name="chanceToChangeRoom">Chance to change room</param>
+	/// <param name="hallwayMaxLenght">Hallway max length</param>
+	/// <returns>Spawned halway</returns>
+	protected Room AddNewHallway(Room lastRoom, int chanceToChangeRoom, int hallwayMaxLenght)
+	{
+		int maxCountInterations = 10000;
+		int countIterations = 0;
+
+		bool isCorrectRemove;
+		Vector3Int directionToSpawn;
+		Room lastHallway = null;
+		Room newHallway = null;
+
+		while (countIterations < maxCountInterations)
+		{
+			countIterations++;
+
+			lastRoom = GetRandomRoom(lastRoom, chanceToChangeRoom);
+
+			directionToSpawn = GetRandomDirection(lastRoom.Position);
+
+			if (directionToSpawn == Vector3Int.zero || CountRoomsInArea(lastRoom.Position + directionToSpawn) > 1)
+			{
+				isCorrectRemove = freeToSpawnRooms.Remove(lastRoom);
+
+				if (isCorrectRemove == false)
+				{
+					throw new UnityException("Invalid remove");
+				}
+
+				lastRoom = GetRandomRoom(lastRoom);
+
+				continue;
+			}
+
+			newHallway = AddNextRoom(lastRoom, directionToSpawn, RoomType.Hallway);
+			break;
+		}
+
+		if (countIterations >= maxCountInterations)
+		{
+			throw new UnityException("A lot of iterations");
+		}
+		if (newHallway == null)
+		{
+			throw new UnityException("Hallway not spawned");
+		}
+
+		for (int hallwayLenght = 1; hallwayLenght < hallwayMaxLenght; hallwayLenght++)
+		{
+			directionToSpawn = GetRandomDirectionWithFreeArea(newHallway.Position);
+
+			if (directionToSpawn == Vector3Int.zero)
+			{
+				LevelMap.Map.Remove(newHallway);
+
+				if (hallwayLenght == 1)
+				{
+					return null;
+				}
+				return lastHallway;
+			}
+
+			lastHallway = newHallway;
+			newHallway = AddNextRoom(newHallway, directionToSpawn, RoomType.Hallway);
+		}
+
+		return newHallway;
+	}
+
+	/// <summary>
+	/// Add new room
+	/// </summary>
+	/// <param name="hallwayRoom">Hallway</param>
+	/// <param name="roomType">Room type</param>
+	/// <returns>Spawned room</returns>
+	protected Room AddNewRoomNextToHallway(Room hallwayRoom, RoomType roomType)
+	{
+		bool isCorrectRemove;
+		Vector3Int directionToSpawn;
+		Room newRoom;
+
+		if (hallwayRoom == null)
+		{
+			return null;
+		}
+		if (roomType == RoomType.Hallway)
+		{
+			throw new UnityException("Wrong room type");
+		}
+
+		directionToSpawn = GetRandomDirectionWithFreeArea(hallwayRoom.Position);
+
+		if (directionToSpawn == Vector3Int.zero)
+		{
+			newRoom = AddNextRoom(hallwayRoom, directionToSpawn, roomType);
+
+			isCorrectRemove = freeToSpawnRooms.Remove(newRoom);
+
+			if (isCorrectRemove == false)
+			{
+				throw new UnityException("Invalid remove");
+			}
+
+			newRoom = GetRandomRoom(newRoom);
+			return newRoom;
+		}
+
+		newRoom = AddNextRoom(hallwayRoom, directionToSpawn, roomType);
+		return newRoom;
+	}
+
+	/// <summary>
+	/// Add special room
+	/// </summary>
+	/// <param name="roomType">Room type</param>
+	protected void AddSpecialRoom(RoomType roomType, bool isBigRoom = true)
+	{
+		if (isBigRoom)
+		{
+			bool isSpawned = false;
+			foreach (var room in freeToSpawnRooms)
+			{
+				if (room.IsExtreme && room.RoomType == RoomType.EnemyRoom)
+				{
+					LevelMap.Map.Remove(room);
+
+					if (CanSpawnBigRoom(room.Position, out Vector3Int lastPosition))
+					{
+						AddBigRoom(room.Position, lastPosition, roomType, room.DistanceFromStart + 1);
+						isSpawned = true;
+						break;
+					}
+
+					LevelMap.Map.Add(room);
+				}
+			}
+
+			if (isSpawned == false)
+			{
+				Debug.LogError($"RoomType: \"{roomType}\" not spawned");
+
+				//LevelMap.CountMapSize();
+
+				////Check left side
+				//for (int i = LevelMap.DownChunk; i < LevelMap.UpChunk; i++)
+				//{
+
+				//}
+			}
+		}
+		else
+		{
+			Room room = GetRandomExtremeRoom();
+
+			if (room == null)
+			{
+				Debug.LogError("There is not extreme room");
+			}
+
+			LevelMap.Map.Remove(room);
+			new Room(room.Position, roomType, room.DistanceFromStart);
+		}
+	}
+
+	/// <summary>
+	/// Add big room
+	/// </summary>
+	/// <param name="firstPosition">First position</param>
+	/// <param name="lastPosition">Last position</param>
+	/// <param name="roomType">Room type</param>
+	/// <param name="distance">Distance of big room</param>
+	protected void AddBigRoom(Vector3Int firstPosition, Vector3Int lastPosition, RoomType roomType, int distance)
+	{
+		int left, right, up, down;
+
+		if (firstPosition.x < lastPosition.x)
+		{
+			left = firstPosition.x;
+			right = lastPosition.x;
+		}
+		else
+		{
+			left = lastPosition.x;
+			right = firstPosition.x;
+		}
+		if (firstPosition.y < lastPosition.y)
+		{
+			down = firstPosition.y;
+			up = lastPosition.y;
+		}
+		else
+		{
+			down = lastPosition.y;
+			up = firstPosition.y;
+		}
+
+		for (int i = left; i <= right; i++)
+		{
+			for (int j = down; j <= up; j++)
+			{
+				new Room(new Vector3Int(i, j, 0), roomType, distance);
+			}
+		}
 	}
 
 	/// <summary>
@@ -1195,6 +1388,67 @@ public class TileGenerator : MonoBehaviour
 		}
 
 		return true;
+	}
+
+	/// <summary>
+	/// Check if the chunk is free
+	/// </summary>
+	/// <param name="position">Chunk position</param>
+	/// <returns>Is free</returns>
+	protected int CountRoomsInArea(Vector3Int position)
+	{
+		int num = 0;
+		foreach (var room in LevelMap.Map)
+		{
+			if (room.RoomType == RoomType.EnemyRoom || room.RoomType == RoomType.StartRoom)
+			{
+				if (room.Position == position + Vector3Int.left + Vector3Int.up)
+				{
+					num++;
+				}
+
+				if (room.Position == position + Vector3Int.left + Vector3Int.down)
+				{
+					num++;
+				}
+
+				if (room.Position == position + Vector3Int.right + Vector3Int.up)
+				{
+					num++;
+				}
+
+				if (room.Position == position + Vector3Int.right + Vector3Int.down)
+				{
+					num++;
+				}
+
+				if (room.Position == position + Vector3Int.left)
+				{
+					num++;
+				}
+
+				if (room.Position == position + Vector3Int.up)
+				{
+					num++;
+				}
+
+				if (room.Position == position + Vector3Int.down)
+				{
+					num++;
+				}
+
+				if (room.Position == position + Vector3Int.right)
+				{
+					num++;
+				}
+			}
+			if (room.Position == position)
+			{
+				num++;
+			}
+		}
+
+		return num;
 	}
 
 	/// <summary>

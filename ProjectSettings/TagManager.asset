@@ -3,22 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Enemy
-  - Character
-  - Collidable Tilemap
-  - Teacher
-  - PlayerBottom
-  - CollideWithProjectiles
-  - TeacherBottom
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Collidable
+  - 
   - Water
   - UI
-  - Obstacle
   - 
   - 
   - 
@@ -33,8 +25,9 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Layer 1
+  - Layer 2
+  - Layer 3
   - 
   - 
   - 
@@ -45,18 +38,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Tilemap
-    uniqueID: 1491039997
-    locked: 0
-  - name: Shadow
-    uniqueID: 917281987
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: PickableBook
-    uniqueID: 3235334345
+  - name: Layer 1
+    uniqueID: 2425651459
     locked: 0
-  - name: Character
-    uniqueID: 4285856015
+  - name: Layer 2
+    uniqueID: 4250941897
+    locked: 0
+  - name: Layer 3
+    uniqueID: 4189426099
     locked: 0

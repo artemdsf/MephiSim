@@ -5,19 +5,19 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class FogOfWar : MonoBehaviour
 {
-
     [SerializeField] private Light2D _light;
 
     private float radius;
 
     void Start()
     {
-        radius = Mathf.Max(LevelMap.ChunkSize.x, LevelMap.ChunkSize.y);
+        //radius = Mathf.Max(LevelMap.ChunkSize.x, LevelMap.ChunkSize.y);
     }
 
     void Update()
     {
         Room currentRoom = LevelMap.GetRoom(LevelMap.WorldCoordsToGrid(transform.position));
+
         if (currentRoom != null && currentRoom.IsVisited == false)
         {
             

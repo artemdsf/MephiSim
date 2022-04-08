@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 499959ecc1364cd44a13d9594fa8c1ce, type: 3}
   m_Name: RoomPrefabContainer
   m_EditorClassIdentifier: 
+  LibRooms:
+  - {fileID: 11400000, guid: 6fdc1164f11dcd04390de158ef2124a9, type: 2}
   BossRooms:
   - {fileID: 11400000, guid: 22af26a3f586cad41b78bd9ad9493d60, type: 2}
   StartRooms:

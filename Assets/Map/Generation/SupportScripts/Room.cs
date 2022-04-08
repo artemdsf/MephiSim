@@ -2,6 +2,7 @@ using UnityEngine;
 
 public enum RoomType
 {
+	LibRoom,
 	BossRoom,
 	StartRoom,
 	EnemyRoom,

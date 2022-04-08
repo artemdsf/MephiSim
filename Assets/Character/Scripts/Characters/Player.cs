@@ -42,8 +42,6 @@ public class Player : Character
 
     protected override void Start()
     {
-
-
         _weapon = GetComponent<PlayerWeapon>();
         if (_weapon == null) 
         {
