@@ -3,25 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-struct Task_t
-{
-    public string question;
-    public int answer;
-}
 
 public class TaskScript : MonoBehaviour
 {
     //Test
-    [SerializeField] private string _testQuestion;
-    [SerializeField] private int _testAnswer;
-
-    [SerializeField] private Text _question;
+    [SerializeField] private Image _question;
     [SerializeField] private Text _input;
 
     private string _currentAnswer = "";
-    private Task_t _newTask;
+    private Task _newTask;
 
-    private string _numbers = "0123456789";
+    private string _numbers = "0123456789.";
 
     private bool _answered = false;
 
@@ -49,15 +41,6 @@ public class TaskScript : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    private Task_t GetTask()
-    {
-        Task_t task = new Task_t();
-
-        task.question = _testQuestion;
-        task.answer = _testAnswer;
-
-        return task;
-    }
 
     private string GetInput(string answer)
     { 
@@ -80,25 +63,21 @@ public class TaskScript : MonoBehaviour
 
     public bool IsAnswerGivenAndCorrect()
     {
-        if (_answered)
-        {
-            NewTask();
-        }
         return _answered;
     }
 
     public void NewTask()
     {
-        _newTask = GetTask();
-
-        _question.text = _newTask.question;
+        _newTask = TasksDatabase.Instance.GetTask();
+        _question.sprite = _newTask.Question;
     }
 
     private void CheckAnswer()
     {
         if (Input.GetKeyDown(KeyCode.Return) && !_answered)
         {
-            if (_currentAnswer == _newTask.answer.ToString())
+            Debug.Log(_newTask.Answer);
+            if (_currentAnswer == _newTask.Answer)
             {
                 Debug.Log("Correct");
                 _answered = true;

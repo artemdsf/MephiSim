@@ -14,7 +14,7 @@ public static class LevelManager
     public delegate void TasksDifficultyStateChanged(TasksDiffcultyEnum tasksDiffculty);
     public static event TasksDifficultyStateChanged TaskDifficultyChanged;
     
-    private static TasksDiffcultyEnum _tasksDiffculty = TasksDiffcultyEnum.NoTasks;
+    private static TasksDiffcultyEnum _tasksDiffculty = TasksDiffcultyEnum.Easy;
 
     public static TasksDiffcultyEnum TasksDiffculty
     {
