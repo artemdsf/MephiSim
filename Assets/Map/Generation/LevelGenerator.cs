@@ -28,12 +28,12 @@ public class LevelGenerator : TileGenerator
 
 		for (int roomCount = 0; roomCount < _roomCountToSpawn; roomCount++)
 		{
-			_lastRoom = AddNewHallway(_lastRoom, _chanceToChangeRoom, _hallwayMaxLenght);
+			_lastRoom = AddNewHallway(_lastRoom, _hallwayMaxLenght, _chanceToChangeRoom);
 			_lastRoom = AddNewRoomNextToHallway(_lastRoom, RoomType.EnemyRoom);
 		}
 
-		AddSpecialRoom(RoomType.BossRoom);
-		AddSpecialRoom(RoomType.LibRoom, isBigRoom:false);
+		AddSpecialRoom(RoomType.BossRoom, _hallwayMaxLenght);
+		AddSpecialRoom(RoomType.LibRoom, _hallwayMaxLenght, isBigRoom: false);
 
 		LevelMap.CountMapSize();
 		GenerateFloor();

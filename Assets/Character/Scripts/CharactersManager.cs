@@ -29,12 +29,10 @@ public class CharactersManager : MonoBehaviour
         InitManager();
     }
 
-  
     private void InitManager()
     {
         
     }
-
 
     public Teacher FindNearestTeacher(Vector3 pos) 
     {
@@ -68,7 +66,6 @@ public class CharactersManager : MonoBehaviour
     {
         return _player;
     }
-
 
     public void AddCharacter(Character character)
     {

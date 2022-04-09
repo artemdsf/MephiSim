@@ -271,8 +271,6 @@ public class TileGenerator : MonoBehaviour
 	/// </summary>
 	private void SetSkirtingBoards()
 	{
-		int[] id = new int[9];
-
 		int left = LevelMap.LeftPosition();
 		int right = LevelMap.RightPosition();
 		int down = LevelMap.DownPosition();
@@ -282,7 +280,7 @@ public class TileGenerator : MonoBehaviour
 		{
 			for (int j = down; j <= up; j++)
 			{
-				id = GetTileID(new Vector3Int(i, j, 0));
+				int[] id = GetTileID(new Vector3Int(i, j, 0));
 
 				if (id[4] == 1)
 				{
@@ -939,32 +937,9 @@ public class TileGenerator : MonoBehaviour
 	/// <returns>Is correct</returns>
 	private bool IsDirectionCorrect(Vector3Int direction)
 	{
-		if (direction == Vector3Int.zero)
-		{
-			return true;
-		}
+		Vector3Int[] directions = { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right, Vector3Int.zero };
 
-		if (direction == Vector3Int.left)
-		{
-			return true;
-		}
-
-		if (direction == Vector3Int.right)
-		{
-			return true;
-		}
-
-		if (direction == Vector3Int.up)
-		{
-			return true;
-		}
-
-		if (direction == Vector3Int.down)
-		{
-			return true;
-		}
-
-		return false;
+		return directions.Contains(direction);
 	}
 
 	/// <summary>
@@ -1127,7 +1102,7 @@ public class TileGenerator : MonoBehaviour
 	/// <param name="chanceToChangeRoom">Chance to change room</param>
 	/// <param name="hallwayMaxLenght">Hallway max length</param>
 	/// <returns>Spawned halway</returns>
-	protected Room AddNewHallway(Room lastRoom, int chanceToChangeRoom, int hallwayMaxLenght)
+	protected Room AddNewHallway(Room lastRoom, int hallwayMaxLenght, int chanceToChangeRoom = 100)
 	{
 		int maxCountInterations = 10000;
 		int countIterations = 0;
@@ -1240,7 +1215,7 @@ public class TileGenerator : MonoBehaviour
 	/// Add special room
 	/// </summary>
 	/// <param name="roomType">Room type</param>
-	protected void AddSpecialRoom(RoomType roomType, bool isBigRoom = true)
+	protected void AddSpecialRoom(RoomType roomType, int hallwayMaxLenght, bool isBigRoom = true)
 	{
 		if (isBigRoom)
 		{
@@ -1264,7 +1239,9 @@ public class TileGenerator : MonoBehaviour
 
 			if (isSpawned == false)
 			{
+				//-------------------------------------------------------------------------------------------
 				Debug.LogError($"RoomType: \"{roomType}\" not spawned");
+				//-------------------------------------------------------------------------------------------
 
 				//LevelMap.CountMapSize();
 
@@ -1281,11 +1258,16 @@ public class TileGenerator : MonoBehaviour
 
 			if (room == null)
 			{
-				Debug.LogError("There is not extreme room");
+				room = AddNewHallway(room, hallwayMaxLenght);
+				room = AddNewRoomNextToHallway(room, roomType);
+			}
+			else
+			{
+				LevelMap.Map.Remove(room);
+				room = new Room(room.Position, roomType, room.DistanceFromStart);
 			}
 
-			LevelMap.Map.Remove(room);
-			new Room(room.Position, roomType, room.DistanceFromStart);
+			room.IsExtreme = false;
 		}
 	}
 
@@ -1325,7 +1307,8 @@ public class TileGenerator : MonoBehaviour
 		{
 			for (int j = down; j <= up; j++)
 			{
-				new Room(new Vector3Int(i, j, 0), roomType, distance);
+				Room room = new Room(new Vector3Int(i, j, 0), roomType, distance);
+				room.IsExtreme = false;
 			}
 		}
 	}
@@ -1339,46 +1322,17 @@ public class TileGenerator : MonoBehaviour
 	{
 		foreach (var room in LevelMap.Map)
 		{
-			if (room.RoomType == RoomType.EnemyRoom || room.RoomType == RoomType.StartRoom)
+			if (room.RoomType != RoomType.Hallway)
 			{
-				if (room.Position == position + Vector3Int.left + Vector3Int.up)
+				for (int x = -1; x <= 1; x++)
 				{
-					return false;
-				}
-
-				if (room.Position == position + Vector3Int.left + Vector3Int.down)
-				{
-					return false;
-				}
-
-				if (room.Position == position + Vector3Int.right + Vector3Int.up)
-				{
-					return false;
-				}
-
-				if (room.Position == position + Vector3Int.right + Vector3Int.down)
-				{
-					return false;
-				}
-
-				if (room.Position == position + Vector3Int.left)
-				{
-					return false;
-				}
-
-				if (room.Position == position + Vector3Int.up)
-				{
-					return false;
-				}
-
-				if (room.Position == position + Vector3Int.down)
-				{
-					return false;
-				}
-
-				if (room.Position == position + Vector3Int.right)
-				{
-					return false;
+					for (int y = -1; y <= 1; y++)
+					{
+						if (room.Position == position + new Vector3Int(x, y, 0))
+						{
+							return false;
+						}
+					}
 				}
 			}
 			if (room.Position == position)
@@ -1400,49 +1354,20 @@ public class TileGenerator : MonoBehaviour
 		int num = 0;
 		foreach (var room in LevelMap.Map)
 		{
-			if (room.RoomType == RoomType.EnemyRoom || room.RoomType == RoomType.StartRoom)
+			if (room.RoomType != RoomType.Hallway)
 			{
-				if (room.Position == position + Vector3Int.left + Vector3Int.up)
+				for (int x = -1; x <= 1; x++)
 				{
-					num++;
-				}
-
-				if (room.Position == position + Vector3Int.left + Vector3Int.down)
-				{
-					num++;
-				}
-
-				if (room.Position == position + Vector3Int.right + Vector3Int.up)
-				{
-					num++;
-				}
-
-				if (room.Position == position + Vector3Int.right + Vector3Int.down)
-				{
-					num++;
-				}
-
-				if (room.Position == position + Vector3Int.left)
-				{
-					num++;
-				}
-
-				if (room.Position == position + Vector3Int.up)
-				{
-					num++;
-				}
-
-				if (room.Position == position + Vector3Int.down)
-				{
-					num++;
-				}
-
-				if (room.Position == position + Vector3Int.right)
-				{
-					num++;
+					for (int y = -1; y <= 1; y++)
+					{
+						if (room.Position == position + new Vector3Int(x, y, 0))
+						{
+							num++;
+						}
+					}
 				}
 			}
-			if (room.Position == position)
+			else if (room.Position == position)
 			{
 				num++;
 			}

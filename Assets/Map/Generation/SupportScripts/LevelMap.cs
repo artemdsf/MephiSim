@@ -8,7 +8,7 @@ public static class LevelMap
 	public static int UpChunk = 0;
 	public static int DownChunk = 0;
 
-	public static readonly Vector3Int ChunkSize = new Vector3Int(18, 10, 0);
+	public static readonly Vector3Int ChunkSize = new Vector3Int(22, 14, 0);
 
 	public static List<Room> Map = new List<Room>();
 

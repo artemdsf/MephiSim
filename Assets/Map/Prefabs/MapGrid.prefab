@@ -107,8 +107,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1491039997
-  m_SortingLayer: -2
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -226,8 +226,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1491039997
-  m_SortingLayer: -2
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -361,8 +361,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1491039997
-  m_SortingLayer: -2
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -448,7 +448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _roomPalette: {fileID: 11400000, guid: 74d15ca4a69020b4f9a72404c74f1904, type: 2}
-  _roomPrefabContainer: {fileID: 11400000, guid: e79b2f32d1a1238459b0a66b8eb71b55, type: 2}
+  _roomPrefabContainer: {fileID: 11400000, guid: e79b2f32d1a1238459b0a66b8eb71b55,
+    type: 2}
   _FloorTilemap: {fileID: 302505344374339324}
   _WallTilemap: {fileID: 302505345898536146}
   _CollidWallTilemap: {fileID: 302505344558312089}
