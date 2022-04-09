@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -59,6 +60,7 @@ public class Player : Character
 	public IUsable InteractableObject { private get; set; }
 
 	private PlayerWeapon _weapon;
+	internal Action<Room> ChangedRoom;
 
 	protected override void Awake()
 	{
