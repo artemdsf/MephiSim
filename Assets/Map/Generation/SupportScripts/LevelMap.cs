@@ -42,7 +42,7 @@ public static class LevelMap
 
 	public static Vector3Int WorldCoordsToGrid(Vector3 pos)
 	{
-		return new Vector3Int((int)(pos.x / ChunkSize.x), (int)(pos.y / ChunkSize.y), 0);
+		return new Vector3Int(Mathf.FloorToInt(pos.x / ChunkSize.x), Mathf.FloorToInt(pos.y / ChunkSize.y), 0);
 	}
 
 	public static Vector3 GridCoordsToWorld(Vector3Int pos)

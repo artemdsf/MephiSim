@@ -7,24 +7,17 @@ public class FogOfWar : MonoBehaviour
 {
     [SerializeField] private Light2D _light;
 
-    private float radius;
+    //private float radius;
 
     void Start()
     {
-        //radius = Mathf.Max(LevelMap.ChunkSize.x, LevelMap.ChunkSize.y);
+        CharactersManager.instance.GetPlayer().ChangedRoom += ChangedRoom;
     }
 
-    void Update()
+    void ChangedRoom(Room room)
     {
-        Room currentRoom = LevelMap.GetRoom(LevelMap.WorldCoordsToGrid(transform.position));
-
-        if (currentRoom != null && currentRoom.IsVisited == false)
-        {
-            
-            Light2D lightInstance = Instantiate(_light.gameObject, currentRoom.CenterPos, Quaternion.identity).GetComponent<Light2D>();
-            lightInstance.pointLightOuterRadius = radius;
-
-            currentRoom.IsVisited = true;
-        }
+        Light2D lightInstance = Instantiate(_light.gameObject, room.CenterPos + Vector3.up * 1.8F, Quaternion.identity).GetComponent<Light2D>();
+        lightInstance.transform.localScale = new Vector3(LevelMap.ChunkSize.x + 0.7F, LevelMap.ChunkSize.y + 3F, 1);
     }
+
 }
