@@ -35,7 +35,7 @@ public class TasksDatabase : MonoBehaviour
         }
     }
 
-    private void Awake()
+/*    private void Awake()
     {
          if (_instance != null)
         {
@@ -48,7 +48,7 @@ public class TasksDatabase : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         LoadDatabase();
     }
-
+*/
     private void LoadDatabase()
     {
 
