@@ -33,22 +33,24 @@ public class TasksDatabase : MonoBehaviour
 			Destroy(this);
 		}
 
-		_tasksLists = new List<Task>[] { _easyTasks, _mediumTasks, _hardTasks };
-		_instance = this;
-		DontDestroyOnLoad(gameObject);
-		LoadDatabase();
-	}
 
-	private void LoadDatabase()
-	{
-		string[] strings;
-		strings = _text.text.Split(new string[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.None);
+        _tasksLists = new List<Task>[] { _easyTasks, _mediumTasks, _hardTasks };
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+        LoadDatabase();
+    }
 
-		foreach (string str in strings)
-		{
-			string[] taskStrings = str.Split(',');
-			string questionSpriteName = taskStrings[0];
-			string answer = taskStrings[1];
+    private void LoadDatabase()
+    {
+
+        string[] strings;
+        strings = _text.text.Split(new string[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.None);
+        
+        foreach(string str in strings)
+        {
+            string[] taskStrings = str.Split(',');
+            string questionSpriteName = taskStrings[0];
+            string answer = taskStrings[1];
 
 			Sprite sprite = Resources.Load<Sprite>(_folderWithTasks + '/' + questionSpriteName);
 			Task task = new Task(sprite, answer);
