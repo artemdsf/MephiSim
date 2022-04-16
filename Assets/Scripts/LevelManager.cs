@@ -25,4 +25,13 @@ public static class LevelManager
             _tasksDiffculty = value;
         }
     }
+
+    private static int _level = 1;
+    public static int Level => _level;
+
+    public static void NextLevel()
+    {
+        _level++;
+        TasksDatabase.Instance.LoadDatabase();
+    }
 }

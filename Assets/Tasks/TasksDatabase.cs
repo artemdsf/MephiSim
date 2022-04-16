@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Task
 {
-    public readonly Sprite Question;
+    public readonly Sprite TaskSprite;
     public readonly string Answer;
-    public Task(Sprite question, string answer)
+    public Task(Sprite taskSprite, string answer)
     {
-        Question = question;
+        TaskSprite = taskSprite;
         Answer = answer;
     }
 }
@@ -19,9 +19,9 @@ public class TasksDatabase : MonoBehaviour
     [SerializeField] private TextAsset _text;
     [SerializeField] string _folderWithTasks;
 
-    private List<Task> _easyTasks = new List<Task>();
-    private List<Task> _mediumTasks = new List<Task>();
-    private List<Task> _hardTasks = new List<Task>();
+    private List<Task> _easyTasks;
+    private List<Task> _mediumTasks;
+    private List<Task> _hardTasks;
 
     List<Task>[] _tasksLists;
 
@@ -42,31 +42,42 @@ public class TasksDatabase : MonoBehaviour
             Destroy(this);
         }
 
-
-        _tasksLists = new List<Task>[] { _easyTasks, _mediumTasks, _hardTasks };
         _instance = this;
         DontDestroyOnLoad(gameObject);
         LoadDatabase();
+        LevelManager.NextLevel();
     }
 
-    private void LoadDatabase()
+    public void LoadDatabase()
     {
+        _easyTasks = new List<Task>();
+        _mediumTasks = new List<Task>();
+        _hardTasks = new List<Task>();
+
+        _tasksLists = new List<Task>[] { _easyTasks, _mediumTasks, _hardTasks };
 
         string[] strings;
         strings = _text.text.Split(new string[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.None);
         
         foreach(string str in strings)
         {
-            string[] taskStrings = str.Split(',');
-            string questionSpriteName = taskStrings[0];
-            string answer = taskStrings[1];
+            string[] questionSpriteAndAnswer = str.Split(',');
+            string taskSpriteName = questionSpriteAndAnswer[0];
+            string answer = questionSpriteAndAnswer[1]; 
 
-            Sprite sprite = Resources.Load<Sprite>(_folderWithTasks + '/' + questionSpriteName);
-            Task task = new Task(sprite, answer);
+            string[] taskProperties = taskSpriteName.Split('_');
+            int level = int.Parse(taskProperties[1]);
 
-            int diffculty = int.Parse(questionSpriteName.Split('_')[2]);
-            _tasksLists[diffculty - 1].Add(task);
+            if (level == LevelManager.Level)
+            {
+                Sprite sprite = Resources.Load<Sprite>(_folderWithTasks + '/' + taskSpriteName);
+                Task task = new Task(sprite, answer);
+
+                int diffculty = int.Parse(taskProperties[2]);
+                _tasksLists[diffculty - 1].Add(task);
+            }
         }
+        Debug.Log("Tasks are loaded", this);
     }
 
     public Task GetTask()

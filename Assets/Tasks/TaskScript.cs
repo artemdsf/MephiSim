@@ -69,7 +69,7 @@ public class TaskScript : MonoBehaviour
     public void NewTask()
     {
         _newTask = TasksDatabase.Instance.GetTask();
-        _question.sprite = _newTask.Question;
+        _question.sprite = _newTask.TaskSprite;
     }
 
     private void CheckAnswer()
