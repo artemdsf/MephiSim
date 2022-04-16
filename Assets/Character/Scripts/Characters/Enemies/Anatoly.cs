@@ -14,9 +14,14 @@ public class Anatoly : Teacher
 
     protected override void Awake()
     {
+        StartCorutines();
+        base.Awake();
+    }
+
+    private void StartCorutines()
+    {
         StartCoroutine(ShootPerTime());
         StartCoroutine(ChangeDirectionPerTime());
-        base.Awake();
     }
 
     private void ChangeDirection()
@@ -51,6 +56,11 @@ public class Anatoly : Teacher
         }
     }
 
+    protected override void OnEnable()
+    {
+        StartCorutines();
+        base.OnEnable();
+    }
 
     protected override void Update()
     {

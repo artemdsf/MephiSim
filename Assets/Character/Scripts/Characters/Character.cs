@@ -145,6 +145,16 @@ public abstract class Character : MonoBehaviour
 		CharactersManager.instance.DeleteCharacter(this);
 	}
 
+	protected virtual void OnEnable()	
+    {
+		CharactersManager.instance.AddCharacter(this);
+	}
+
+	protected virtual void OnDisable()
+	{
+		CharactersManager.instance.DeleteCharacter(this);
+	}
+
 	public void Init(float maxHP, float defaultSpeed, float defaultDefense, Vector2 size)
 	{
 		_defaultDef = defaultDefense;
