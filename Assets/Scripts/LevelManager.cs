@@ -1,5 +1,12 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+
+public enum Tag
+{
+	Player,
+	Enviroment,
+	Enemies,
+	Lights
+}
 
 public static class LevelManager
 {
@@ -34,4 +41,12 @@ public static class LevelManager
         _level++;
         TasksDatabase.Instance.LoadDatabase();
     }
+
+	public static Dictionary<Tag, string> TagsDictionary = new Dictionary<Tag, string>
+	{
+		{ Tag.Player, "Player" },
+		{ Tag.Enemies, "Enemies" },
+		{ Tag.Enviroment, "Enviroment" },
+		{ Tag.Lights, "Lights" }
+	};
 }

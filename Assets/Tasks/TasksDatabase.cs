@@ -1,5 +1,3 @@
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,8 +14,8 @@ public class Task
 
 public class TasksDatabase : MonoBehaviour
 {
-    [SerializeField] private TextAsset _text;
-    [SerializeField] string _folderWithTasks;
+	[SerializeField] private TextAsset _text;
+	[SerializeField] private string _folderWithTasks;
 
     private List<Task> _easyTasks;
     private List<Task> _mediumTasks;
@@ -26,21 +24,15 @@ public class TasksDatabase : MonoBehaviour
     List<Task>[] _tasksLists;
 
 
-    private static TasksDatabase _instance;
+	private static TasksDatabase _instance;
+	public static TasksDatabase Instance => _instance;
 
-    public static TasksDatabase Instance { 
-        get
-        {
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-         if (_instance != null)
-        {
-            Destroy(this);
-        }
+	private void Awake()
+	{
+		if (_instance != null)
+		{
+			Destroy(this);
+		}
 
         _instance = this;
         DontDestroyOnLoad(gameObject);

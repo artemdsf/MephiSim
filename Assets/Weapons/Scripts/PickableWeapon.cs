@@ -22,7 +22,7 @@ public class PickableWeapon : MonoBehaviour, IUsable
 		if (collision.tag == "PlayerBottom")
 		{
 			_player.InteractableObject = this;
-			_player.ShowKeyHint(KeyType.Use);
+			_player.ShowUseHint();
 		}
 	}
 

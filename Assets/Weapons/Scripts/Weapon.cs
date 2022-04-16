@@ -1,26 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
-    [SerializeField] private Transform _weaponEnd;
+	[SerializeField] private Transform _weaponEnd;
+	//private Transform _pool;
 
-    public Transform WeaponEnd => _weaponEnd;
+	public Transform WeaponEnd => _weaponEnd;
 
-    public virtual void Shoot(Vector2 direction, WeaponStats stats)
-    {
-        if (stats == null)
-        {
-            Debug.LogError("It looks like no weapon stats has been assigned!", this);
-            return;
-        }
+	private void Start()
+	{
+		
+	}
 
-        direction = direction.normalized;
+	public virtual void Shoot(Vector2 direction, WeaponStats stats)
+	{
+		if (stats == null)
+		{
+			Debug.LogError("It looks like no weapon stats has been assigned!", this);
+			return;
+		}
 
-        GameObject projectileInstance = Instantiate(stats.Projectile, _weaponEnd.position, Quaternion.LookRotation(Vector3.forward, new Vector2(-direction.y, direction.x)));
+		direction = direction.normalized;
 
-        projectileInstance.gameObject.GetComponent<Rigidbody2D>().velocity = direction * stats.ProjectileSpeed;
-        projectileInstance.GetComponent<Projectile>().Damage = stats.Damage;
-    }
+		GameObject projectileInstance = Instantiate(stats.Projectile, _weaponEnd.position, Quaternion.LookRotation(Vector3.forward, new Vector2(-direction.y, direction.x)));
+
+		projectileInstance.gameObject.GetComponent<Rigidbody2D>().velocity = direction * stats.ProjectileSpeed;
+		projectileInstance.GetComponent<Projectile>().Damage = stats.Damage;
+	}
 }

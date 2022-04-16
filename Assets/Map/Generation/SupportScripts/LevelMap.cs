@@ -25,22 +25,13 @@ public static class LevelMap
 		return null;
 	}
 
-	public static int LeftPosition()
-	{
-		return (LeftChunk - 1) * ChunkSize.x;
-	}
-	public static int RightPosition()
-	{
-		return (RightChunk + 2) * ChunkSize.x;
-	}
-	public static int DownPosition()
-	{
-		return (DownChunk - 1) * ChunkSize.y;
-	}
-	public static int UpPosition()
-	{
-		return (UpChunk + 2) * ChunkSize.y;
-	}
+	public static int LeftPosition => (LeftChunk - 1) * ChunkSize.x;
+
+	public static int RightPosition => (RightChunk + 2) * ChunkSize.x;
+
+	public static int DownPosition => (DownChunk - 1) * ChunkSize.y;
+
+	public static int UpPosition => (UpChunk + 2) * ChunkSize.y;
 
 	public static Vector3Int WorldCoordsToGrid(Vector3 pos)
 	{

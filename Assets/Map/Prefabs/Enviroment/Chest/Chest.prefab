@@ -8,12 +8,13 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7115376190741776110}
+  - component: {fileID: 6174140572721590518}
   - component: {fileID: 1814270653062767475}
-  - component: {fileID: 4388441257165180209}
+  - component: {fileID: 1302584462604811588}
   - component: {fileID: 2573186073874450115}
   - component: {fileID: 5582282717573724048}
   - component: {fileID: 923891434020422295}
+  - component: {fileID: 4388441257165180209}
   m_Layer: 3
   m_Name: Chest
   m_TagString: Untagged
@@ -21,21 +22,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7115376190741776110
-Transform:
+--- !u!224 &6174140572721590518
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2239115728200054532}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9, y: 4, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 7186017058350005690}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -9, y: 4}
+  m_SizeDelta: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &1814270653062767475
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -52,7 +58,7 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
@@ -88,23 +94,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4388441257165180209
-MonoBehaviour:
+--- !u!210 &1302584462604811588
+SortingGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2239115728200054532}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d00f0543d4c63f0488410e87ddefb8dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _reward: {fileID: 7186017058350005688}
-  _closed: {fileID: -1709597125649789099, guid: dbd03eb4fcb801c48b8065128304c85e,
-    type: 3}
-  _opened: {fileID: -1823722794434361609, guid: dbd03eb4fcb801c48b8065128304c85e,
-    type: 3}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!61 &2573186073874450115
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -178,12 +178,29 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &4388441257165180209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2239115728200054532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00f0543d4c63f0488410e87ddefb8dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _reward: {fileID: 7186017058350005688}
+  _closed: {fileID: -1709597125649789099, guid: dbd03eb4fcb801c48b8065128304c85e,
+    type: 3}
+  _opened: {fileID: -1823722794434361609, guid: dbd03eb4fcb801c48b8065128304c85e,
+    type: 3}
 --- !u!1001 &215203217496985783
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7115376190741776110}
+    m_TransformParent: {fileID: 6174140572721590518}
     m_Modifications:
     - target: {fileID: 2080621163, guid: 04db256195d87c84f858ecb67d6dfaa1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -217,7 +234,7 @@ PrefabInstance:
     - target: {fileID: 7009098961532529933, guid: 04db256195d87c84f858ecb67d6dfaa1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7009098961532529933, guid: 04db256195d87c84f858ecb67d6dfaa1,
         type: 3}

@@ -14,9 +14,6 @@ public class WeaponStats : ScriptableObject
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _cooldown;
 
-
-
-
     public Sprite WeaponSprite => _weaponSprite;
     public GameObject Projectile => _projectile;
     
