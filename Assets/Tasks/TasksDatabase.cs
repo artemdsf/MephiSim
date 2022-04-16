@@ -1,94 +1,81 @@
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Task
 {
-    public readonly Sprite Question;
-    public readonly string Answer;
-    public Task(Sprite question, string answer)
-    {
-        Question = question;
-        Answer = answer;
-    }
+	public readonly Sprite Question;
+	public readonly string Answer;
+	public Task(Sprite question, string answer)
+	{
+		Question = question;
+		Answer = answer;
+	}
 }
 
 public class TasksDatabase : MonoBehaviour
 {
-    [SerializeField] private TextAsset _text;
-    [SerializeField] string _folderWithTasks;
+	[SerializeField] private TextAsset _text;
+	[SerializeField] private string _folderWithTasks;
 
-    private List<Task> _easyTasks = new List<Task>();
-    private List<Task> _mediumTasks = new List<Task>();
-    private List<Task> _hardTasks = new List<Task>();
-
-    List<Task>[] _tasksLists;
-
-
-    private static TasksDatabase _instance;
-
-    public static TasksDatabase Instance { 
-        get
-        {
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-         if (_instance != null)
-        {
-            Destroy(this);
-        }
+	private List<Task> _easyTasks = new List<Task>();
+	private List<Task> _mediumTasks = new List<Task>();
+	private List<Task> _hardTasks = new List<Task>();
+	private List<Task>[] _tasksLists;
 
 
-        _tasksLists = new List<Task>[] { _easyTasks, _mediumTasks, _hardTasks };
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
-        LoadDatabase();
-    }
+	private static TasksDatabase _instance;
+	public static TasksDatabase Instance => _instance;
 
-    private void LoadDatabase()
-    {
+	private void Awake()
+	{
+		if (_instance != null)
+		{
+			Destroy(this);
+		}
 
-        string[] strings;
-        strings = _text.text.Split(new string[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.None);
-        
-        foreach(string str in strings)
-        {
-            string[] taskStrings = str.Split(',');
-            string questionSpriteName = taskStrings[0];
-            string answer = taskStrings[1];
+		_tasksLists = new List<Task>[] { _easyTasks, _mediumTasks, _hardTasks };
+		_instance = this;
+		DontDestroyOnLoad(gameObject);
+		LoadDatabase();
+	}
 
-            Sprite sprite = Resources.Load<Sprite>(_folderWithTasks + '/' + questionSpriteName);
-            Task task = new Task(sprite, answer);
+	private void LoadDatabase()
+	{
+		string[] strings;
+		strings = _text.text.Split(new string[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.None);
 
-            int diffculty = int.Parse(questionSpriteName.Split('_')[2]);
-            _tasksLists[diffculty - 1].Add(task);
-        }
-    }
+		foreach (string str in strings)
+		{
+			string[] taskStrings = str.Split(',');
+			string questionSpriteName = taskStrings[0];
+			string answer = taskStrings[1];
 
-    public Task GetTask()
-    {
+			Sprite sprite = Resources.Load<Sprite>(_folderWithTasks + '/' + questionSpriteName);
+			Task task = new Task(sprite, answer);
 
-        if (LevelManager.TasksDiffculty == 0)
-        {
-            Debug.LogWarning("Attemp to get task when difficulty is set to \"NoTasks\"");
-            return null;
-        }
+			int diffculty = int.Parse(questionSpriteName.Split('_')[2]);
+			_tasksLists[diffculty - 1].Add(task);
+		}
+	}
 
-        List<Task> tasks = _tasksLists[(int)LevelManager.TasksDiffculty - 1];
+	public Task GetTask()
+	{
+		if (LevelManager.TasksDiffculty == 0)
+		{
+			Debug.LogWarning("Attemp to get task when difficulty is set to \"NoTasks\"");
+			return null;
+		}
 
-        if (tasks == null || tasks.Count == 0)
-        {
-            Debug.LogWarning($"No tasks for difficulty {LevelManager.TasksDiffculty} was found");
-            return null;
-        }
+		List<Task> tasks = _tasksLists[(int)LevelManager.TasksDiffculty - 1];
 
-        Task task = tasks[Random.Range(0, tasks.Count - 1)];
-        tasks.Remove(task);
-        return task;
-    }
-    
+		if (tasks == null || tasks.Count == 0)
+		{
+			Debug.LogWarning($"No tasks for difficulty {LevelManager.TasksDiffculty} was found");
+			return null;
+		}
+
+		Task task = tasks[Random.Range(0, tasks.Count - 1)];
+		tasks.Remove(task);
+		return task;
+	}
 }

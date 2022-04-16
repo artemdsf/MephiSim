@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadGameScene : MonoBehaviour
 {
-	public float LoadProgress = 0;
+	public float LoadProgress { get; private set; }
 
 	private AsyncOperation operation;
 
@@ -25,8 +25,7 @@ public class LoadGameScene : MonoBehaviour
 		while (operation.isDone == false)
 		{
 			LoadProgress = operation.progress;
+			yield return null;
 		}
-
-		yield return null;
 	}
 }

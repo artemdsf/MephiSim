@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine;
 
 public enum RoomType
@@ -20,20 +22,37 @@ public class Room
 		LevelMap.Map.Add(this);
 	}
 
-	public Vector3 CenterPos 
-	{
-		get
-		{
-			return LevelMap.GetChunkCenter(Position);
-		}
-	}
+	public Light2D Light;
+
+	public List<GameObject> Content = new List<GameObject>();
+	
+	public Vector3 CenterPos => LevelMap.GetChunkCenter(Position);
 
 	public Vector3Int Position;
+
 	public RoomType RoomType;
 
-	public bool IsExtreme = true;
+	public bool IsLast = true;
 
 	public bool IsVisited = false;
 
 	public int DistanceFromStart { get; }
+
+	public void ActivateRoom()
+	{
+		FindObject(Tag.Enemies)?.SetActive(true);
+
+		if (FindObject(Tag.Lights) != null)
+		{
+			Light2D lightInstance = Object.Instantiate(Light.gameObject, CenterPos, Quaternion.identity, FindObject(Tag.Lights).transform).GetComponent<Light2D>();
+			lightInstance.transform.localScale = new Vector3(LevelMap.ChunkSize.x + 0.7f, LevelMap.ChunkSize.y + 3f, 1);
+		}
+
+		IsVisited = true;
+	}
+
+	private GameObject FindObject(Tag tag)
+	{
+		return Content.Find(item => item.tag == LevelManager.TagsDictionary[tag]);
+	}
 }

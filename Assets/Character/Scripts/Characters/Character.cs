@@ -9,55 +9,21 @@ public abstract class Character : MonoBehaviour
 	[SerializeField] private float _defaultDef = 10;
 	[SerializeField] private float _defaultSpeed = 10;
 
-	public float MaxHP
-	{
-		get
-		{
-			return _maxHP;
-		}
-	}
-	public float DefaultDef
-	{
-		get
-		{
-			return _defaultDef;
-		}
-	}
-
-	public float DefaultSpeed
-	{
-		get
-		{
-			return _defaultSpeed;
-		}
-	}
-
 	private LayerMask _collidable;
 	private Animator _animator;
 	public Vector3 Velocity { private set; get; }
 
-	public Vector2 Size
-	{
-		get
-		{
-			return _characterBottom.size;
-		}
-	}
+	public Vector2 Size => _characterBottom.size;
 
-	public LayerMask CollidableLayerMask
-	{
-		get
-		{
-			return _collidable;
-		}
-	}
+	public LayerMask CollidableLayerMask => _collidable;
+
+	public float MaxHP => _maxHP;
+	public float DefaultDef => _defaultDef;
+	public float DefaultSpeed => _defaultSpeed;
 
 	public float HP
 	{
-		get
-		{
-			return _hp;
-		}
+		get => _hp;
 		private set
 		{
 			if (value < 0)
@@ -74,15 +40,9 @@ public abstract class Character : MonoBehaviour
 			}
 		}
 	}
-
-	private float _hp;
-
 	public float Defense
 	{
-		get
-		{
-			return _defense;
-		}
+		get => _defense;
 		set
 		{
 			if (value < 0)
@@ -99,15 +59,9 @@ public abstract class Character : MonoBehaviour
 			}
 		}
 	}
-
-	private float _defense;
-
 	public float Speed
 	{
-		get
-		{
-			return _speed;
-		}
+		get => _speed;
 		set
 		{
 			if (value < 0)
@@ -121,6 +75,8 @@ public abstract class Character : MonoBehaviour
 		}
 	}
 
+	private float _hp;
+	private float _defense;
 	private float _speed;
 
 	protected virtual void Start()

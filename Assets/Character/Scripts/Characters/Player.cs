@@ -3,40 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public struct Key
-{
-	public KeyCode KeyCode;
-	public Sprite KeySprite;
-}
-
-public enum KeyType
-{
-	Use
-}
-
 public class Player : Character
 {
 	[SerializeField] private SpriteRenderer _placeForHint;
 
 	//-----------------------------Keys-------------------------------------
 	[Header("Use key")]
-	[SerializeField] private KeyCode _useKeyCode = KeyCode.E;
 	[SerializeField] private Sprite _useKeySprite;
-	private Key _useKey;
-
-	private List<Key> _keys = new List<Key>();
 	//----------------------------------------------------------------------
 	[Header("Characteristics")]
 	[SerializeField] private float _maxMana;
-	private float _mana;
+
+	public IUsable InteractableObject { private get; set; }
 
 	public float Mana
 	{
-		get
-		{
-			return _mana;
-		}
-
+		get => _mana;
 		private set
 		{
 			if (_mana >= 0)
@@ -49,27 +31,11 @@ public class Player : Character
 			}
 		}
 	}
-	public float MaxMana
-	{
-		get
-		{
-			return _maxMana;
-		}
-	}
+	public float MaxMana =>_maxMana;
 
-	public IUsable InteractableObject { private get; set; }
+	private float _mana;
 
 	private PlayerWeapon _weapon;
-	internal Action<Room> ChangedRoom;
-
-	protected override void Awake()
-	{
-		_useKey.KeyCode = _useKeyCode;
-		_useKey.KeySprite = _useKeySprite;
-		_keys.Add(_useKey);
-
-		base.Awake();
-	}
 
 	protected override void Start()
 	{
@@ -93,14 +59,15 @@ public class Player : Character
 
 		#region Interactions
 		TryUse();
+		TryChangeRoom();
 		#endregion
 
 		FindTeacher(movementDirection);
 	}
 
-	public void ShowKeyHint(KeyType keyType)
+	public void ShowUseHint()
 	{
-		_placeForHint.sprite = _keys[(int)keyType].KeySprite;
+		_placeForHint.sprite = _useKeySprite;
 	}
 
 	public void HideKeyHint()
@@ -124,9 +91,18 @@ public class Player : Character
 
 	private void TryUse()
 	{
-		if (Input.GetKeyDown(_useKeyCode))
+		if (Input.GetButtonDown("Use"))
 		{
 			InteractableObject?.Use();
+		}
+	}
+
+	private void TryChangeRoom()
+	{
+		Room currentRoom = LevelMap.GetRoom(LevelMap.WorldCoordsToGrid(transform.position));
+		if (currentRoom != null && currentRoom.IsVisited == false)
+		{
+			currentRoom.ActivateRoom();
 		}
 	}
 }
