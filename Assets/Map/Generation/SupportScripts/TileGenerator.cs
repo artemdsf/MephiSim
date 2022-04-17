@@ -44,6 +44,21 @@ public class TileGenerator : MonoBehaviour
 	private List<Tile> _nonCollidWallTiles = new List<Tile>();
 	private List<Tile> _floorTiles = new List<Tile>();
 
+	public void Reset()
+	{
+		for (int i = 0; i < _rooms.transform.childCount; i++)
+		{
+			Destroy(_rooms.transform.GetChild(i).gameObject);
+		}
+
+		LevelMap.Reset();
+		freeToSpawnRooms.Clear();
+
+		_FloorTilemap.ClearAllTiles();
+		_WallTilemap.ClearAllTiles();
+		_CollidWallTilemap.ClearAllTiles();
+	}
+
 	#region Generation
 	protected Room AddStartRoom()
 	{

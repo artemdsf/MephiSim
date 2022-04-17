@@ -77,6 +77,7 @@ public class Player : Character
 
 	public override void Die()
 	{
+		LevelGenerator.Instance.Reset();
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 

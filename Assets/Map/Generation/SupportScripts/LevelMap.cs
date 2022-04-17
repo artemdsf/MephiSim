@@ -65,4 +65,14 @@ public static class LevelMap
 				DownChunk = room.Position.y;
 		}
 	}
+
+	public static void Reset()
+	{
+		Map.Clear();
+
+		LeftChunk = 0;
+		RightChunk = 0;
+		UpChunk = 0;
+		DownChunk = 0;
+	}
 }

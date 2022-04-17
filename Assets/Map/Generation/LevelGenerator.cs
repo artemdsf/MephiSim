@@ -11,6 +11,14 @@ public class LevelGenerator : TileGenerator
 
 	private void Awake()
 	{
+		if (Instance)
+		{
+			DestroyImmediate(gameObject);
+			return;
+		}
+
+		Instance = this;
+
 		grid = GetComponent<Transform>();
 	}
 
@@ -19,11 +27,15 @@ public class LevelGenerator : TileGenerator
 		GenerateLevel();
 	}
 
+	public static LevelGenerator Instance { get; private set; } = null;
+
 	/// <summary>
 	/// Generate level
 	/// </summary>
 	private void GenerateLevel()
 	{
+		Reset();
+
 		//Generate Start room
 		Room _lastRoom = AddStartRoom();
 
