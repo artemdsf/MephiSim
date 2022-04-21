@@ -9,7 +9,7 @@ public class ChangeTasksDifficulty : MonoBehaviour
     private Image _image;
     private Sprite _normalSprite;
 
-    [SerializeField] private LevelManager.TasksDiffcultyEnum _setDifficulty;
+    [SerializeField] private GameManager.TasksDiffcultyEnum _setDifficulty;
 
     private void Start()
     {
@@ -19,18 +19,18 @@ public class ChangeTasksDifficulty : MonoBehaviour
         _normalSprite = _image.sprite;
 
         _button.onClick.AddListener(OnClick);
-        LevelManager.TaskDifficultyChanged += DifficultyChanged;
+        GameManager.TaskDifficultyChanged += DifficultyChanged;
 
-        DifficultyChanged(LevelManager.TasksDiffculty);
+        DifficultyChanged(GameManager.TasksDiffculty);
     }
 
     private void OnClick()
     {
-        LevelManager.TasksDiffculty = _setDifficulty;
-        Debug.Log(LevelManager.TasksDiffculty);
+        GameManager.TasksDiffculty = _setDifficulty;
+        Debug.Log(GameManager.TasksDiffculty);
     }
 
-    private void DifficultyChanged(LevelManager.TasksDiffcultyEnum tasksDiffculty)
+    private void DifficultyChanged(GameManager.TasksDiffcultyEnum tasksDiffculty)
     {
         StartCoroutine(DifficultyChangedEnumerator());
     }
@@ -39,7 +39,7 @@ public class ChangeTasksDifficulty : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        if (LevelManager.TasksDiffculty == _setDifficulty)
+        if (GameManager.TasksDiffculty == _setDifficulty)
         {
             _image.sprite = _button.spriteState.pressedSprite;
             _button.interactable = false;

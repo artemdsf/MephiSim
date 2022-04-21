@@ -176,6 +176,11 @@ public abstract class Character : MonoBehaviour
 
 	public abstract void Die();
 
+	protected virtual void Awake()
+	{
+		ResetStats();
+	}
+
 	protected virtual void Start()
 	{
 		CollidableLayerMask = LayerMask.GetMask("Obstacle");

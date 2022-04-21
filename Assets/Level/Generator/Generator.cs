@@ -389,8 +389,8 @@ public class Generator : MonoBehaviour
 			GameObject gameObject = Instantiate(child.gameObject, roomPosition, Quaternion.identity, emptyObject.transform);
 			gameObject.tag = child.gameObject.tag;
 
-			if (gameObject.tag == LevelManager.TagsDictionary[Tag.Enemies] ||
-				gameObject.tag == LevelManager.TagsDictionary[Tag.Lights])
+			if (gameObject.tag == GameManager.TagsDictionary[Tag.Enemies] ||
+				gameObject.tag == GameManager.TagsDictionary[Tag.Lights])
 			{
 				gameObject.SetActive(false);
 			}

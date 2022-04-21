@@ -39,9 +39,13 @@ public class Player : Character
 
 	private PlayerWeapon _weapon;
 
-	private void Awake()
+	protected override void Awake()
 	{
 		_playerStats = (PlayerStats)Stats;
+
+		Mana = _playerStats.MaxMana;
+
+		base.Awake();
 	}
 
 	protected override void Start()
@@ -147,6 +151,11 @@ public class Player : Character
 		Room currentRoom = LevelInfo.GetRoom(LevelInfo.WorldCoordsToGrid(transform.position));
 		if (currentRoom != null && currentRoom.IsVisited == false)
 		{
+			if (currentRoom.RoomType == RoomType.EnemyRoom)
+			{
+				TasksManager.Instance.NewTask();
+			}
+			
 			currentRoom.ActivateRoom();
 		}
 	}

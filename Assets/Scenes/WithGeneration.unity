@@ -1105,27 +1105,7 @@ PrefabInstance:
     - target: {fileID: 3886857917635766600, guid: e1637e74742e18646b147f9741d90a74,
         type: 3}
       propertyPath: m_Name
-      value: Task
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886857917635766600, guid: e1637e74742e18646b147f9741d90a74,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886857917964408457, guid: e1637e74742e18646b147f9741d90a74,
-        type: 3}
-      propertyPath: m_FontData.m_VerticalOverflow
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886857917964408457, guid: e1637e74742e18646b147f9741d90a74,
-        type: 3}
-      propertyPath: m_FontData.m_HorizontalOverflow
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3886857917964408458, guid: e1637e74742e18646b147f9741d90a74,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -20
+      value: TaskManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1637e74742e18646b147f9741d90a74, type: 3}

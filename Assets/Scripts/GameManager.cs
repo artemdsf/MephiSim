@@ -8,7 +8,7 @@ public enum Tag
 	Lights
 }
 
-public static class LevelManager
+public static class GameManager
 {
     public enum TasksDiffcultyEnum
     {

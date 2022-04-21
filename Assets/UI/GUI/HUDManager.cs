@@ -12,14 +12,17 @@ public class HUDManager : MonoBehaviour
 
     private void Start()
     {
-        _player = CharactersManager.instance.GetPlayer();
+		_player = CharactersManager.instance.GetPlayer();
         _hpSlider.maxValue = _player.MaxHP;
 		_player.ValuesChanges.AddListener(UpdateValues);
 
 		_weapon = _player.GetComponent<PlayerWeapon>();
         _weapon.OnWeaponChanging += DisplayWeapon;
+
         _weaponSlot.enabled = false;
-    }
+
+		UpdateValues();
+	}
 
 	private void UpdateValues()
 	{

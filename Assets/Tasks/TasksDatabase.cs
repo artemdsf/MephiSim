@@ -21,23 +21,20 @@ public class TasksDatabase : MonoBehaviour
     private List<Task> _mediumTasks;
     private List<Task> _hardTasks;
 
-    List<Task>[] _tasksLists;
+    private List<Task>[] _tasksLists;
 
-
-	private static TasksDatabase _instance;
-	public static TasksDatabase Instance => _instance;
+	public static TasksDatabase Instance { get; private set; }
 
 	private void Awake()
 	{
-		if (_instance != null)
+		if (Instance != null)
 		{
 			Destroy(this);
 		}
 
-        _instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
         LoadDatabase();
-        LevelManager.NextLevel();
     }
 
     public void LoadDatabase()
@@ -60,7 +57,7 @@ public class TasksDatabase : MonoBehaviour
             string[] taskProperties = taskSpriteName.Split('_');
             int level = int.Parse(taskProperties[1]);
 
-            if (level == LevelManager.Level)
+            if (level == GameManager.Level)
             {
                 Sprite sprite = Resources.Load<Sprite>(_folderWithTasks + '/' + taskSpriteName);
                 Task task = new Task(sprite, answer);
@@ -75,17 +72,17 @@ public class TasksDatabase : MonoBehaviour
     public Task GetTask()
     {
 
-        if (LevelManager.TasksDiffculty == 0)
+        if (GameManager.TasksDiffculty == 0)
         {
             Debug.LogWarning("Attemp to get task when difficulty is set to \"NoTasks\"");
             return null;
         }
 
-        List<Task> tasks = _tasksLists[(int)LevelManager.TasksDiffculty - 1];
+        List<Task> tasks = _tasksLists[(int)GameManager.TasksDiffculty - 1];
 
         if (tasks == null || tasks.Count == 0)
         {
-            Debug.LogWarning($"No tasks for difficulty {LevelManager.TasksDiffculty} was found");
+            Debug.LogWarning($"No tasks for difficulty {GameManager.TasksDiffculty} was found");
             return null;
         }
 

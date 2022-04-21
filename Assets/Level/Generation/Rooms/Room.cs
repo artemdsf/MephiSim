@@ -53,6 +53,6 @@ public class Room
 
 	private GameObject FindObject(Tag tag)
 	{
-		return Content.Find(item => item.tag == LevelManager.TagsDictionary[tag]);
+		return Content.Find(item => item.tag == GameManager.TagsDictionary[tag]);
 	}
 }
