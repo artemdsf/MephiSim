@@ -969,13 +969,19 @@ PrefabInstance:
       objectReference: {fileID: 1032787278}
     - target: {fileID: 302505345991034502, guid: 5f8c960794e0d8c4ba47a0bdcc34c0b0,
         type: 3}
+      propertyPath: _roomPalette
+      value: 
+      objectReference: {fileID: 11400000, guid: 74d15ca4a69020b4f9a72404c74f1904,
+        type: 2}
+    - target: {fileID: 302505345991034502, guid: 5f8c960794e0d8c4ba47a0bdcc34c0b0,
+        type: 3}
       propertyPath: _hallwayMaxLenght
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 302505345991034502, guid: 5f8c960794e0d8c4ba47a0bdcc34c0b0,
         type: 3}
       propertyPath: _roomCountToSpawn
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 302505345991034503, guid: 5f8c960794e0d8c4ba47a0bdcc34c0b0,
         type: 3}

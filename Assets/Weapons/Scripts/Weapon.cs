@@ -7,11 +7,6 @@ public abstract class Weapon : MonoBehaviour
 
 	public Transform WeaponEnd => _weaponEnd;
 
-	private void Start()
-	{
-		
-	}
-
 	public virtual void Shoot(Vector2 direction, WeaponStats stats)
 	{
 		if (stats == null)

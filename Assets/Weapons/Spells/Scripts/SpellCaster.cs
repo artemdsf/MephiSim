@@ -17,7 +17,7 @@ public class SpellCaster : MonoBehaviour
             return false;
         }
 
-        bool succeed = UsefulFuncs.AddToListWithoutDuplicates(_spells, spell);
+        bool succeed = Check.AddToListWithoutDuplicates(_spells, spell);
 
         if (succeed)
         {

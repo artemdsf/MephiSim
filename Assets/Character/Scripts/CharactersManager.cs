@@ -5,7 +5,7 @@ public class CharactersManager : MonoBehaviour
 {
 	public static CharactersManager instance = null;
 
-	private List<Teacher> _teachers = new List<Teacher>();
+	private List<Enemy> _teachers = new List<Enemy>();
 	private Player _player;
 
 	public int TeachersCount()
@@ -15,7 +15,6 @@ public class CharactersManager : MonoBehaviour
 
 	private void Awake()
 	{
-
 		if (instance == null)
 		{
 			instance = this;
@@ -26,17 +25,11 @@ public class CharactersManager : MonoBehaviour
 		}
 
 		DontDestroyOnLoad(this);
-		InitManager();
 	}
 
-	private void InitManager()
+	public Enemy FindNearestEnemy(Vector3 pos)
 	{
-
-	}
-
-	public Teacher FindNearestTeacher(Vector3 pos)
-	{
-		Teacher foundTeacher;
+		Enemy foundTeacher;
 		float closestDistSqr = 0;
 
 		if (_teachers.Count != 0)
@@ -49,7 +42,7 @@ public class CharactersManager : MonoBehaviour
 			foundTeacher = null;
 		}
 
-		foreach (Teacher teachers in _teachers)
+		foreach (Enemy teachers in _teachers)
 		{
 			float distSqr = Vector3.SqrMagnitude(pos - teachers.transform.position);
 			if (distSqr < closestDistSqr)
@@ -73,9 +66,9 @@ public class CharactersManager : MonoBehaviour
 		{
 			_player = character as Player;
 		}
-		else if (character is Teacher)
+		else if (character is Enemy)
 		{
-			UsefulFuncs.AddToListWithoutDuplicates(_teachers, character as Teacher);
+			Check.AddToListWithoutDuplicates(_teachers, character as Enemy);
 		}
 	}
 
@@ -85,9 +78,9 @@ public class CharactersManager : MonoBehaviour
 		{
 			_player = null;
 		}
-		else if (character is Teacher)
+		else if (character is Enemy)
 		{
-			_teachers.Remove(character as Teacher);
+			_teachers.Remove(character as Enemy);
 		}
 	}
 }
