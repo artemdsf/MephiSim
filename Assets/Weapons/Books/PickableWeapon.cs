@@ -23,6 +23,7 @@ public class PickableWeapon : MonoBehaviour, IUsable
 		{
 			_player.InteractableObject = this;
 			_player.ShowUseHint();
+			_player.ShowDescription(_weaponStats.Description);
 		}
 	}
 
@@ -32,6 +33,7 @@ public class PickableWeapon : MonoBehaviour, IUsable
 		{
 			_player.InteractableObject = null;
 			_player.HideKeyHint();
+			_player.HideDescription();
 		}
 	}
 
@@ -46,9 +48,12 @@ public class PickableWeapon : MonoBehaviour, IUsable
 		{
 			_weaponStats = temp;
 			_renderer.sprite = temp.WeaponSprite;
+
+			_player.ShowDescription(_weaponStats.Description);
 		}
 		else
 		{
+			_player.HideDescription();
 			Destroy(gameObject);
 		}
 	}

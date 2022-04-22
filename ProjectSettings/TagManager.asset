@@ -9,6 +9,9 @@ TagManager:
   - Enviroment
   - Enemies
   - Lights
+  - Teacher
+  - TeacherBottom
+  - Text
   layers:
   - Default
   - TransparentFX

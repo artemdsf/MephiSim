@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bb41ee7c1639ea4c974cefe72d1225c, type: 3}
   m_Name: Book1
   m_EditorClassIdentifier: 
-  _weaponSprite: {fileID: -4709139536117854929, guid: 8d92aaed621e5e2448d7253c94e14c97, type: 3}
-  _projectile: {fileID: 5488027479072248723, guid: 3ea6c69458c9b8c468ca56bb3df84a9c, type: 3}
+  _weaponSprite: {fileID: -4709139536117854929, guid: 8d92aaed621e5e2448d7253c94e14c97,
+    type: 3}
+  _projectile: {fileID: 5488027479072248723, guid: 3ea6c69458c9b8c468ca56bb3df84a9c,
+    type: 3}
   _name: Unnamed Book
+  _description: "\u0420\u0430\u043D\u0434\u043E\u043C\u043D\u0430\u044F \u043A\u043D\u0438\u0433\u0430"
   _damage: 20
   _projectileSpeed: 10
   _cooldown: 0.3

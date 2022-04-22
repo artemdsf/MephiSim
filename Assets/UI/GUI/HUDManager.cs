@@ -6,6 +6,7 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private Slider _hpSlider;
     [SerializeField] private Slider _manaSlider;
     [SerializeField] private Image _weaponSlot;
+	[SerializeField] private Transform _description;
 
     private Player _player;
     private PlayerWeapon _weapon;
@@ -13,8 +14,12 @@ public class HUDManager : MonoBehaviour
     private void Start()
     {
 		_player = CharactersManager.instance.GetPlayer();
-        _hpSlider.maxValue = _player.MaxHP;
-		_player.ValuesChanges.AddListener(UpdateValues);
+
+		_player.Description = _description;
+
+
+		_hpSlider.maxValue = _player.MaxHP;
+		_player.OnValuesChanging.AddListener(UpdateValues);
 
 		_weapon = _player.GetComponent<PlayerWeapon>();
         _weapon.OnWeaponChanging += DisplayWeapon;

@@ -9,8 +9,9 @@ public class WeaponStats : ScriptableObject
     [SerializeField] private GameObject _projectile;
 
     [SerializeField] private string _name;
+    [SerializeField] private string _description;
 
-    [SerializeField] private float _damage;
+	[SerializeField] private float _damage;
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _cooldown;
 
@@ -18,9 +19,9 @@ public class WeaponStats : ScriptableObject
     public GameObject Projectile => _projectile;
     
     public string Name => _name;
-    
-    public float Damage => _damage;
+    public string Description => _description;
+
+	public float Damage => _damage;
     public float ProjectileSpeed => _projectileSpeed;
     public float Cooldown => _cooldown;
-
 }

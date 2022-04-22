@@ -8,9 +8,11 @@ public class Hram : Enemy
 
 	private HramStats _hramStats;
 
-	private void Awake()
+	protected override void Awake()
 	{
 		_hramStats = (HramStats)Stats;
+
+		base.Awake();
 	}
 
 	protected override void OnEnable()

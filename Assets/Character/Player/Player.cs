@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : Character
 {
@@ -9,9 +10,11 @@ public class Player : Character
 	[Header("Use key")]
 	[SerializeField] private Sprite _useKeySprite;
 
-	public UnityEvent ValuesChanges = new UnityEvent();
+	public UnityEvent OnValuesChanging = new UnityEvent();
 
 	public IUsable InteractableObject { private get; set; }
+
+	public Transform Description;
 
 	public float Mana
 	{
@@ -84,7 +87,7 @@ public class Player : Character
 
 		Mana -= value;
 
-		ValuesChanges.Invoke();
+		OnValuesChanging.Invoke();
 	}
 
 	public void RestoreMana(float value)
@@ -96,21 +99,21 @@ public class Player : Character
 
 		Mana += value;
 
-		ValuesChanges.Invoke();
+		OnValuesChanging.Invoke();
 	}
 
 	public override void TakeDamage(float damage)
 	{
 		base.TakeDamage(damage);
 
-		ValuesChanges.Invoke();
+		OnValuesChanging.Invoke();
 	}
 
 	public override void Heal(float hp)
 	{
 		base.Heal(hp);
 
-		ValuesChanges.Invoke();
+		OnValuesChanging.Invoke();
 	}
 
 	public void ShowUseHint()
@@ -121,6 +124,25 @@ public class Player : Character
 	public void HideKeyHint()
 	{
 		_placeForHint.sprite = null;
+	}
+
+	public void ShowDescription(string text)
+	{
+		foreach (Transform child in Description)
+		{
+			if (child.tag == "Text")
+			{
+				child.gameObject.GetComponent<Text>().text = text;
+				break;
+			}
+		}
+
+		Description.gameObject.SetActive(true);
+	}
+
+	public void HideDescription()
+	{
+		Description.gameObject.SetActive(false);
 	}
 
 	public override void Die()
