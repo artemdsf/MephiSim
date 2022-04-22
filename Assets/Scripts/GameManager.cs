@@ -5,7 +5,10 @@ public enum Tag
 	Player,
 	Enviroment,
 	Enemies,
-	Lights
+    Enemy,
+	Lights,
+    EnemyBottom,
+    PlayerBottom
 }
 
 public static class GameManager
@@ -46,7 +49,10 @@ public static class GameManager
 	{
 		{ Tag.Player, "Player" },
 		{ Tag.Enemies, "Enemies" },
-		{ Tag.Enviroment, "Enviroment" },
-		{ Tag.Lights, "Lights" }
-	};
+        { Tag.Enemy, "Teacher" },
+        { Tag.Enviroment, "Enviroment" },
+		{ Tag.Lights, "Lights" },
+        { Tag.EnemyBottom, "TeacherBottom" },
+        { Tag.PlayerBottom, "PlayerBottom" }
+    };
 }

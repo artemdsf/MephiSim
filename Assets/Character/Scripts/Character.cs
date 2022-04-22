@@ -1,9 +1,10 @@
 using UnityEngine;
 
+[RequireComponent(typeof(EffectsManager))] 
 public abstract class Character : MonoBehaviour
 {
 	[SerializeField] private BoxCollider2D _characterBottom;
-
+	[SerializeField] EffectsManager _effectsManager;
 	[SerializeField] protected Stats Stats;
 
 	public Vector3 Velocity { private set; get; }
@@ -102,8 +103,8 @@ public abstract class Character : MonoBehaviour
 
 	public virtual void TakeDamage(float damage)
 	{
-		float decreasedHP = damage * (1 - _defense / 100);
-
+		float decreasedHP = _effectsManager.TakingDamage(damage) * (1 - _defense / 100);
+		
 		if (damage < 0)
 		{
 			damage = 0;
@@ -122,6 +123,9 @@ public abstract class Character : MonoBehaviour
 
 	public virtual void Heal(float hp)
 	{
+
+		hp = _effectsManager.Healing(hp);
+
 		if (hp < 0)
 		{
 			hp = 0;
@@ -144,7 +148,16 @@ public abstract class Character : MonoBehaviour
 
 	public void Move(Vector2 direction)
 	{
-		Vector3 finalDirection = direction.normalized * _speed * Time.deltaTime;
+		if (Input.GetKeyDown(KeyCode.B))
+        {
+			_effectsManager.AddEffect(new SpeedUp());
+			_effectsManager.AddEffect(new Invincibility());
+		}
+
+		float speed = Speed; 
+		direction = _effectsManager.Moving(direction, ref speed);
+
+		Vector3 finalDirection = direction.normalized * speed * Time.deltaTime;
 
 		if (IsSpaceFree(_characterBottom.transform.position + finalDirection + (Vector3)direction.normalized * CHECK_MULTIPLIER) == false)
 		{
@@ -170,6 +183,7 @@ public abstract class Character : MonoBehaviour
 			WalkingAnim(finalDirection);
 		}
 
+
 		Velocity = finalDirection;
 		transform.position += finalDirection;
 	}
@@ -185,6 +199,7 @@ public abstract class Character : MonoBehaviour
 	{
 		CollidableLayerMask = LayerMask.GetMask("Obstacle");
 		_animator = GetComponent<Animator>();
+		_effectsManager = GetComponent<EffectsManager>();
 
 		CheckParameters();
 

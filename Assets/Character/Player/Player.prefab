@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 8026875779573503562}
   - component: {fileID: 4767513935035315894}
   - component: {fileID: 7880435718152887986}
+  - component: {fileID: 7475459362432859767}
+  - component: {fileID: 6205702883366685228}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -180,13 +182,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterBottom: {fileID: 5798173064137875872}
+  _effectsManager: {fileID: 0}
   Stats: {fileID: 11400000, guid: 18158d3b11d726d4c9d082205d8c0385, type: 2}
   _placeForHint: {fileID: 7151618559806626475}
   _useKeySprite: {fileID: 1710861328682202855, guid: aeb5f1364c6470e469c3d329f56953c5,
     type: 3}
-  ValuesChanges:
+  OnValuesChanging:
     m_PersistentCalls:
       m_Calls: []
+  Description: {fileID: 0}
+--- !u!114 &7475459362432859767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880435718152888014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab0f2703b659f3f43b9efd7dbc2b175b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6205702883366685228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880435718152888014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7072ec947c591940805fc09c244e109, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spells:
+  - {fileID: 11400000, guid: 9dcd3beb2c5775e4797567a41d241522, type: 2}
+  _effectArea: {fileID: 6068098077114516028, guid: 5dee3c1d2cd1b3f44b812f9f10fd6d9c,
+    type: 3}
+  _maxSpellsCount: 3
 --- !u!1 &7880435718271763576
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1374120290940829309}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6093018521994214282}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
   m_Name: 
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_UpscaleRT: 1
   m_PixelSnapping: 0
   m_CropFrameX: 0
-  m_CropFrameY: 1
+  m_CropFrameY: 0
   m_StretchFill: 0
 --- !u!114 &1374120290940829309
 MonoBehaviour:
@@ -151,5 +151,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec26d924f336fb348a137db59afd8969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 2
-  _speedMult: 2
+  _maxDistance: 0
+  _speedMult: 10

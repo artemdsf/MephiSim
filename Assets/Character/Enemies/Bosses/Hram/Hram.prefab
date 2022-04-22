@@ -203,6 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterBottom: {fileID: 7412509887704001897}
+  _effectsManager: {fileID: 0}
   Stats: {fileID: 11400000, guid: 9621403fc23698242b7e0014ac671493, type: 2}
 --- !u!114 &6495728928813995472
 MonoBehaviour:

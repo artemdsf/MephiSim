@@ -5,7 +5,8 @@ using UnityEngine;
 public class SpellCaster : MonoBehaviour
 {
     [SerializeField] private List<Spell> _spells;
-    [SerializeField] private uint _maxSpellsCount;
+    [SerializeField] private EffectArea _effectArea;
+    [SerializeField] protected uint _maxSpellsCount;
 
     public delegate void SpellsChanched(List<Spell> spells);
     public event SpellsChanched OnSpellsChanged;
@@ -45,6 +46,12 @@ public class SpellCaster : MonoBehaviour
 
         Debug.LogError($"there is no Spell with name {name}", this);
         return null;
+    }
+
+    public void CastAreaSpell(Spell spell, Vector3 target)
+    {
+        EffectArea effectArea = Instantiate(_effectArea, target, Quaternion.identity);
+        effectArea.Effect = spell.EffectObject;
     }
     
 }
