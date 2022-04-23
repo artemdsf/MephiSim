@@ -83,6 +83,5 @@ public abstract class Effect
     public virtual Vector3 Moving(Vector3 direction, ref float speed) { return direction; }
     public virtual void OnActivate() {}
     public virtual void OnDelete() {}
-    public virtual void Tick() { Debug.Log(Priority); }
-
+    public virtual void Tick() {}
 } 

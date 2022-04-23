@@ -35,13 +35,13 @@ public static class GameManager
             _tasksDiffculty = value;
         }
     }
+	public static int Level { get; private set; } = 1;
 
-    private static int _level = 1;
-    public static int Level => _level;
+	public static bool IsPaused;
 
-    public static void NextLevel()
+	public static void NextLevel()
     {
-        _level++;
+        Level++;
         TasksDatabase.Instance.LoadDatabase();
     }
 

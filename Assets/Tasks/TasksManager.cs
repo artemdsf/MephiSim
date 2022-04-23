@@ -41,6 +41,7 @@ public class TasksManager : MonoBehaviour
 
 	private IEnumerator GiveTask()
 	{
+		GameManager.IsPaused = true;
 		while (true)
 		{
 			_currentAnswer = GetInput(_currentAnswer);
@@ -56,6 +57,7 @@ public class TasksManager : MonoBehaviour
 		}
 
 		Deactivate();
+		GameManager.IsPaused = false;
 
 		yield return null;
 	}

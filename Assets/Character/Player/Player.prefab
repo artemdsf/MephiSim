@@ -219,7 +219,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9dcd3beb2c5775e4797567a41d241522, type: 2}
   _effectArea: {fileID: 6068098077114516028, guid: 5dee3c1d2cd1b3f44b812f9f10fd6d9c,
     type: 3}
-  _maxSpellsCount: 3
+  _maxSpellsCount: 1
 --- !u!1 &7880435718271763576
 GameObject:
   m_ObjectHideFlags: 0
