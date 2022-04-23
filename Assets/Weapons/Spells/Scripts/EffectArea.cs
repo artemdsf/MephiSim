@@ -16,7 +16,6 @@ public class EffectArea : MonoBehaviour
         if (collision.tag == GameManager.TagsDictionary[Tag.PlayerBottom] || collision.tag == GameManager.TagsDictionary[Tag.EnemyBottom])
         {
             collision.GetComponentInParent<EffectsManager>().AddEffect(Effect);
-            Debug.Log(Effect);
         }
     }
 }

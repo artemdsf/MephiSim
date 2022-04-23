@@ -4,20 +4,14 @@ using UnityEngine;
 
 public class SpellCaster : MonoBehaviour
 {
-    [SerializeField] private List<Spell> _spells;
+    [SerializeField] protected List<Spell> _spells;
     [SerializeField] private EffectArea _effectArea;
-    [SerializeField] protected uint _maxSpellsCount;
 
     public delegate void SpellsChanched(List<Spell> spells);
     public event SpellsChanched OnSpellsChanged;
 
-    public bool AddSpell(Spell spell)
+    public virtual bool AddSpell(Spell spell)
     {
-        if (_spells.Count >= _maxSpellsCount)
-        {
-            return false;
-        }
-
         bool succeed = Check.AddToListWithoutDuplicates(_spells, spell);
 
         if (succeed)
@@ -26,6 +20,11 @@ public class SpellCaster : MonoBehaviour
         }
 
         return succeed;
+    }
+
+    public int GetSpellsCount()
+    {
+        return _spells.Count;
     }
 
     public Spell GetSpell(int index)
