@@ -5,12 +5,26 @@ public class CharactersManager : MonoBehaviour
 {
 	public static CharactersManager instance = null;
 
-	private List<Enemy> _teachers = new List<Enemy>();
+	private List<Enemy> _enemies = new List<Enemy>();
 	private Player _player;
 
-	public int TeachersCount()
+	public int EnemiesCount()
 	{
-		return _teachers.Count;
+		return _enemies.Count;
+	}
+
+	public int EnemiesCount(Room room)
+	{
+		int count = 0;
+		foreach (var enemy in _enemies)
+		{
+			if (enemy.Room == room)
+			{
+				count++;
+			}
+		}
+
+		return count;
 	}
 
 	private void Awake()
@@ -29,30 +43,30 @@ public class CharactersManager : MonoBehaviour
 
 	public Enemy FindNearestEnemy(Vector3 pos)
 	{
-		Enemy foundTeacher;
+		Enemy nearestEnemy;
 		float closestDistSqr = 0;
 
-		if (_teachers.Count != 0)
+		if (_enemies.Count != 0)
 		{
-			foundTeacher = _teachers[0];
-			closestDistSqr = Vector3.SqrMagnitude(pos - _teachers[0].transform.position);
+			nearestEnemy = _enemies[0];
+			closestDistSqr = Vector3.SqrMagnitude(pos - _enemies[0].transform.position);
 		}
 		else
 		{
-			foundTeacher = null;
+			nearestEnemy = null;
 		}
 
-		foreach (Enemy teachers in _teachers)
+		foreach (Enemy enemy in _enemies)
 		{
-			float distSqr = Vector3.SqrMagnitude(pos - teachers.transform.position);
+			float distSqr = Vector3.SqrMagnitude(pos - enemy.transform.position);
 			if (distSqr < closestDistSqr)
 			{
 				closestDistSqr = distSqr;
-				foundTeacher = teachers;
+				nearestEnemy = enemy;
 			}
 		}
 
-		return foundTeacher;
+		return nearestEnemy;
 	}
 
 	public Player GetPlayer()
@@ -68,7 +82,7 @@ public class CharactersManager : MonoBehaviour
 		}
 		else if (character is Enemy)
 		{
-			Check.AddToListWithoutDuplicates(_teachers, character as Enemy);
+			Check.AddToListWithoutDuplicates(_enemies, character as Enemy);
 		}
 	}
 
@@ -80,7 +94,7 @@ public class CharactersManager : MonoBehaviour
 		}
 		else if (character is Enemy)
 		{
-			_teachers.Remove(character as Enemy);
+			_enemies.Remove(character as Enemy);
 		}
 	}
 }

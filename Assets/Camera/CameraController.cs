@@ -2,25 +2,20 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	[SerializeField] private float _maxDistance = 5;
-	[SerializeField] private float _speedMult = 10;
+	[SerializeField] private float _speed = 10;
 
-	private Player _player;
+	private Transform _player;
+	private float _offset;
 
 	private void Start()
 	{
-		_player = CharactersManager.instance.GetPlayer();
-
-		transform.position = _player.transform.position + Vector3.forward * transform.position.z;
+		_player = CharactersManager.instance.GetPlayer().transform;
+		_offset = transform.position.z;
+		transform.position = _player.position + Vector3.forward * transform.position.z;
 	}
 
 	private void Update()
 	{
-		Vector2 playerPos = _player.transform.position;
-
-		if (Vector2.Distance(playerPos, transform.position) > _maxDistance)
-		{
-			transform.position += (Vector3)(playerPos - (Vector2)transform.position) * _speedMult * Time.deltaTime;
-		}
+		transform.position = (Vector3)Vector2.Lerp(transform.position, _player.position, _speed * Time.deltaTime) + Vector3.forward * _offset;
 	}
 }

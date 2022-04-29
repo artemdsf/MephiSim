@@ -190,11 +190,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d00f0543d4c63f0488410e87ddefb8dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reward: {fileID: 7186017058350005688}
-  _closed: {fileID: -1709597125649789099, guid: dbd03eb4fcb801c48b8065128304c85e,
-    type: 3}
-  _opened: {fileID: -1823722794434361609, guid: dbd03eb4fcb801c48b8065128304c85e,
-    type: 3}
+  _chestsContainer: {fileID: 11400000, guid: 73441003d06e44a42b9bb3282e444edb, type: 2}
+  _prefabNum: -1
+  _randomSprite: 0
 --- !u!1001 &215203217496985783
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -276,6 +274,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Book-pickable
       objectReference: {fileID: 0}
+    - target: {fileID: 7009098961532529935, guid: 04db256195d87c84f858ecb67d6dfaa1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7009098961532529935, guid: 04db256195d87c84f858ecb67d6dfaa1,
+        type: 3}
+      propertyPath: m_TagString
+      value: Reward
+      objectReference: {fileID: 0}
     - target: {fileID: 9081829285657723893, guid: 04db256195d87c84f858ecb67d6dfaa1,
         type: 3}
       propertyPath: m_SortingOrder
@@ -283,12 +291,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04db256195d87c84f858ecb67d6dfaa1, type: 3}
---- !u!1 &7186017058350005688 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7009098961532529935, guid: 04db256195d87c84f858ecb67d6dfaa1,
-    type: 3}
-  m_PrefabInstance: {fileID: 215203217496985783}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7186017058350005690 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7009098961532529933, guid: 04db256195d87c84f858ecb67d6dfaa1,

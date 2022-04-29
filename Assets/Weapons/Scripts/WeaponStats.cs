@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Weapon", menuName = "ScriptableObjects/Weapon")]
+[CreateAssetMenu(fileName = "New Weapon", menuName = "ScriptableObjects/Characters/Weapon")]
 public class WeaponStats : ScriptableObject
 {
     [SerializeField] private Sprite _weaponSprite;

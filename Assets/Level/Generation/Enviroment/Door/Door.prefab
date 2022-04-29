@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 4054061966024359822}
   - component: {fileID: 8176621118675119435}
   - component: {fileID: 4142809362812652073}
-  m_Layer: 0
+  - component: {fileID: 5165195068163719427}
+  - component: {fileID: 1310613225840006961}
+  m_Layer: 3
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,6 +105,44 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5165195068163719427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204515854577132642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8603b8b233785734c8e0dee77d03866d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &1310613225840006961
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204515854577132642}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.5, y: -0.5}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2}
+  m_EdgeRadius: 0
 --- !u!1 &6739608478863799861
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,7 +153,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6871821376456867614}
   - component: {fileID: 5039892577560665997}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LeftDownCorner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,9 +211,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: -1
+  m_SortingOrder: 1
   m_Sprite: {fileID: -3173608693671145627, guid: 5dc6e55e5842d934c8aeded0884d6666,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -196,7 +236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8335336856586703935}
   - component: {fileID: 3857151322950737856}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RightUpCorner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,9 +294,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: -1
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2790336303706699148, guid: 5dc6e55e5842d934c8aeded0884d6666,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -279,7 +319,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3072716089936310514}
   - component: {fileID: 2415114781051952777}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RightDownCorner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,9 +377,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: -1
+  m_SortingOrder: 1
   m_Sprite: {fileID: 8264104401124846307, guid: 5dc6e55e5842d934c8aeded0884d6666,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -362,7 +402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7605397165030870812}
   - component: {fileID: 7505953327766423135}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LeftUpCorner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,9 +460,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: -1
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2051920946597837519, guid: 5dc6e55e5842d934c8aeded0884d6666,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

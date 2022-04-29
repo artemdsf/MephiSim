@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "HramStats", menuName = "ScriptableObjects/Stats/HramStats", order = 0)]
+[CreateAssetMenu(fileName = "HramStats", menuName = "ScriptableObjects/Characters/Stats/HramStats", order = 0)]
 public class HramStats : Stats
 {
 	public float ShootingCooldown;

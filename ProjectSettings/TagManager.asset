@@ -12,6 +12,10 @@ TagManager:
   - Teacher
   - TeacherBottom
   - Text
+  - Hallway
+  - StartRoom
+  - EnemyRoom
+  - Reward
   layers:
   - Default
   - TransparentFX

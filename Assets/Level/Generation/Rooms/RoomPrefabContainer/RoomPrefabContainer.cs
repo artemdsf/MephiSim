@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RoomPrefabContainer", menuName = "ScriptableObjects/RoomPrefabs/RoomPrefabContainer", order = 0)]
+[CreateAssetMenu(fileName = "RoomPrefabContainer", menuName = "ScriptableObjects/Generation/RoomPrefabs/RoomPrefabContainer", order = 0)]
 public class RoomPrefabContainer : ScriptableObject
 {
 	public List<RoomPrefab> LibRooms;

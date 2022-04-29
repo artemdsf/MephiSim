@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Stats", menuName = "ScriptableObjects/Stats/CharacteStats", order = 0)]
+[CreateAssetMenu(fileName = "Stats", menuName = "ScriptableObjects/Characters/Stats/CharacterStats", order = 0)]
 public class Stats : ScriptableObject
 {
 	[Min(0)]

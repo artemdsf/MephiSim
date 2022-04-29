@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 
-[CreateAssetMenu(fileName = "New Spell", menuName = "ScriptableObjects/Spells/Spell")]
+[CreateAssetMenu(fileName = "New Spell", menuName = "ScriptableObjects/Characters/Spells/Spell")]
 public  class Spell : ScriptableObject
 {
     public enum SpellType

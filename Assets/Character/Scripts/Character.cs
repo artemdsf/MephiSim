@@ -14,9 +14,9 @@ public abstract class Character : MonoBehaviour
 	public LayerMask CollidableLayerMask { get; private set; }
 
 	private Animator _animator;
-	
-	private const float CHECK_MULTIPLIER = 0.1f;
 
+	public Room Room => LevelInfo.GetRoom(LevelInfo.WorldCoordsToGrid(transform.position));
+	
 	public float MaxHP => Stats.MaxHP;
 	public float DefaultDef => Stats.DefaultDef;
 	public float DefaultSpeed => Stats.DefaultSpeed;
@@ -64,20 +64,15 @@ public abstract class Character : MonoBehaviour
 		get => _speed;
 		set
 		{
-			if (value < 0)
-			{
-				_speed = 0;
-			}
-			else
-			{
-				_speed = value;
-			}
+			_speed = value;
 		}
 	}
 
 	private float _hp;
 	private float _defense;
 	private float _speed;
+	
+	private const float CHECK_MULTIPLIER = 0.1f;
 
 	public void ResetStats()
 	{
@@ -216,6 +211,7 @@ public abstract class Character : MonoBehaviour
 	protected virtual void OnEnable()
 	{
 		CharactersManager.instance.AddCharacter(this);
+
 	}
 
 	protected virtual void OnDisable()
