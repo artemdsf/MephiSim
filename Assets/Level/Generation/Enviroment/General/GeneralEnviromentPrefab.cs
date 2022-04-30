@@ -8,6 +8,7 @@ public class Board
 	}
 }
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class GeneralEnviromentPrefab : MonoBehaviour
 {
     [SerializeField] private GeneralEnviromentContainer _container;
@@ -15,15 +16,27 @@ public class GeneralEnviromentPrefab : MonoBehaviour
     [Min(0)]
     [SerializeField] private int _boardNum = -1;
 
-    private void OnValidate()
+  //  private void OnValidate()
+  //  {
+		//if (_randomSprite)
+		//{
+  //          new Board(gameObject, _container.GetItem(_container.Items));
+  //      }
+		//else
+		//{
+  //          new Board(gameObject, _container.GetItem(_container.Items, _boardNum));
+  //      }
+  //  }
+
+	private void Awake()
     {
-		if (_randomSprite)
-		{
+        if (_randomSprite)
+        {
             new Board(gameObject, _container.GetItem(_container.Items));
         }
-		else
-		{
+        else
+        {
             new Board(gameObject, _container.GetItem(_container.Items, _boardNum));
         }
-    }    
+    }
 }
