@@ -14,7 +14,7 @@ public class PickableWeapon : MonoBehaviour, IUsable
 
 	private void Start()
 	{
-		_player = CharactersManager.instance.GetPlayer();
+		_player = CharactersManager.Instance.GetPlayer();
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)

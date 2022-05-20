@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Invincibility : Effect
 {
-    public Invincibility() : base(0, 0, 10) { }
+    public Invincibility() : base(5, float.PositiveInfinity, 100) { }
 
-    
-
+    public override float TakingDamage(float damage)
+    {
+        return 0;
+    }
 }
+

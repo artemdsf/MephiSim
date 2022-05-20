@@ -14,33 +14,31 @@ public class EffectPrioriy : IComparer<Effect>
         {
             return 1;
         }
-        else
-        {
-            return 0;
-        }
+
+        return 0;
     }
 }
 
 public class EffectsManager : MonoBehaviour
 {
-    private SortedSet<Effect> _effects;
+    private List<Effect> _effects = new List<Effect>();
     private Character _character;
 
     private void Awake()
     {
         _character = GetComponent<Character>();
-        _effects = new SortedSet<Effect>(new EffectPrioriy());
     }
 
     public void AddEffect(Effect effect)
     {
-        bool isCharacterTarget = false;
+            bool isCharacterTarget = false;
 
         foreach(System.Type type in effect.Targets)
         {
             if (type.IsAssignableFrom(_character.GetType()))
             {
                 isCharacterTarget = true;
+                break;
             }
         }
 
@@ -53,7 +51,7 @@ public class EffectsManager : MonoBehaviour
         {
             if (effect.GetType() == item.GetType())
             {
-                item.Reset();
+                item.RemainingLifetime = item.Lifetime;
                 return;
             }
         }
@@ -61,8 +59,14 @@ public class EffectsManager : MonoBehaviour
         Effect newEffect = (Effect)System.Activator.CreateInstance(effect.GetType());
         newEffect.Character = _character;
         _effects.Add(newEffect);
+        _effects.Sort(new EffectPrioriy());
 
         newEffect.OnActivate();
+    }
+
+    public void RemoveEffect(Effect effect)
+    {
+        _effects.RemoveAll(item => item.GetType() == effect.GetType());
     }
 
     public void Update()
@@ -83,7 +87,16 @@ public class EffectsManager : MonoBehaviour
             }
         }
 
-        _effects.RemoveWhere(effect => effect.RemainingLifetime <= 0);
+        _effects.RemoveAll(effect => effect.RemainingLifetime <= 0);
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log($"Effects on {_character.name}: ");
+            foreach (Effect effect in _effects)
+            {
+                Debug.Log(effect.GetType().Name);
+            }
+        }
     }
 
     public float TakingDamage(float damage)
@@ -145,5 +158,6 @@ public class EffectsManager : MonoBehaviour
 
         return mana;
     }
+
 
 }

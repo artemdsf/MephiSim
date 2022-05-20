@@ -40,7 +40,15 @@ public class Room
 
 	public void ActivateRoom()
 	{
-		FindObject(Tag.Enemies)?.SetActive(true);
+		if (CharactersManager.Instance.WereBossesActivated == false || RoomType != RoomType.BossRoom)
+		{
+			FindObject(Tag.Enemies)?.SetActive(true);
+
+			if(RoomType == RoomType.BossRoom)
+            {
+				CharactersManager.Instance.BossActivated();
+            }
+		}
 
 		if (FindObject(Tag.Lights) != null)
 		{
@@ -51,7 +59,7 @@ public class Room
 		IsVisited = true;
 	}
 
-	private GameObject FindObject(Tag tag)
+	public GameObject FindObject(Tag tag)
 	{
 		return Content.Find(item => item.tag == GameManager.TagsDictionary[tag]);
 	}

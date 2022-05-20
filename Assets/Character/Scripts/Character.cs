@@ -4,10 +4,13 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour
 {
 	[SerializeField] private BoxCollider2D _characterBottom;
-	[SerializeField] EffectsManager _effectsManager;
+	private EffectsManager _effectsManager;
 	[SerializeField] protected Stats Stats;
 
 	public Vector3 Velocity { private set; get; }
+	public Vector3 LastNonZeroVelocity { private set; get; }
+
+	public EffectsManager EffectsManager => _effectsManager;
 
 	public Vector2 Size => _characterBottom.size;
 
@@ -63,8 +66,14 @@ public abstract class Character : MonoBehaviour
 	{
 		get => _speed;
 		set
-		{
-			_speed = value;
+		{	if (value < 0)
+			{
+				_speed = 0;
+			}
+			else
+			{
+				_speed = value;
+			}
 		}
 	}
 
@@ -143,12 +152,6 @@ public abstract class Character : MonoBehaviour
 
 	public void Move(Vector2 direction)
 	{
-		if (Input.GetKeyDown(KeyCode.B))
-        {
-			_effectsManager.AddEffect(new SpeedUp());
-			_effectsManager.AddEffect(new Invincibility());
-		}
-
 		float speed = Speed; 
 		direction = _effectsManager.Moving(direction, ref speed);
 
@@ -173,20 +176,25 @@ public abstract class Character : MonoBehaviour
 			}
 		}
 
+		Velocity = finalDirection;
+		if (finalDirection != Vector3.zero)
+        {
+			LastNonZeroVelocity = finalDirection;
+        }
+
+		transform.position += finalDirection;
+
 		if (_animator != null)
 		{
 			WalkingAnim(finalDirection);
 		}
-
-
-		Velocity = finalDirection;
-		transform.position += finalDirection;
 	}
 
 	public abstract void Die();
 
 	protected virtual void Awake()
 	{
+		CharactersManager.Instance.AddCharacter(this);
 		ResetStats();
 	}
 
@@ -205,18 +213,18 @@ public abstract class Character : MonoBehaviour
 
 	protected virtual void OnDestroy()
 	{
-		CharactersManager.instance.DeleteCharacter(this);
+		CharactersManager.Instance.DeleteCharacter(this);
 	}
 
 	protected virtual void OnEnable()
 	{
-		CharactersManager.instance.AddCharacter(this);
+		//CharactersManager.Instance.AddCharacter(this);
 
 	}
 
 	protected virtual void OnDisable()
 	{
-		CharactersManager.instance.DeleteCharacter(this);
+		//CharactersManager.Instance.DeleteCharacter(this);
 	}
 
 	private void WalkingAnim(Vector2 direction)

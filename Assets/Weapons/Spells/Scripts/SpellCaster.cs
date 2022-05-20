@@ -4,22 +4,19 @@ using UnityEngine;
 
 public class SpellCaster : MonoBehaviour
 {
-    [SerializeField] protected List<Spell> _spells;
+    [SerializeField] private List<Spell> _spells;
     [SerializeField] private EffectArea _effectArea;
 
-    public delegate void SpellsChanched(List<Spell> spells);
-    public event SpellsChanched OnSpellsChanged;
+    
 
     public virtual bool AddSpell(Spell spell)
     {
-        bool succeed = Check.AddToListWithoutDuplicates(_spells, spell);
+        return Check.AddToListWithoutDuplicates(_spells, spell);
+    }
 
-        if (succeed)
-        {
-            OnSpellsChanged(_spells);
-        }
-
-        return succeed;
+    public void SetSpell(int index, Spell spell)
+    {
+        _spells[index] = spell;
     }
 
     public int GetSpellsCount()
@@ -29,6 +26,10 @@ public class SpellCaster : MonoBehaviour
 
     public Spell GetSpell(int index)
     {
+        if (index >= _spells.Count || index < 0)
+        {
+            return null;
+        }
         return _spells[index];
     }
 
@@ -36,14 +37,13 @@ public class SpellCaster : MonoBehaviour
     {
         foreach (Spell spell in _spells)
         {
-            if (spell.Name == name)
+            if (spell.SpellName == name)
             {
                 return spell;
             }
 
         }
 
-        Debug.LogError($"there is no Spell with name {name}", this);
         return null;
     }
 
@@ -52,5 +52,5 @@ public class SpellCaster : MonoBehaviour
         EffectArea effectArea = Instantiate(_effectArea, target, Quaternion.identity);
         effectArea.Effect = spell.EffectObject;
     }
-    
+
 }

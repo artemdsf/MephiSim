@@ -8,7 +8,7 @@ public class EffectArea : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, 3);
+        Destroy(gameObject, 0.2F);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

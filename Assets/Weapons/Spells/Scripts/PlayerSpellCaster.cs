@@ -2,35 +2,61 @@ using UnityEngine;
 
 public class PlayerSpellCaster : SpellCaster
 {
+    private Player _player;
 
     private LayerMask _raycastLayer;
     [SerializeField] private uint _maxSpellsCount;
     public uint MaxSpellsCount => _maxSpellsCount;
 
-	private void Awake()
+    public delegate void SpellsChanched(PlayerSpellCaster playerSpellCaster);
+    public event SpellsChanched OnSpellsChanged;
+
+    private void Awake()
 	{
 		_raycastLayer = LayerMask.GetMask("Floor");
 	}
 
+    private void Start()
+    {
+        _player = GetComponent<Player>();
+        OnSpellsChanged(this);
+    }
+
     public override bool AddSpell(Spell spell)
     {
+        bool suceed = false;
+
         if (GetSpellsCount() >= _maxSpellsCount)
         {
             return false;
         }
 
-        return base.AddSpell(spell);
+        suceed = base.AddSpell(spell);
+
+        if (suceed)
+        {
+            OnSpellsChanged(this);
+        }
+
+        return suceed;
     }
 
-    public void AddSpell(Spell spell, uint instedOfIndex)
+    public bool AddSpell(Spell spell, uint instedOfIndex)
     {
+        if (GetSpell(spell.SpellName))
+        {
+            return false;
+        }
+
         if (GetSpellsCount() >= _maxSpellsCount)
         {
-            _spells[(int)instedOfIndex] = spell;
+            SetSpell((int)instedOfIndex, spell);
+            OnSpellsChanged(this);
+            return true;
         }
         else
         {
-            base.AddSpell(spell);
+           return AddSpell(spell);
         }
 
     }
@@ -42,14 +68,15 @@ public class PlayerSpellCaster : SpellCaster
             if (Input.GetButtonDown("Spell" + (i + 1).ToString()))
             {
                 Spell spell = GetSpell(i);
-                if (spell != null)
+                if (spell != null && _player.Mana >= spell.ManaCost)
                 {
                     RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
                     if (hit.collider != null)
                     {
                         if (spell.Type == Spell.SpellType.AOE)
-                            CastAreaSpell(spell, hit.point);      
+                            CastAreaSpell(spell, hit.point);
+                        _player.SpendMana(spell.ManaCost);
                     }
                 }
             }

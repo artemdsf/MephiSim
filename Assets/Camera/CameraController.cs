@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
 
 	private void Start()
 	{
-		_player = CharactersManager.instance.GetPlayer().transform;
+		_player = CharactersManager.Instance.GetPlayer().transform;
 		_offset = transform.position.z;
 		transform.position = _player.position + Vector3.forward * transform.position.z;
 	}

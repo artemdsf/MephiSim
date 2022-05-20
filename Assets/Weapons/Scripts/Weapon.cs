@@ -6,7 +6,7 @@ public abstract class Weapon : MonoBehaviour
 
 	public Transform WeaponEnd => _weaponEnd;
 
-	public virtual void Shoot(Vector2 direction, WeaponStats stats)
+	public virtual void Shoot(Vector2 direction, WeaponStats stats, Transform origin)
 	{
 		if (stats == null)
 		{
@@ -15,9 +15,14 @@ public abstract class Weapon : MonoBehaviour
 
 		direction = direction.normalized;
 
-		GameObject bullet = PoolManager.GetObject(stats.Projectile.name, _weaponEnd.position, Quaternion.LookRotation(Vector3.forward, new Vector2(-direction.y, direction.x)));
+		GameObject bullet = PoolManager.GetObject(stats.Projectile.name, origin.position, Quaternion.LookRotation(Vector3.forward, new Vector2(-direction.y, direction.x)));
 
 		bullet.gameObject.GetComponent<Rigidbody2D>().velocity = direction * stats.ProjectileSpeed;
 		bullet.GetComponent<Projectile>().Damage = stats.Damage;
 	}
+
+	public virtual void Shoot(Vector2 direction, WeaponStats stats)
+    {
+		Shoot(direction, stats, _weaponEnd);
+    }
 }

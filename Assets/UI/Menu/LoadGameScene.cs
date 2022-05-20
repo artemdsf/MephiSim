@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class LoadGameScene : MonoBehaviour
 {
 	public float LoadProgress { get; private set; }
+	[SerializeField] private int sceneNumber = 1;
 
 	private AsyncOperation operation;
 
@@ -20,7 +21,7 @@ public class LoadGameScene : MonoBehaviour
 
 	private IEnumerator StartLoad()
 	{
-		operation = SceneManager.LoadSceneAsync(1);
+		operation = SceneManager.LoadSceneAsync(sceneNumber);
 
 		while (operation.isDone == false)
 		{

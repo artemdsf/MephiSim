@@ -11,9 +11,7 @@ public class Player : Character
 	[SerializeField] private Sprite _useKeySprite;
 
 	public UnityEvent OnValuesChanging = new UnityEvent();
-
 	public IUsable InteractableObject { private get; set; }
-
 	public Transform Description;
 
 	public float Mana
@@ -33,14 +31,19 @@ public class Player : Character
 			{
 				_mana = value;
 			}
+
 		}
 	}
+
 
 	private float _mana;
 
 	private PlayerStats _playerStats;
+	public float MaxMana => _playerStats.MaxMana;
 
 	private PlayerWeapon _weapon;
+
+	private bool _isShooting = true;
 
 	protected override void Awake()
 	{
@@ -70,12 +73,19 @@ public class Player : Character
 		Move(movementDirection);
 		#endregion
 
+
+		if (Input.GetButtonDown("Toggle fire"))
+        {
+			_isShooting = !_isShooting;
+        }
+
+		UseWeapon();
+
 		#region Interactions
 		TryUse();
 		TryChangeRoom();
 		#endregion
 
-		FindEnemy(movementDirection);
 	}
 
 	public void SpendMana(float value)
@@ -85,6 +95,7 @@ public class Player : Character
 			value = 0;
 		}
 
+		value = EffectsManager.SpendingMana(value);
 		Mana -= value;
 
 		OnValuesChanging.Invoke();
@@ -151,13 +162,24 @@ public class Player : Character
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
-	private void FindEnemy(Vector2 direction)
+	private void UseWeapon()
 	{
-		Enemy nearestEnemy = CharactersManager.instance.FindNearestEnemy(transform.position);
-		if (_weapon && nearestEnemy != null && direction == Vector2.zero)
+		Enemy nearestEnemy = null;
+
+		if (_isShooting)
 		{
-			_weapon.Shoot(nearestEnemy.transform.position - _weapon.WeaponEnd.position);
+			nearestEnemy = CharactersManager.Instance.FindActiveNearestEnemy(transform.position);
+			if (_weapon != null && nearestEnemy != null)
+			{
+				_weapon.Shoot(nearestEnemy.transform.position - _weapon.WeaponEnd.position);
+			}
 		}
+		
+		if (nearestEnemy == null || !_isShooting)
+		{
+			_weapon.Follow((-1) * LastNonZeroVelocity);
+		}
+
 	}
 
 	private void TryUse()

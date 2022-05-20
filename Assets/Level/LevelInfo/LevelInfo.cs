@@ -66,6 +66,16 @@ public static class LevelInfo
 		}
 	}
 
+	public static List<Room> GetRoomsOfType(RoomType type)
+    {
+		return Map.FindAll(room => room.RoomType == type);
+    }
+
+	public static Room GetRoomOfType(RoomType type)
+	{
+		return Map.Find(room => room.RoomType == type);
+	}
+
 	public static void Reset()
 	{
 		Map.Clear();

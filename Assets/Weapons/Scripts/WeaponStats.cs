@@ -14,6 +14,8 @@ public class WeaponStats : ScriptableObject
 	[SerializeField] private float _damage;
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _cooldown;
+    [SerializeField] private float _movementSpeed = 5;
+    [SerializeField] private float _distanceFromPlayer = 1;
 
     public Sprite WeaponSprite => _weaponSprite;
     public GameObject Projectile => _projectile;
@@ -24,4 +26,6 @@ public class WeaponStats : ScriptableObject
 	public float Damage => _damage;
     public float ProjectileSpeed => _projectileSpeed;
     public float Cooldown => _cooldown;
+    public float MovementSpeed => _movementSpeed;
+    public float DistanceFromPlayer => _distanceFromPlayer;
 }

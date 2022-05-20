@@ -1,24 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharactersManager : MonoBehaviour
 {
-	public static CharactersManager instance = null;
-
+	public bool WereBossesActivated { get; private set;  } = false;
+	public UnityEvent OnBossesDeath;
+	public static CharactersManager Instance { get; private set; } = null;
 	private List<Enemy> _enemies = new List<Enemy>();
+	private List<Enemy> _bosses = new List<Enemy>();
 	private Player _player;
 
-	public int EnemiesCount()
-	{
-		return _enemies.Count;
-	}
-
-	public int EnemiesCount(Room room)
+	public int ActiveEnemiesCount()
 	{
 		int count = 0;
 		foreach (var enemy in _enemies)
 		{
-			if (enemy.Room == room)
+			if (enemy.gameObject.activeInHierarchy)
+			{
+				count++;
+			}
+		}
+
+		return count;
+	}
+
+	public int ActiveEnemiesCount(Room room)
+	{
+		int count = 0;
+		foreach (var enemy in _enemies)
+		{
+			if (enemy.Room == room && enemy.gameObject.activeInHierarchy)
 			{
 				count++;
 			}
@@ -29,37 +41,27 @@ public class CharactersManager : MonoBehaviour
 
 	private void Awake()
 	{
-		if (instance == null)
+		if (Instance == null)
 		{
-			instance = this;
+			Instance = this;
 		}
-		else if (instance == this)
+		else if (Instance == this)
 		{
 			Destroy(gameObject);
 		}
 
-		DontDestroyOnLoad(this);
 	}
 
-	public Enemy FindNearestEnemy(Vector3 pos)
+	public Enemy FindActiveNearestEnemy(Vector3 pos)
 	{
-		Enemy nearestEnemy;
+		Enemy nearestEnemy = null;
 		float closestDistSqr = 0;
-
-		if (_enemies.Count != 0)
-		{
-			nearestEnemy = _enemies[0];
-			closestDistSqr = Vector3.SqrMagnitude(pos - _enemies[0].transform.position);
-		}
-		else
-		{
-			nearestEnemy = null;
-		}
+		bool found = false;
 
 		foreach (Enemy enemy in _enemies)
 		{
 			float distSqr = Vector3.SqrMagnitude(pos - enemy.transform.position);
-			if (distSqr < closestDistSqr)
+			if ((distSqr < closestDistSqr || found == false) && enemy.gameObject.activeInHierarchy)
 			{
 				closestDistSqr = distSqr;
 				nearestEnemy = enemy;
@@ -82,8 +84,19 @@ public class CharactersManager : MonoBehaviour
 		}
 		else if (character is Enemy)
 		{
+			if ((character as Enemy).IsBoss)
+			{
+				Check.AddToListWithoutDuplicates(_bosses, character as Enemy);
+				(character as Enemy).OnEnemyDeath.AddListener(AreBossesDead);
+			}
+
 			Check.AddToListWithoutDuplicates(_enemies, character as Enemy);
 		}
+	}
+
+	public void BossActivated()
+	{
+		WereBossesActivated = true;
 	}
 
 	public void DeleteCharacter(Character character)
@@ -95,6 +108,28 @@ public class CharactersManager : MonoBehaviour
 		else if (character is Enemy)
 		{
 			_enemies.Remove(character as Enemy);
+
+			if ((character as Enemy).IsBoss)
+			{
+				_bosses.Remove(character as Enemy);
+			}
 		}
 	}
+
+	private void AreBossesDead()
+    {
+		int count = 0;
+		foreach (Enemy enemy in _bosses)
+        {
+			if (enemy.gameObject.activeInHierarchy == false)
+            {
+				count++;
+            }
+        }
+
+		if (count == _bosses.Count)
+        {
+			OnBossesDeath?.Invoke();
+        }
+    }
 }
