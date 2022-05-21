@@ -21,3 +21,5 @@ MonoBehaviour:
   _damage: 80
   _projectileSpeed: 5
   _cooldown: 0.5
+  _movementSpeed: 5
+  _distanceFromPlayer: 2

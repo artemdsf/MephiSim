@@ -41,22 +41,25 @@ public class PlayerSpellCaster : SpellCaster
         return suceed;
     }
 
-    public bool AddSpell(Spell spell, uint instedOfIndex)
+    public Spell AddSpell(Spell spell, uint instedOfIndex)
     {
-        if (GetSpell(spell.SpellName))
+        Spell oldSpell = GetSpell(spell.SpellName);
+        if (oldSpell)
         {
-            return false;
+            return oldSpell;
         }
 
         if (GetSpellsCount() >= _maxSpellsCount)
         {
+            oldSpell = GetSpell((int)instedOfIndex);
             SetSpell((int)instedOfIndex, spell);
             OnSpellsChanged(this);
-            return true;
+            return oldSpell;
         }
         else
         {
-           return AddSpell(spell);
+            AddSpell(spell);
+            return null;
         }
 
     }

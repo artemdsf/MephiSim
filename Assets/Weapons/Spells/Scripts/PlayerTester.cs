@@ -32,7 +32,7 @@ public class PlayerTester : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             _player.RestoreMana(_player.MaxMana);
-            Debug.Log("Mana has been recovered");
+            Debug.Log("Mana has been restored");
         }
 
         if (Input.GetKeyDown(KeyCode.G))

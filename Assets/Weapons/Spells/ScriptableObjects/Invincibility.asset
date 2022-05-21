@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c288d49f0d84f43951d8a81941daa2, type: 3}
   m_Name: Invincibility
   m_EditorClassIdentifier: 
-  Effect: 0
+  Effect: 1
   _type: 0
-  _icon: {fileID: 0}
+  _icon: {fileID: 4450044365338583073, guid: 7bfe3a3c444dc6d428a4ae5e5682e0c2, type: 3}
   _projectileSprite: {fileID: 0}
   _animatorController: {fileID: 0}
-  _name: 
-  _manaCost: 0
+  _spellName: Invincibility
+  _manaCost: 30

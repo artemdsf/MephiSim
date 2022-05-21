@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterBottom: {fileID: 3697341443874008782}
-  Stats: {fileID: 11400000, guid: 9621403fc23698242b7e0014ac671493, type: 2}
+  Stats: {fileID: 11400000, guid: 7e9f2db6a1d2bee49b82e50022b04ad5, type: 2}
   _isBoss: 1
   OnEnemyDeath:
     m_PersistentCalls:

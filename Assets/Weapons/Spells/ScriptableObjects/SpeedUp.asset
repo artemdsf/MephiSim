@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Effect: 0
   _type: 0
-  _icon: {fileID: 0}
+  _icon: {fileID: -4445206438108918016, guid: 7bfe3a3c444dc6d428a4ae5e5682e0c2, type: 3}
   _projectileSprite: {fileID: 0}
   _animatorController: {fileID: 0}
-  _name: Speed Up
+  _spellName: Speed Up
+  _manaCost: 10
